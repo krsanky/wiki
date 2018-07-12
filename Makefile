@@ -1,5 +1,7 @@
 TARGET=	wiki
 
+all: $(TARGET)
+
 $(TARGET): $(TARGET).c
 	$(CC) -o $(TARGET).cgi $(TARGET).c
 
