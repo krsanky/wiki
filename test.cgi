@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -wT
 use strict;
 
 print "HTTP/1.0 200 OK\n";
