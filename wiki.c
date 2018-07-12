@@ -15,7 +15,7 @@ main(int argc, char * argv[])
 
 	printf("HTTP/1.0 200 OK\n");
 	printf("Content-type: text/html\n\n");
-	printf("<p>test</p>\n");
+	printf("<h1>wiki</h1>\n");
 
 	return 0;
 }

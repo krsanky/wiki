@@ -1,4 +1,5 @@
 bin/
 usr/
 porch/
-wiki
+*.cgi
+
