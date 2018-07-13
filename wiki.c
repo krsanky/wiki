@@ -9,7 +9,7 @@
  * what the program does. 
  */ 
 int 
-main(int argc, char * argv[]) 
+main(void)
 {
 	//printf("%s: num-args:%d\n", argv[0], argc);
 
