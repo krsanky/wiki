@@ -4,7 +4,7 @@ PROG=	wiki
 all: $(PROG)
 
 $(PROG): $(.TARGET).c
-	$(CC) $(CFLAGS) -o $(.TARGET).cgi $(.TARGET).c
+	$(CC) $(CFLAGS) -o $(.TARGET).cgi dthis.c $(.TARGET).c
 
 #$(CC) $(CFLAGS) -I. -c main.c
 

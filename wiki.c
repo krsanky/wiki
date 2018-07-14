@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "dthis.h"
+
 /* 
  * All major routines should have a comment briefly describing what 
  * they do.  The comment before the "main" routine should describe 
@@ -16,6 +18,8 @@ main(void)
 	printf("HTTP/1.0 200 OK\n");
 	printf("Content-type: text/html\n\n");
 	printf("<h1>wiki</h1>\n");
+
+	printf("<h2>%d</h2>\n", dthis_fn());
 
 	return 0;
 }
