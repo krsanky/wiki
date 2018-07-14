@@ -1,11 +1,10 @@
 CFLAGS=	-W -Wall
-TARGET=	wiki
 PROG=	wiki
 
-all: $(TARGET)
+all: $(PROG)
 
-$(TARGET): $(TARGET).c
-	$(CC) $(CFLAGS) -o $(TARGET).cgi $(TARGET).c
+$(PROG): $(.TARGET).c
+	$(CC) $(CFLAGS) -o $(.TARGET).cgi $(.TARGET).c
 
 #$(CC) $(CFLAGS) -I. -c main.c
 
@@ -13,12 +12,22 @@ test:
 	@echo CURDIR:${.CURDIR}
 	@echo TARGET:${.TARGET} [should be 'test']
 
-mdtest: mdtest.c
-	#$(CC) -o mdtest.cgi -lmarkdown -I/usr/local/include mdtest.c
-	$(CC) -o mdtest.cgi -I/usr/local/include mdtest.c
+#/usr/local/include/mkdio.h
+#/usr/local/lib/libmarkdown.a
+mdtest: ${.TARGET}.c
+	$(CC) -o ${.TARGET}.cgi \
+		-L/usr/local/lib -I/usr/local/include \
+		${.TARGET}.c \
+		-lmarkdown \
+
+writef: ${.TARGET}.c
+	$(CC) -o ${.TARGET} \
+		-L/usr/local/lib -I/usr/local/include \
+		${.TARGET}.c \
+		-lmarkdown \
 
 clean:
-	rm -f $(TARGET).cgi
+	rm -f *.cgi
 
 .PHONY: all
 

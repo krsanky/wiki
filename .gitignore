@@ -3,3 +3,5 @@ usr/
 porch/
 *.cgi
 *.pdf
+*.core
+
