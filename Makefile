@@ -27,7 +27,7 @@ writef: ${.TARGET}.c
 		-lmarkdown \
 
 clean:
-	rm -f *.cgi
+	rm -f *.cgi writef
 
 .PHONY: all
 
