@@ -5,3 +5,7 @@ porch/
 *.pdf
 *.core
 
+a.out
+content/
+examples/
+function_pointers.html

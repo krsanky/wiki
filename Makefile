@@ -1,10 +1,11 @@
 CFLAGS=	-W -Wall
-PROG=	wiki
 
-all: $(PROG)
+all: wiki
 
-$(PROG): $(.TARGET).c
-	$(CC) $(CFLAGS) -o $(.TARGET).cgi dthis.c $(.TARGET).c
+wiki: wiki.cgi
+wiki.cgi: wiki.c
+	$(CC) $(CFLAGS) -o $(.TARGET) \
+		 yuarel.c myhtml.c wiki.c
 
 #$(CC) $(CFLAGS) -I. -c main.c
 
@@ -12,8 +13,6 @@ test:
 	@echo CURDIR:${.CURDIR}
 	@echo TARGET:${.TARGET} [should be 'test']
 
-#/usr/local/include/mkdio.h
-#/usr/local/lib/libmarkdown.a
 mdtest: ${.TARGET}.c
 	$(CC) -o ${.TARGET}.cgi \
 		-L/usr/local/lib -I/usr/local/include \
@@ -26,9 +25,11 @@ writef: ${.TARGET}.c
 		${.TARGET}.c \
 		-lmarkdown \
 
+myserver: ${.TARGET}.c
+	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c
+
 clean:
-	rm -f *.cgi writef
+	rm -f *.cgi writef myserver
 
-.PHONY: all
+.PHONY: all wiki test
 
-#.include <bsd.subdir.mk>
