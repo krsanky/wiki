@@ -5,8 +5,7 @@
 #include <nanomsg/nn.h>
 #include <nanomsg/reqrep.h>
 
-#define NODE0 "node0"
-#define DATE "DATE"
+#include "settings.h"
 
 FILE           *logfile;
 
@@ -23,17 +22,30 @@ date(void)
 	time_t 		now = time(&now);
 	struct tm      *info = localtime(&now);
 	char           *text = asctime(info);
-	text[strlen(text) - 1] = '\0';	/* remove '\n' */
-	return (text);
+	text[strlen(text) - 1] = '\0'; /* remove '\n' */
+	return text;
 }
 
-/*
- * This is the server code we want.
- */
-int
-node0(const char *url)
+void
+dispatch(char *msg, int sock)
 {
-	//int 		sz_date = strlen(DATE) + 1;	/* '\0' too */
+	int bytes;
+	fprintf(logfile, "RECEIVED REQUEST:%s\n", msg);
+	if (strcmp(msg, "DATE") == 0) {
+		char           *d = date();
+		int 		sz_d = strlen(d) + 1;
+		printf("NODE0: SENDING  %s\n", d);
+		if ((bytes = nn_send(sock, d, sz_d, 0)) < 0) {
+			fatal("nn_send");
+		}
+	} else {
+		fprintf(logfile, "UNKNOWN REQUEST:%s\n", msg);
+	}
+}
+
+int
+server(const char *url)
+{
 	int 		sock;
 	int 		rv;
 
@@ -44,24 +56,34 @@ node0(const char *url)
 		fatal("nn_bind");
 	}
 	for (;;) {
-		char           *buf = NULL;
+		char           *msg = NULL;
 		int 		bytes;
-		if ((bytes = nn_recv(sock, &buf, NN_MSG, 0)) < 0) {
+		if ((bytes = nn_recv(sock, &msg, NN_MSG, 0)) < 0) {
 			fatal("nn_recv");
 		}
-		fprintf(logfile, "BUF:%s\n", buf);
+		fprintf(logfile, "msg:%s\n", msg);
 		fflush(logfile);
-		if ((bytes == (strlen(DATE) + 1)) && (strcmp(DATE, buf) == 0)) {
-			printf("NODE0: RECEIVED DATE REQUEST\n");
-			fprintf(logfile, "NODE0: RECEIVED DATE REQUEST\n");
+
+		/*
+		 * since nm allocated the buffer we won't check its length
+		 * against bytes?
+		 */
+		dispatch(msg, sock);
+		/*
+		if ((bytes == (strlen("DATE") + 1)) && (strcmp("DATE",msg) == 0)) {
+			printf("NODE0: RECEIVED  REQUEST\n");
+			fprintf(logfile, "NODE0: RECEIVED  REQUEST\n");
 			char           *d = date();
-			int 		sz_d = strlen(d) + 1;	/* '\0' too */
-			printf("NODE0: SENDING DATE %s\n", d);
+			int 		sz_d = strlen(d) + 1;
+			printf("NODE0: SENDING  %s\n", d);
 			if ((bytes = nn_send(sock, d, sz_d, 0)) < 0) {
 				fatal("nn_send");
 			}
 		}
-		nn_freemsg(buf);
+		*/
+
+
+		nn_freemsg(msg);
 	}
 }
 
@@ -83,7 +105,7 @@ main(int argc, char **argv)
 	fprintf(logfile, "main...\n");
 	fflush(logfile);
 
-	node0("ipc:///tmp/reqrep.ipc");
+	server(SERVER_URL);
 
 	if (logfile != NULL)
 		fclose(logfile);

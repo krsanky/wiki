@@ -5,6 +5,8 @@
 #include <nanomsg/nn.h>
 #include <nanomsg/reqrep.h>
 
+#include "settings.h"
+
 void
 fatal(const char *func)
 {
@@ -13,7 +15,7 @@ fatal(const char *func)
 }
 
 int
-node1(const char *url)
+client(const char *url)
 {
 	int 		sz_date = strlen("DATE") + 1;	/* '\0' too */
 	char           *buf = NULL;
@@ -36,7 +38,7 @@ node1(const char *url)
 	}
 	printf("NODE1: RECEIVED DATE %s\n", buf);
 	nn_freemsg(buf);
-	return (nn_shutdown(sock, 0));
+	return (nn_shutdown(sock, rv));
 }
 
 int
@@ -44,7 +46,8 @@ main(int argc, char **argv)
 {
 	printf("I am %s\n", argv[0]);
 
-	node1("ipc:///tmp/reqrep.ipc");
+	if (client(SERVER_URL) < 0)
+		fatal("nn error\n");
 
 	return 0;
 }
