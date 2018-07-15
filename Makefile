@@ -2,9 +2,14 @@ CFLAGS=	-W -Wall
 
 all: wiki.cgi
 
-wiki.cgi: wiki.c
+wiki.cgi: wiki.c main.c myhtml.c
 	$(CC) $(CFLAGS) -o $(.TARGET) \
 		 main.c yuarel.c myhtml.c wiki.c
+
+nanologger: ${.TARGET}.c
+	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
+		-L/usr/local/lib -I/usr/local/include \
+		-lnanomsg
 
 #$(CC) $(CFLAGS) -I. -c main.c
 
@@ -24,11 +29,8 @@ writef: ${.TARGET}.c
 		${.TARGET}.c \
 		-lmarkdown \
 
-myserver: ${.TARGET}.c
-	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c
-
 clean:
-	rm -f *.cgi writef myserver
+	rm -f *.cgi writef myserver nanologger
 
-.PHONY: all wiki test
+.PHONY: test
 
