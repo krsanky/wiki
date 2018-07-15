@@ -18,8 +18,6 @@ nanoclient: ${.TARGET}.c
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg
 
-#$(CC) $(CFLAGS) -I. -c main.c
-
 test:
 	@echo CURDIR:${.CURDIR}
 	@echo TARGET:${.TARGET} [should be 'test']
@@ -37,7 +35,7 @@ writef: ${.TARGET}.c
 		-lmarkdown \
 
 clean:
-	rm -f *.cgi writef myserver nanologger
+	rm -f *.cgi writef myserver nanologger nanoclient mdtest
 
-.PHONY: test
+.PHONY: test wiki.cgi
 

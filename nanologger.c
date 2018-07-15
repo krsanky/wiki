@@ -6,7 +6,6 @@
 #include <nanomsg/reqrep.h>
 
 #define NODE0 "node0"
-#define NODE1 "node1"
 #define DATE "DATE"
 
 FILE           *logfile;
@@ -50,8 +49,11 @@ node0(const char *url)
 		if ((bytes = nn_recv(sock, &buf, NN_MSG, 0)) < 0) {
 			fatal("nn_recv");
 		}
+		fprintf(logfile, "BUF:%s\n", buf);
+		fflush(logfile);
 		if ((bytes == (strlen(DATE) + 1)) && (strcmp(DATE, buf) == 0)) {
 			printf("NODE0: RECEIVED DATE REQUEST\n");
+			fprintf(logfile, "NODE0: RECEIVED DATE REQUEST\n");
 			char           *d = date();
 			int 		sz_d = strlen(d) + 1;	/* '\0' too */
 			printf("NODE0: SENDING DATE %s\n", d);
@@ -74,7 +76,12 @@ main(int argc, char **argv)
 	printf("I am %s\n", argv[0]);
 
 	logfile = fopen("log.txt", "a");
+	if (logfile == NULL) {
+		printf("error opening logfile\n");
+		exit(1);
+	}
 	fprintf(logfile, "main...\n");
+	fflush(logfile);
 
 	node0("ipc:///tmp/reqrep.ipc");
 
