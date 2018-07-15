@@ -7,7 +7,14 @@ wiki.cgi: wiki.c main.c myhtml.c
 		 main.c yuarel.c myhtml.c wiki.c
 
 nanologger: ${.TARGET}.c
-	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
+	$(CC) $(CFLAGS) -o ${.TARGET} \
+		${.TARGET}.c \
+		-L/usr/local/lib -I/usr/local/include \
+		-lnanomsg
+
+nanoclient: ${.TARGET}.c
+	$(CC) $(CFLAGS) -o ${.TARGET} \
+		${.TARGET}.c \
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg
 
