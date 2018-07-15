@@ -1,11 +1,10 @@
 CFLAGS=	-W -Wall
 
-all: wiki
+all: wiki.cgi
 
-wiki: wiki.cgi
 wiki.cgi: wiki.c
 	$(CC) $(CFLAGS) -o $(.TARGET) \
-		 yuarel.c myhtml.c wiki.c
+		 main.c yuarel.c myhtml.c wiki.c
 
 #$(CC) $(CFLAGS) -I. -c main.c
 

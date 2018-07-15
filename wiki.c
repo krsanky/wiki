@@ -10,23 +10,22 @@
 
 extern char **environ; /* not used, maybe delete eventually ... */
 
-/* 
- * All major routines should have a comment briefly describing what 
- * they do.  The comment before the "main" routine should describe 
- * what the program does. 
- */ 
-int 
-main(void)
+void 
+query_params_test(void)
 {
 	char *qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
 		errorpage("error with QUERY_STRING");
-		return EXIT_FAILURE;
+		return;
 	}
 
 	int p;
 	struct yuarel_param params[10];
 	p = yuarel_parse_query(qs, '&', params, 10);
+	if (p < 0) {
+		errorpage("error with yuarel_parse_query()");
+		return;
+	}
 
 	printf("HTTP/1.0 200 OK\n");
 	printf("Content-type: text/html\n\n");
@@ -41,7 +40,6 @@ main(void)
 	printf("</dl>\n");
 
 	myhtml_footer();
-	return EXIT_SUCCESS;
 }
 
 void 
