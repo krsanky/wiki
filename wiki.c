@@ -8,10 +8,10 @@
 #include "myhtml.h"
 #include "yuarel.h"
 
-extern char **environ; /* not used, maybe delete eventually ... */
+extern char **environ;
 
 void 
-query_params_test(void)
+query_params_test(struct yuarel_param *params, int sz)
 {
 	char *qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
@@ -19,10 +19,7 @@ query_params_test(void)
 		return;
 	}
 
-	int p;
-	struct yuarel_param params[10];
-	p = yuarel_parse_query(qs, '&', params, 10);
-	if (p < 0) {
+	if (sz < 0) {
 		errorpage("error with yuarel_parse_query()");
 		return;
 	}
@@ -34,8 +31,8 @@ query_params_test(void)
 	myhtml_topnav();
 	printf("<hr/>\n");
 	printf("<dl>\n");
-	while (p-- > 0) {
-		printf("<dt>%s</dt><dd>%s</dd>\n", params[p].key, params[p].val);
+	while (sz-- > 0) {
+		printf("<dt>%s</dt><dd>%s</dd>\n", params[sz].key, params[sz].val);
 	}
 	printf("</dl>\n");
 

@@ -30,7 +30,8 @@ void
 dispatch(char *msg, int sock)
 {
 	int bytes;
-	fprintf(logfile, "RECEIVED REQUEST:%s\n", msg);
+	fprintf(logfile, "received request:%s sz:%lu\n", msg, strlen(msg));
+	fflush(logfile);
 	if (strcmp(msg, "DATE") == 0) {
 		char           *d = date();
 		int 		sz_d = strlen(d) + 1;
@@ -38,6 +39,9 @@ dispatch(char *msg, int sock)
 		if ((bytes = nn_send(sock, d, sz_d, 0)) < 0) {
 			fatal("nn_send");
 		}
+	} else if (strncmp(msg, "LOG", 3) == 0) {
+		fprintf(logfile, "%s\n", msg);
+		fflush(logfile);
 	} else {
 		fprintf(logfile, "UNKNOWN REQUEST:%s\n", msg);
 	}
@@ -69,20 +73,6 @@ server(const char *url)
 		 * against bytes?
 		 */
 		dispatch(msg, sock);
-		/*
-		if ((bytes == (strlen("DATE") + 1)) && (strcmp("DATE",msg) == 0)) {
-			printf("NODE0: RECEIVED  REQUEST\n");
-			fprintf(logfile, "NODE0: RECEIVED  REQUEST\n");
-			char           *d = date();
-			int 		sz_d = strlen(d) + 1;
-			printf("NODE0: SENDING  %s\n", d);
-			if ((bytes = nn_send(sock, d, sz_d, 0)) < 0) {
-				fatal("nn_send");
-			}
-		}
-		*/
-
-
 		nn_freemsg(msg);
 	}
 }
@@ -97,7 +87,7 @@ main(int argc, char **argv)
 {
 	printf("I am %s\n", argv[0]);
 
-	logfile = fopen("log.txt", "a");
+	logfile = fopen("nlog.txt", "a");
 	if (logfile == NULL) {
 		printf("error opening logfile\n");
 		exit(1);
@@ -105,7 +95,7 @@ main(int argc, char **argv)
 	fprintf(logfile, "main...\n");
 	fflush(logfile);
 
-	server(SERVER_URL);
+	server(SERVER_URL2);
 
 	if (logfile != NULL)
 		fclose(logfile);

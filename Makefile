@@ -1,10 +1,10 @@
 CFLAGS=	-W -Wall
 
-all: wiki.cgi
+all: wiki.cgi nanologger nanoclient
 
-wiki.cgi: wiki.c main.c myhtml.c
+wiki.cgi: wiki.c main.c myhtml.c yuarel.c
 	$(CC) $(CFLAGS) -o $(.TARGET) \
-		 main.c yuarel.c myhtml.c wiki.c
+		main.c yuarel.c myhtml.c wiki.c 
 
 nanologger: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
@@ -36,6 +36,8 @@ writef: ${.TARGET}.c
 
 clean:
 	rm -f *.cgi writef myserver nanologger nanoclient mdtest
+cleanlogs: 
+	rm -rf nlog.txt log.txt
 
-.PHONY: test wiki.cgi
+.PHONY: test wiki.cgi clean cleanlogs
 

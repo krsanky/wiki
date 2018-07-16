@@ -11,10 +11,21 @@ FILE *logfile;
 int 
 main(void)
 {
-	logfile = fopen("log.txt", "a");
-	fprintf(logfile, "main...\n");
+	struct yuarel_param *params;
 	int p;
-	struct yuarel_param params[10];
+	params = malloc(sizeof(*params)*10); 
+	if (params == NULL) {
+		puts("error with malloc");
+		return EXIT_FAILURE;
+	}
+
+	logfile = fopen("log.txt", "a");
+	if (logfile == NULL) {
+		puts("error opening file");
+		return EXIT_FAILURE;
+	}
+
+	fprintf(logfile, "main...\n");
 	char *qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
 		errorpage("error with QUERY_STRING");
@@ -41,7 +52,7 @@ main(void)
 	} else if(strcmp(params[0].key, "start")==0)  {
 		errorpage("start");
 	} else {
-		query_params_test();
+		query_params_test(params, 10);
 	}
 
 	if (logfile != NULL) fclose(logfile);

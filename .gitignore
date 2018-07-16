@@ -9,6 +9,6 @@ a.out
 content/
 examples/
 function_pointers.html
-log.txt
+*log.txt
 nanologger
 nanoclient
