@@ -71,6 +71,20 @@ errorpage(char *error)
 }
 
 void
+msgpage(char *msg) 
+{
+	printf("HTTP/1.0 200 OK\n");
+	printf("Content-type: text/html\n\n");
+
+	myhtml_header();
+	myhtml_topnav();
+	printf("<hr/>\n");
+	printf("\
+<p style='color:green;'>%s</p>\n", msg);
+	myhtml_footer();
+}
+
+void
 showenv()
 {
 	printf("<pre>\n");
@@ -88,3 +102,10 @@ showenv()
 	printf("</pre>\n");
 
 }
+
+void
+wikilog(char * msg)
+{
+	printf("wikilog...\n");
+}
+
