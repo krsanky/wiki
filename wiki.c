@@ -116,7 +116,6 @@ showenv()
 int
 wikilog(char * msg)
 {
-	char           *buf = NULL;
 	int 		bytes = -1;
 	int 		sock;
 	int 		rv;
@@ -130,10 +129,6 @@ wikilog(char * msg)
 	if ((bytes = nn_send(sock, "DATE", strlen("DATE")+1, 0)) < 0) {
 		return -1;
 	}
-	if ((bytes = nn_recv(sock, &buf, NN_MSG, 0)) < 0) {
-		return -1;
-	}
-	nn_freemsg(buf);
 	return (nn_shutdown(sock, rv));
 }
 
