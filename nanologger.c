@@ -6,15 +6,9 @@
 #include <nanomsg/reqrep.h>
 
 #include "settings.h"
+#include "wiki.h"
 
 FILE           *logfile;
-
-void
-fatal(const char *func)
-{
-	fprintf(stderr, "%s: %s\n", func, nn_strerror(nn_errno()));
-	exit(1);
-}
 
 char           *
 date(void)
@@ -95,7 +89,7 @@ main(int argc, char **argv)
 	fprintf(logfile, "main...\n");
 	fflush(logfile);
 
-	server(SERVER_URL2);
+	server(SERVER_ENDPOINT);
 
 	if (logfile != NULL)
 		fclose(logfile);

@@ -26,6 +26,7 @@ client(const char *url)
 	if ((sock = nn_socket(AF_SP, NN_REQ)) < 0) {
 		fatal("nn_socket");
 	}
+	printf("url[%s]\n", url);
 	if ((rv = nn_connect(sock, url)) < 0) {
 		fatal("nn_connect");
 	}
@@ -45,8 +46,9 @@ int
 main(int argc, char **argv)
 {
 	printf("I am %s\n", argv[0]);
+	printf("url:%s\n", SERVER_ENDPOINT);
 
-	if (client(SERVER_URL) < 0)
+	if (client(SERVER_ENDPOINT) < 0)
 		fatal("nn error\n");
 
 	return 0;

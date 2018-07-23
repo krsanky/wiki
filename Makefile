@@ -4,11 +4,14 @@ all: wiki.cgi nanologger nanoclient
 
 wiki.cgi: wiki.c main.c myhtml.c yuarel.c
 	$(CC) $(CFLAGS) -o $(.TARGET) \
-		main.c yuarel.c myhtml.c wiki.c 
+		main.c yuarel.c myhtml.c wiki.c \
+		-L/usr/local/lib -I/usr/local/include \
+		-lnanomsg
 
 nanologger: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
 		${.TARGET}.c \
+		wiki.c myhtml.c \
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg
 
@@ -26,7 +29,7 @@ mdtest: ${.TARGET}.c
 	$(CC) -o ${.TARGET}.cgi \
 		-L/usr/local/lib -I/usr/local/include \
 		${.TARGET}.c \
-		-lmarkdown \
+		-lmarkdown 
 
 writef: ${.TARGET}.c
 	$(CC) -o ${.TARGET} \

@@ -3,12 +3,22 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <nanomsg/nn.h>
+#include <nanomsg/reqrep.h>
 
 #include "wiki.h"
 #include "myhtml.h"
 #include "yuarel.h"
+#include "settings.h"
 
 extern char **environ;
+
+void
+fatal(const char *func)
+{
+	fprintf(stderr, "%s: %s\n", func, nn_strerror(nn_errno()));
+	exit(1);
+}
 
 void 
 query_params_test(struct yuarel_param *params, int sz)
@@ -103,9 +113,27 @@ showenv()
 
 }
 
-void
+int
 wikilog(char * msg)
 {
-	printf("wikilog...\n");
+	char           *buf = NULL;
+	int 		bytes = -1;
+	int 		sock;
+	int 		rv;
+
+	if ((sock = nn_socket(AF_SP, NN_REQ)) < 0) {
+		return -1;
+	}
+	if ((rv = nn_connect(sock, SERVER_ENDPOINT)) < 0) {
+		return -1;
+	}
+	if ((bytes = nn_send(sock, "DATE", strlen("DATE")+1, 0)) < 0) {
+		return -1;
+	}
+	if ((bytes = nn_recv(sock, &buf, NN_MSG, 0)) < 0) {
+		return -1;
+	}
+	nn_freemsg(buf);
+	return (nn_shutdown(sock, rv));
 }
 

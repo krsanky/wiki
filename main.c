@@ -52,6 +52,7 @@ main(void)
 	} else if(strcmp(params[0].key, "start")==0)  {
 		errorpage("start");
 	} else if(strcmp(params[0].key, "logtest")==0)  {
+		wikilog("test...");
 		msgpage("logtest");
 	} else {
 		query_params_test(params, 10);
