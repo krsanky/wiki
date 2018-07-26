@@ -34,6 +34,9 @@ dispatch(char *msg, int sock)
 			fatal("nn_send");
 		}
 	} else if (strncmp(msg, "LOG", 3) == 0) {
+		if ((bytes = nn_send(sock, "RCVD", 5, 0)) < 0) {
+			fatal("nn_send");
+		}
 		fprintf(logfile, "log:%s\n", msg);
 		fflush(logfile);
 	} else {
