@@ -11,7 +11,7 @@
 #include "yuarel.h"
 #include "settings.h"
 
-extern char **environ;
+extern char   **environ;
 
 void
 fatal(const char *func)
@@ -20,20 +20,18 @@ fatal(const char *func)
 	exit(1);
 }
 
-void 
-query_params_test(struct yuarel_param *params, int sz)
+void
+query_params_test(struct yuarel_param * params, int sz)
 {
-	char *qs = getenv("QUERY_STRING");
+	char           *qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
 		errorpage("error with QUERY_STRING");
 		return;
 	}
-
 	if (sz < 0) {
 		errorpage("error with yuarel_parse_query()");
 		return;
 	}
-
 	printf("HTTP/1.0 200 OK\n");
 	printf("Content-type: text/html\n\n");
 
@@ -49,7 +47,7 @@ query_params_test(struct yuarel_param *params, int sz)
 	myhtml_footer();
 }
 
-void 
+void
 mainpage(void)
 {
 	printf("HTTP/1.0 200 OK\n");
@@ -67,7 +65,7 @@ mainpage(void)
 }
 
 void
-errorpage(char *error) 
+errorpage(char *error)
 {
 	printf("HTTP/1.0 200 OK\n");
 	printf("Content-type: text/html\n\n");
@@ -81,7 +79,7 @@ errorpage(char *error)
 }
 
 void
-msgpage(char *msg) 
+msgpage(char *msg)
 {
 	printf("HTTP/1.0 200 OK\n");
 	printf("Content-type: text/html\n\n");
@@ -98,26 +96,24 @@ void
 showenv()
 {
 	printf("<pre>\n");
-	char *data = getenv("QUERY_STRING");
-	if(data == NULL)
-  		printf("Error! Error in passing data from form to script.\n");
+	char           *data = getenv("QUERY_STRING");
+	if (data == NULL)
+		printf("Error! Error in passing data from form to script.\n");
 	else
 		printf("QUERY_STRING[%s]\n", data);
 
 	puts("---------------");
 
 	for (char **env = environ; *env; ++env)
-        printf("%s\n", *env);
-	
+		printf("%s\n", *env);
+
 	printf("</pre>\n");
 }
 
 int
-wikilog(char * msg)
+wikilog(char *msg)
 {
-	int 		sz_date = strlen("DATE") + 1;
-	char           *buf = NULL;
-	char		*msg1 = "LOG_asdqwe123";
+	char           *buf, *msg_;
 	int 		bytes = -1;
 	int 		sock;
 	int 		rv;
@@ -128,14 +124,18 @@ wikilog(char * msg)
 	if ((rv = nn_connect(sock, SERVER_ENDPOINT)) < 0) {
 		fatal("nn_connect");
 	}
-	if ((bytes = nn_send(sock, msg, strlen(msg)+1, 0)) < 0) {
+
+	msg_ = malloc(strlen(msg) + sizeof(LOG_PREFIX));
+	strlcpy(msg_, "LOG", sizeof(msg_));	
+	strlcat(msg_, msg, sizeof(msg_));
+
+	if ((bytes = nn_send(sock, msg_, strlen(msg_) + 1, 0)) < 0) {
 		fatal("nn_send");
 	}
 	if ((bytes = nn_recv(sock, &buf, NN_MSG, 0)) < 0) {
 		fatal("nn_recv");
 	}
-
+	free(msg_);
 	nn_freemsg(buf);
 	return (nn_shutdown(sock, rv));
 }
-

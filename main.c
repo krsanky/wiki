@@ -52,7 +52,7 @@ main(void)
 	} else if(strcmp(params[0].key, "start")==0)  {
 		errorpage("start");
 	} else if(strcmp(params[0].key, "logtest")==0)  {
-		if((ret = wikilog("LOG_poop...")) < 0) 
+		if((ret = wikilog("123poop...")) < 0) 
 			errorpage("logtest");
 		else
 			msgpage("logtest..");

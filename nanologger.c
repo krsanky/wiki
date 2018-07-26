@@ -33,13 +33,17 @@ dispatch(char *msg, int sock)
 		if ((bytes = nn_send(sock, d, sz_d, 0)) < 0) {
 			fatal("nn_send");
 		}
-	} else if (strncmp(msg, "LOG", 3) == 0) {
+	} else if (strncmp(msg, LOG_PREFIX, sizeof(LOG_PREFIX)-1) == 0) {
 		if ((bytes = nn_send(sock, "RCVD", 5, 0)) < 0) {
 			fatal("nn_send");
 		}
+		msg = msg+3;
 		fprintf(logfile, "log:%s\n", msg);
 		fflush(logfile);
 	} else {
+		if ((bytes = nn_send(sock, "RCVD", 5, 0)) < 0) {
+			fatal("nn_send");
+		}
 		fprintf(logfile, "UNKNOWN REQUEST:%s\n", msg);
 		fflush(logfile);
 	}

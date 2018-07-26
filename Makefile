@@ -37,10 +37,13 @@ writef: ${.TARGET}.c
 		${.TARGET}.c \
 		-lmarkdown \
 
+indent:
+	@echo "implement indenting of all c code..."
+
 clean:
-	rm -f *.cgi writef myserver nanologger nanoclient mdtest
+	rm -f *.cgi *.BAK writef myserver nanologger nanoclient mdtest
 cleanlogs: 
 	rm -rf nlog.txt log.txt
 
-.PHONY: test clean cleanlogs
+.PHONY: test clean cleanlogs indent
 
