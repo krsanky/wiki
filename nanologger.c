@@ -34,10 +34,11 @@ dispatch(char *msg, int sock)
 			fatal("nn_send");
 		}
 	} else if (strncmp(msg, "LOG", 3) == 0) {
-		fprintf(logfile, "%s\n", msg);
+		fprintf(logfile, "log:%s\n", msg);
 		fflush(logfile);
 	} else {
 		fprintf(logfile, "UNKNOWN REQUEST:%s\n", msg);
+		fflush(logfile);
 	}
 }
 
@@ -60,6 +61,7 @@ server(const char *url)
 			fatal("nn_recv");
 		}
 		fprintf(logfile, "msg:%s\n", msg);
+		printf("msg:%s\n", msg);
 		fflush(logfile);
 
 		/*

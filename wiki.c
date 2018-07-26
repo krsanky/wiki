@@ -110,12 +110,12 @@ showenv()
         printf("%s\n", *env);
 	
 	printf("</pre>\n");
-
 }
 
 int
 wikilog(char * msg)
 {
+/*
 	int 		bytes = -1;
 	int 		sock;
 	int 		rv;
@@ -126,9 +126,33 @@ wikilog(char * msg)
 	if ((rv = nn_connect(sock, SERVER_ENDPOINT)) < 0) {
 		return -1;
 	}
-	if ((bytes = nn_send(sock, "DATE", strlen("DATE")+1, 0)) < 0) {
+	if ((bytes = nn_send(sock, msg, strlen(msg)+1, 0)) < 0) {
 		return -1;
 	}
+	return (nn_shutdown(sock, rv));
+*/
+/* -------------- */
+	int 		sz_date = strlen("DATE") + 1;
+	char           *buf = NULL;
+	int 		bytes = -1;
+	int 		sock;
+	int 		rv;
+
+	if ((sock = nn_socket(AF_SP, NN_REQ)) < 0) {
+		fatal("nn_socket");
+	}
+	if ((rv = nn_connect(sock, SERVER_ENDPOINT)) < 0) {
+		fatal("nn_connect");
+	}
+	printf("NODE1: SENDING DATE REQUEST\n");
+	if ((bytes = nn_send(sock, "DATE", sz_date, 0)) < 0) {
+		fatal("nn_send");
+	}
+	if ((bytes = nn_recv(sock, &buf, NN_MSG, 0)) < 0) {
+		fatal("nn_recv");
+	}
+	//printf("NODE1: RECEIVED DATE %s\n", buf);
+	nn_freemsg(buf);
 	return (nn_shutdown(sock, rv));
 }
 

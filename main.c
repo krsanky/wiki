@@ -12,7 +12,7 @@ main(void)
 {
 	FILE *logfile;
 	struct yuarel_param *params;
-	int p;
+	int p, ret;
 	params = malloc(sizeof(*params)*10); 
 
 	if (params == NULL) {
@@ -52,8 +52,10 @@ main(void)
 	} else if(strcmp(params[0].key, "start")==0)  {
 		errorpage("start");
 	} else if(strcmp(params[0].key, "logtest")==0)  {
-		wikilog("test...");
-		msgpage("logtest");
+		if((ret = wikilog("LOG_sadasdtest...")) < 0) 
+			errorpage("logtest");
+		else
+			msgpage("logtest..");
 	} else {
 		query_params_test(params, 10);
 	}

@@ -15,7 +15,7 @@ fatal(const char *func)
 }
 
 int
-client(const char *url)
+client()
 {
 	int 		sz_date = strlen("DATE") + 1;	/* '\0' too */
 	char           *buf = NULL;
@@ -26,8 +26,7 @@ client(const char *url)
 	if ((sock = nn_socket(AF_SP, NN_REQ)) < 0) {
 		fatal("nn_socket");
 	}
-	printf("url[%s]\n", url);
-	if ((rv = nn_connect(sock, url)) < 0) {
+	if ((rv = nn_connect(sock, SERVER_ENDPOINT)) < 0) {
 		fatal("nn_connect");
 	}
 	printf("NODE1: SENDING DATE REQUEST\n");
@@ -46,9 +45,8 @@ int
 main(int argc, char **argv)
 {
 	printf("I am %s\n", argv[0]);
-	printf("url:%s\n", SERVER_ENDPOINT);
 
-	if (client(SERVER_ENDPOINT) < 0)
+	if (client() < 0)
 		fatal("nn error\n");
 
 	return 0;

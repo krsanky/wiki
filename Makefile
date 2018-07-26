@@ -42,5 +42,5 @@ clean:
 cleanlogs: 
 	rm -rf nlog.txt log.txt
 
-.PHONY: test wiki.cgi clean cleanlogs
+.PHONY: test clean cleanlogs
 
