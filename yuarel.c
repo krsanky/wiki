@@ -293,3 +293,4 @@ yuarel_parse_query(char *query, char delimiter, struct yuarel_param *params, int
 
 	return i;
 }
+

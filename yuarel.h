@@ -22,10 +22,6 @@
 #ifndef INC_YUAREL_H
 #define INC_YUAREL_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
  * The struct where the parsed values will be stored:
  *
@@ -107,8 +103,5 @@ extern int yuarel_split_path(char *path, char **parts, int max_parts);
  */
 extern int yuarel_parse_query(char *query, char delimiter, struct yuarel_param *params, int max_params);
 
-#ifdef __cplusplus
-}
-#endif
-
 #endif /* INC_YUAREL_H */
+
