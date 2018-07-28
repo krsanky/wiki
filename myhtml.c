@@ -1,7 +1,7 @@
 #include "myhtml.h"
 
-void 
-myhtml_header() 
+void
+myhtml_header()
 {
 	printf("\
 <!doctype html>\
@@ -13,7 +13,7 @@ myhtml_header()
 \n");
 }
 
-void 
+void
 myhtml_footer()
 {
 	printf("\
@@ -27,7 +27,6 @@ myhtml_topnav()
 {
 	printf("<a href=\"/\">home</a> ");
 	printf("<a href='/wiki.cgi?index'>index</a> ");
-/* 	printf("<a href='/edit.cgi?asd=123'>edit</a> "); */
+	/* printf("<a href='/edit.cgi?asd=123'>edit</a> "); */
 	printf("\n");
 }
-

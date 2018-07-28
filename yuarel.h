@@ -31,20 +31,20 @@
  * path will be used to null terminate the hostname if no port is supplied.
  */
 struct yuarel {
-	char *scheme; /* scheme, without ":" and "//" */
-	char *username; /* username, default: NULL */
-	char *password; /* password, default: NULL */
-	char *host; /* hostname or IP address */
-	int port; /* port, default: 0 */
-	char *path; /* path, without leading "/", default: NULL */
-	char *query; /* query, default: NULL */
-	char *fragment; /* fragment, default: NULL */
+	char           *scheme;	/* scheme, without ":" and "//" */
+	char           *username;	/* username, default: NULL */
+	char           *password;	/* password, default: NULL */
+	char           *host;	/* hostname or IP address */
+	int 		port;	/* port, default: 0 */
+	char           *path;	/* path, without leading "/", default: NULL */
+	char           *query;	/* query, default: NULL */
+	char           *fragment;	/* fragment, default: NULL */
 };
 
 /* A struct to hold the query string parameter values. */
 struct yuarel_param {
-	char *key;
-	char *val;
+	char           *key;
+	char           *val;
 };
 
 /**
@@ -65,7 +65,7 @@ struct yuarel_param {
  *
  * Returns 0 on success, otherwise -1.
  */
-extern int yuarel_parse(struct yuarel *url, char *url_str);
+extern int 	yuarel_parse(struct yuarel * url, char *url_str);
 
 /**
  * Split a path into several strings.
@@ -80,7 +80,7 @@ extern int yuarel_parse(struct yuarel *url, char *url_str);
  *
  * Returns the number of parsed items. -1 on error.
  */
-extern int yuarel_split_path(char *path, char **parts, int max_parts);
+extern int 	yuarel_split_path(char *path, char **parts, int max_parts);
 
 /**
  * Parse a query string into a key/value struct.
@@ -101,7 +101,6 @@ extern int yuarel_split_path(char *path, char **parts, int max_parts);
  *
  * Returns the number of parsed items. -1 on error.
  */
-extern int yuarel_parse_query(char *query, char delimiter, struct yuarel_param *params, int max_params);
+extern int 	yuarel_parse_query(char *query, char delimiter, struct yuarel_param * params, int max_params);
 
-#endif /* INC_YUAREL_H */
-
+#endif				/* INC_YUAREL_H */

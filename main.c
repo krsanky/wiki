@@ -13,9 +13,9 @@ main(void)
 	FILE           *logfile;
 	struct yuarel_param *params;
 	int 		p        , ret;
-	params = malloc(sizeof(*params) * 10); 
-	char 		*msg;
-	char 		*val;
+	params = malloc(sizeof(*params) * 10);
+	char           *msg;
+	char           *val;
 
 	if (params == NULL) {
 		puts("error with malloc");
@@ -50,7 +50,7 @@ main(void)
 	} else if (strcmp(params[0].key, "start") == 0) {
 		msgpage("start");
 	} else if (strcmp(params[0].key, "logtest") == 0) {
-		if (params[0].val != NULL) 	
+		if (params[0].val != NULL)
 			val = params[0].val;
 		else
 			val = "NO VALUE";
@@ -65,7 +65,7 @@ main(void)
 		}
 	} else if (strcmp(params[0].key, "index") == 0) {
 		wikiindex();
-	} else { /* unreachable ? */
+	} else {		/* unreachable ? */
 		query_params_test(params, 10);
 	}
 

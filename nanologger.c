@@ -16,14 +16,14 @@ date(void)
 	time_t 		now = time(&now);
 	struct tm      *info = localtime(&now);
 	char           *text = asctime(info);
-	text[strlen(text) - 1] = '\0'; /* remove '\n' */
+	text[strlen(text) - 1] = '\0';	/* remove '\n' */
 	return text;
 }
 
 void
 dispatch(char *msg, int sock)
 {
-	int bytes;
+	int 		bytes;
 	fprintf(logfile, "received request:%s sz:%lu\n", msg, strlen(msg));
 	fflush(logfile);
 	if (strcmp(msg, "DATE") == 0) {
@@ -33,11 +33,11 @@ dispatch(char *msg, int sock)
 		if ((bytes = nn_send(sock, d, sz_d, 0)) < 0) {
 			fatal("nn_send");
 		}
-	} else if (strncmp(msg, LOG_PREFIX, sizeof(LOG_PREFIX)-1) == 0) {
+	} else if (strncmp(msg, LOG_PREFIX, sizeof(LOG_PREFIX) - 1) == 0) {
 		if ((bytes = nn_send(sock, "RCVD", 5, 0)) < 0) {
 			fatal("nn_send");
 		}
-		msg = msg+sizeof(LOG_PREFIX)-1;
+		msg = msg + sizeof(LOG_PREFIX) - 1;
 		fprintf(logfile, "log:%s\n", msg);
 		fflush(logfile);
 	} else {
