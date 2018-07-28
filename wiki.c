@@ -33,7 +33,6 @@ query_params_test(struct yuarel_param * params, int sz)
 		errorpage("error with yuarel_parse_query()");
 		return;
 	}
-	printf("HTTP/1.0 200 OK\n");
 	printf("Content-type: text/html\n\n");
 
 	myhtml_header();
@@ -51,7 +50,6 @@ query_params_test(struct yuarel_param * params, int sz)
 void
 mainpage(void)
 {
-	printf("HTTP/1.0 200 OK\n");
 	printf("Content-type: text/html\n\n");
 
 	myhtml_header();
@@ -71,7 +69,6 @@ mainpage(void)
 void
 errorpage(char *error)
 {
-	printf("HTTP/1.0 200 OK\n");
 	printf("Content-type: text/html\n\n");
 
 	myhtml_header();
@@ -85,7 +82,6 @@ errorpage(char *error)
 void
 msgpage(char *msg)
 {
-	printf("HTTP/1.0 200 OK\n");
 	printf("Content-type: text/html\n\n");
 
 	myhtml_header();
@@ -152,7 +148,6 @@ wikiindex(void)
 	struct dirent  *de;
 	DIR            *dr;
 
-	/* printf("HTTP/1.0 200 OK\n"); */
 	printf("Content-type: text/html\n\n");
 	myhtml_header();
 	myhtml_topnav();
