@@ -63,7 +63,9 @@ main(void)
 		} else {
 			msgpage(msg);
 		}
-	} else {
+	} else if (strcmp(params[0].key, "index") == 0) {
+		msgpage("index");
+	} else { /* unreachable ? */
 		query_params_test(params, 10);
 	}
 

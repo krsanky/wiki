@@ -1,6 +1,5 @@
 bin/
 usr/
-porch/
 *.cgi
 *.pdf
 *.core
@@ -14,3 +13,4 @@ nanologger
 nanoclient
 code-examples/
 nng/
+upload/

@@ -57,7 +57,10 @@ mainpage(void)
 	myhtml_topnav();
 	printf("<hr/>\n");
 	printf("\
-<p>wiki wiki wiki</p>\n");
+<p>wiki wiki wiki</p>\n\
+<ul>\n\
+<li><a href='/wiki.cgi?index'>index</a></li>\
+</ul>\n");
 
 	showenv();
 

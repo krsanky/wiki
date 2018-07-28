@@ -3,5 +3,6 @@
 
 #define SERVER_ENDPOINT "tcp://127.0.0.1:23000"
 #define LOG_PREFIX "LOG"
+#define WIKI_ROOT "content"
 
 #endif
