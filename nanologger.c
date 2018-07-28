@@ -24,8 +24,10 @@ void
 dispatch(char *msg, int sock)
 {
 	int 		bytes;
-	fprintf(logfile, "received request:%s sz:%lu\n", msg, strlen(msg));
-	fflush(logfile);
+	/*
+		fprintf(logfile, "received request:%s sz:%lu\n", msg, strlen(msg));
+		fflush(logfile);
+	*/
 	if (strcmp(msg, "DATE") == 0) {
 		char           *d = date();
 		int 		sz_d = strlen(d) + 1;
@@ -67,9 +69,11 @@ server(const char *url)
 		if ((bytes = nn_recv(sock, &msg, NN_MSG, 0)) < 0) {
 			fatal("nn_recv");
 		}
-		fprintf(logfile, "msg:%s\n", msg);
 		printf("msg:%s\n", msg);
-		fflush(logfile);
+		/*
+				fprintf(logfile, "msg:%s\n", msg);
+				fflush(logfile);
+		*/
 
 		/*
 		 * since nm allocated the buffer we won't check its length
@@ -88,15 +92,18 @@ server(const char *url)
 int
 main(int argc, char **argv)
 {
-	printf("I am %s\n", argv[0]);
+	printf("I am %s argc:%d\n", argv[0], argc);
+
 
 	logfile = fopen("nlog.txt", "a");
 	if (logfile == NULL) {
 		printf("error opening logfile\n");
 		exit(1);
 	}
-	fprintf(logfile, "main...\n");
-	fflush(logfile);
+	/*
+		fprintf(logfile, "main...\n");
+		fflush(logfile);
+	*/
 
 	server(SERVER_ENDPOINT);
 

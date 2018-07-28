@@ -10,7 +10,6 @@
 int
 main(void)
 {
-	FILE           *logfile;
 	struct yuarel_param *params;
 	int 		p        , ret;
 	params = malloc(sizeof(*params) * 10);
@@ -21,11 +20,6 @@ main(void)
 		puts("error with malloc");
 		return EXIT_FAILURE;
 	}
-	if ((logfile = fopen("log.txt", "a")) == NULL) {
-		puts("error opening file");
-		return EXIT_FAILURE;
-	}
-	fprintf(logfile, "main...\n");
 	char           *qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
 		errorpage("error with QUERY_STRING");
@@ -69,7 +63,5 @@ main(void)
 		query_params_test(params, 10);
 	}
 
-	if (logfile != NULL)
-		fclose(logfile);
 	return EXIT_SUCCESS;
 }

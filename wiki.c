@@ -110,6 +110,19 @@ showenv()
 	printf("</pre>\n");
 }
 
+/*
+int
+printf(const char *fmt, ...)
+{
+	int ret;
+	va_list ap;
+
+	va_start(ap, fmt);
+	ret = vfprintf(stdout, fmt, ap);
+	va_end(ap);
+	return (ret);
+}
+*/
 int
 wikilog(char *msg)
 {
@@ -142,6 +155,31 @@ wikilog(char *msg)
 	return (nn_shutdown(sock, rv));
 }
 
+int
+is_md(const char *f)
+{
+	char           *ext;
+
+	ext = strrchr(f, '.');
+	ext++;
+	if (strcasecmp(ext, "md") == 0)
+		return 1;
+	/*
+		char           *msg;
+		int 		msgl;
+	
+		msgl = strlen("is_md() ext:\n") + strlen(f) + strlen(ext) + 1;
+		msg = malloc(msgl);
+		snprintf(msg, msgl, "is_md(%s) ext:%s", f, ext);
+		wikilog(msg);
+		free(msg);
+	*/
+
+
+
+	return 0;
+}
+
 void
 wikiindex(void)
 {
@@ -160,8 +198,11 @@ wikiindex(void)
 	} else {
 		printf("dir werked\n");
 	}
-	while ((de = readdir(dr)) != NULL)
-		printf("%s\n", de->d_name);
+	while ((de = readdir(dr)) != NULL) {
+		if (is_md(de->d_name)) {
+			printf("%s\n", de->d_name);
+		}
+	}
 
 	printf("</pre>\n");
 	myhtml_footer();
