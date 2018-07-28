@@ -4,6 +4,7 @@
 #include "yuarel.h"
 
 void 		fatal    (const char *);
+void 		http_headers(void);
 void 		showenv  (void);
 void 		mainpage (void);
 void 		errorpage(char *);

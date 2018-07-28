@@ -44,7 +44,7 @@ client()
 int
 main(int argc, char **argv)
 {
-	printf("I am %s\n", argv[0]);
+	printf("I am %s argc:%d\n", argv[0], argc);
 
 	if (client() < 0)
 		fatal("nn error\n");

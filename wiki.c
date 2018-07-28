@@ -22,6 +22,12 @@ fatal(const char *func)
 }
 
 void
+http_headers(void)
+{
+	printf("Content-type: text/html\n\n");
+}
+
+void
 query_params_test(struct yuarel_param * params, int sz)
 {
 	char           *qs = getenv("QUERY_STRING");
@@ -33,11 +39,10 @@ query_params_test(struct yuarel_param * params, int sz)
 		errorpage("error with yuarel_parse_query()");
 		return;
 	}
-	printf("Content-type: text/html\n\n");
+	http_headers();
 
 	myhtml_header();
 	myhtml_topnav();
-	printf("<hr/>\n");
 	printf("<dl>\n");
 	while (sz-- > 0) {
 		printf("<dt>%s</dt><dd>%s</dd>\n", params[sz].key, params[sz].val);
@@ -50,11 +55,10 @@ query_params_test(struct yuarel_param * params, int sz)
 void
 mainpage(void)
 {
-	printf("Content-type: text/html\n\n");
+	http_headers();
 
 	myhtml_header();
 	myhtml_topnav();
-	printf("<hr/>\n");
 	printf("\
 <p>wiki wiki wiki</p>\n\
 <ul>\n\
@@ -69,11 +73,10 @@ mainpage(void)
 void
 errorpage(char *error)
 {
-	printf("Content-type: text/html\n\n");
+	http_headers();
 
 	myhtml_header();
 	myhtml_topnav();
-	printf("<hr/>\n");
 	printf("\
 <p style='color:red;'>%s</p>\n", error);
 	myhtml_footer();
@@ -82,11 +85,10 @@ errorpage(char *error)
 void
 msgpage(char *msg)
 {
-	printf("Content-type: text/html\n\n");
+	http_headers();
 
 	myhtml_header();
 	myhtml_topnav();
-	printf("<hr/>\n");
 	printf("\
 <p style='color:green;'>%s</p>\n", msg);
 	myhtml_footer();
@@ -156,27 +158,16 @@ wikilog(char *msg)
 }
 
 int
-is_md(const char *f)
+is_md(struct dirent * de)
 {
 	char           *ext;
-
-	ext = strrchr(f, '.');
-	ext++;
-	if (strcasecmp(ext, "md") == 0)
-		return 1;
-	/*
-		char           *msg;
-		int 		msgl;
-	
-		msgl = strlen("is_md() ext:\n") + strlen(f) + strlen(ext) + 1;
-		msg = malloc(msgl);
-		snprintf(msg, msgl, "is_md(%s) ext:%s", f, ext);
-		wikilog(msg);
-		free(msg);
-	*/
-
-
-
+	ext = strrchr(de->d_name, '.');
+	if (ext != NULL) {
+		ext++;
+		if (strcasecmp(ext, "md") == 0)
+			if (de->d_type == DT_REG)
+				return 1;
+	}
 	return 0;
 }
 
@@ -184,28 +175,34 @@ void
 wikiindex(void)
 {
 	struct dirent  *de;
-	DIR            *dr;
+	DIR            *dir;
 
-	printf("Content-type: text/html\n\n");
+
+	dir = opendir(WIKI_ROOT);
+	if (dir == NULL) {
+		errorpage("could not open dir:");
+	}
+	http_headers();
 	myhtml_header();
 	myhtml_topnav();
-	printf("<hr/>\n");
-
-	printf("<pre>\n");
-	dr = opendir(WIKI_ROOT);
-	if (dr == NULL) {
-		printf("could not open dir:%s\n", WIKI_ROOT);
-	} else {
-		printf("dir werked\n");
-	}
-	while ((de = readdir(dr)) != NULL) {
-		if (is_md(de->d_name)) {
-			printf("%s\n", de->d_name);
+	printf("<ul>\n");
+	while ((de = readdir(dir)) != NULL) {
+		if (is_md(de)) {
+			printf("\
+<li>\
+<a href='/wiki.cgi?view&p=%s'>\
+%s\
+</a></li>\n", de->d_name, de->d_name);
+		} else if (de->d_type == DT_DIR) {
+			printf("\
+<li>\
+<a href='/wiki.cgi?index&d=%s'>\
+dir:%s\
+</a></li>\n", de->d_name, de->d_name);
 		}
 	}
-
-	printf("</pre>\n");
+	printf("</ul>\n");
 	myhtml_footer();
 
-	closedir(dr);
+	closedir(dir);
 }
