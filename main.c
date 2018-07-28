@@ -7,26 +7,26 @@
 #include "yuarel.h"
 
 
-int 
+int
 main(void)
 {
-	FILE *logfile;
+	FILE           *logfile;
 	struct yuarel_param *params;
-	int p, ret;
-	params = malloc(sizeof(*params)*10); 
+	int 		p        , ret;
+	params = malloc(sizeof(*params) * 10); 
+	char 		*msg;
+	char 		*val;
 
 	if (params == NULL) {
 		puts("error with malloc");
 		return EXIT_FAILURE;
 	}
-
 	if ((logfile = fopen("log.txt", "a")) == NULL) {
 		puts("error opening file");
 		return EXIT_FAILURE;
 	}
-
 	fprintf(logfile, "main...\n");
-	char *qs = getenv("QUERY_STRING");
+	char           *qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
 		errorpage("error with QUERY_STRING");
 		return EXIT_FAILURE;
@@ -34,7 +34,7 @@ main(void)
 	if (strlen(qs) > 0) {
 		p = yuarel_parse_query(qs, '&', params, 10);
 		if (p < 0) {
-			char * tmpstr = malloc(100);	
+			char           *tmpstr = malloc(100);
 			if (tmpstr == NULL) {
 				errorpage("error with yuarel_parse_query()");
 			} else {
@@ -45,22 +45,29 @@ main(void)
 			return EXIT_FAILURE;
 		}
 	}
-
-	
 	if ((strlen(qs) < 1) || (p < 1)) {
 		mainpage();
-	} else if(strcmp(params[0].key, "start")==0)  {
-		errorpage("start");
-	} else if(strcmp(params[0].key, "logtest")==0)  {
-		if((ret = wikilog("123poop...")) < 0) 
-			errorpage("logtest");
+	} else if (strcmp(params[0].key, "start") == 0) {
+		msgpage("start");
+	} else if (strcmp(params[0].key, "logtest") == 0) {
+		if (params[0].val != NULL) 	
+			val = params[0].val;
 		else
-			msgpage("logtest..");
+			val = "NO VALUE";
+		msg = "logtest";
+		if (params[0].val != NULL) {
+			msg = params[0].val;
+		}
+		if ((ret = wikilog(val)) < 0) {
+			errorpage(msg);
+		} else {
+			msgpage(msg);
+		}
 	} else {
 		query_params_test(params, 10);
 	}
 
-	if (logfile != NULL) fclose(logfile);
+	if (logfile != NULL)
+		fclose(logfile);
 	return EXIT_SUCCESS;
 }
-

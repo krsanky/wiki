@@ -113,7 +113,9 @@ showenv()
 int
 wikilog(char *msg)
 {
-	char           *buf, *msg_;
+	char           *msg_;
+	int		msg_l;
+	char           *buf;
 	int 		bytes = -1;
 	int 		sock;
 	int 		rv;
@@ -125,9 +127,10 @@ wikilog(char *msg)
 		fatal("nn_connect");
 	}
 
-	msg_ = malloc(strlen(msg) + sizeof(LOG_PREFIX));
-	strlcpy(msg_, "LOG", sizeof(msg_));	
-	strlcat(msg_, msg, sizeof(msg_));
+	msg_l = strlen(msg) + sizeof(LOG_PREFIX);
+	msg_ = malloc(msg_l);
+	strlcpy(msg_, LOG_PREFIX, msg_l);
+	strlcat(msg_, msg, msg_l);
 
 	if ((bytes = nn_send(sock, msg_, strlen(msg_) + 1, 0)) < 0) {
 		fatal("nn_send");
@@ -139,3 +142,6 @@ wikilog(char *msg)
 	nn_freemsg(buf);
 	return (nn_shutdown(sock, rv));
 }
+
+
+
