@@ -64,7 +64,7 @@ main(void)
 			msgpage(msg);
 		}
 	} else if (strcmp(params[0].key, "index") == 0) {
-		msgpage("index");
+		wikiindex();
 	} else { /* unreachable ? */
 		query_params_test(params, 10);
 	}

@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <dirent.h>
 #include <unistd.h>
 #include <nanomsg/nn.h>
 #include <nanomsg/reqrep.h>
@@ -117,7 +118,7 @@ int
 wikilog(char *msg)
 {
 	char           *msg_;
-	int		msg_l;
+	int 		msg_l;
 	char           *buf;
 	int 		bytes = -1;
 	int 		sock;
@@ -129,7 +130,6 @@ wikilog(char *msg)
 	if ((rv = nn_connect(sock, SERVER_ENDPOINT)) < 0) {
 		fatal("nn_connect");
 	}
-
 	msg_l = strlen(msg) + sizeof(LOG_PREFIX);
 	msg_ = malloc(msg_l);
 	strlcpy(msg_, LOG_PREFIX, msg_l);
@@ -146,5 +146,30 @@ wikilog(char *msg)
 	return (nn_shutdown(sock, rv));
 }
 
+void
+wikiindex(void)
+{
+	struct dirent  *de;
+	DIR            *dr;
 
+	/* printf("HTTP/1.0 200 OK\n"); */
+	printf("Content-type: text/html\n\n");
+	myhtml_header();
+	myhtml_topnav();
+	printf("<hr/>\n");
 
+	printf("<pre>\n");
+	dr = opendir(WIKI_ROOT);
+	if (dr == NULL) {
+		printf("could not open dir:%s\n", WIKI_ROOT);
+	} else {
+		printf("dir werked\n");
+	}
+	while ((de = readdir(dr)) != NULL)
+		printf("%s\n", de->d_name);
+
+	printf("</pre>\n");
+	myhtml_footer();
+
+	closedir(dr);
+}

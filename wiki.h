@@ -11,5 +11,6 @@ void errorpage(char *);
 void msgpage(char *);
 void query_params_test(struct yuarel_param *, int);
 int wikilog(char *);
+void wikiindex(void);
 
 #endif
