@@ -6,7 +6,7 @@ wiki.cgi: wiki.c main.c myhtml.c yuarel.c
 	$(CC) $(CFLAGS) -o $(.TARGET) \
 		main.c yuarel.c myhtml.c wiki.c \
 		-L/usr/local/lib -I/usr/local/include \
-		-lnanomsg
+		-lnanomsg -lmarkdown 
 
 nanologger: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
@@ -42,7 +42,8 @@ indent:
 	./indent-all.sh
 
 clean:
-	rm -f *.cgi *.BAK writef myserver nanologger nanoclient mdtest
+	rm -f writef myserver nanologger nanoclient mdtest
+	rm -rf a.out *.BAK *.cgi
 cleanlogs: 
 	rm -rf nlog.txt log.txt
 

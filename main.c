@@ -22,7 +22,7 @@ main(void)
 	}
 	char           *qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
-		errorpage("error with QUERY_STRING");
+		errpage("error with QUERY_STRING");
 		return EXIT_FAILURE;
 	}
 	if (strlen(qs) > 0) {
@@ -30,10 +30,10 @@ main(void)
 		if (p < 0) {
 			char           *tmpstr = malloc(100);
 			if (tmpstr == NULL) {
-				errorpage("error with yuarel_parse_query()");
+				errpage("error with yuarel_parse_query()");
 			} else {
 				snprintf(tmpstr, 99, "error with yuarel_parse_query() [QUERY_STRING:%s][len:%lu]", qs, strlen(qs));
-				errorpage(tmpstr);
+				errpage(tmpstr);
 				free(tmpstr);
 			}
 			return EXIT_FAILURE;
@@ -53,12 +53,14 @@ main(void)
 			msg = params[0].val;
 		}
 		if ((ret = wikilog(val)) < 0) {
-			errorpage(msg);
+			errpage(msg);
 		} else {
 			msgpage(msg);
 		}
 	} else if (strcmp(params[0].key, "index") == 0) {
 		wikiindex();
+	} else if (strcmp(params[0].key, "view") == 0) {
+		wikiview("m1.md");
 	} else {		/* unreachable ? */
 		query_params_test(params, 10);
 	}

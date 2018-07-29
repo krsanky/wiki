@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <nanomsg/nn.h>
 #include <nanomsg/reqrep.h>
+#include <mkdio.h>
 
 #include "wiki.h"
 #include "myhtml.h"
@@ -32,11 +33,11 @@ query_params_test(struct yuarel_param * params, int sz)
 {
 	char           *qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
-		errorpage("error with QUERY_STRING");
+		errpage("error with QUERY_STRING");
 		return;
 	}
 	if (sz < 0) {
-		errorpage("error with yuarel_parse_query()");
+		errpage("error with yuarel_parse_query()");
 		return;
 	}
 	http_headers();
@@ -71,7 +72,7 @@ mainpage(void)
 }
 
 void
-errorpage(char *error)
+errpage(char *error)
 {
 	http_headers();
 
@@ -180,7 +181,7 @@ wikiindex(void)
 
 	dir = opendir(WIKI_ROOT);
 	if (dir == NULL) {
-		errorpage("could not open dir:");
+		errpage("could not open dir:");
 	}
 	http_headers();
 	myhtml_header();
@@ -206,3 +207,51 @@ dir:%s\
 
 	closedir(dir);
 }
+
+
+void
+wikiview(char * filename) 
+{
+/*
+	char	*msg;
+	int	msgl;
+	msgl = strlen("this is the msg mdfile:")+strlen(filename)+1;
+	msg = malloc(msgl);
+	if (msg != NULL) {
+		strlcpy(msg, "this is the msg:", msgl);
+		strlcat(msg, filename, msgl);
+		wikilog(msg);
+	}
+*/
+
+	int 		val;
+	MMIOT          *mmiot;
+	FILE           *mdfile;
+	char		*fullpath;
+	int		fpl;
+
+	fpl = sizeof(WIKI_ROOT) + 1 + strlen(filename);
+	fullpath = malloc(fpl);
+	strlcpy(fullpath, WIKI_ROOT, fpl);
+	strlcat(fullpath, "/", fpl);
+	strlcat(fullpath, filename, fpl);
+	
+	
+	mdfile = fopen(fullpath, "r");
+	free(fullpath);
+	if (mdfile == NULL) {
+		errpage("cannot open input file:");
+	}
+	mmiot = mkd_in(mdfile, 0);
+
+	http_headers();
+	myhtml_header();
+	myhtml_topnav();
+	val = markdown(mmiot, stdout, MKD_GITHUBTAGS);
+	myhtml_footer();
+	/*val ????*/
+
+	if (mdfile != NULL)
+		fclose(mdfile);
+}
+
