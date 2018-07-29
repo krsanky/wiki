@@ -11,9 +11,9 @@ wiki.cgi: wiki.c main.c myhtml.c yuarel.c
 nanologger: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
 		${.TARGET}.c \
-		wiki.c myhtml.c \
+		myhtml.c wiki.c \
 		-L/usr/local/lib -I/usr/local/include \
-		-lnanomsg
+		-lnanomsg -lmarkdown 
 
 nanoclient: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
