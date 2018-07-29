@@ -114,37 +114,6 @@ showenv()
 	printf("</pre>\n");
 }
 
-/*
-int
-printf(const char *fmt, ...)
-{
-	int ret;
-	va_list ap;
-
-	va_start(ap, fmt);
-	ret = vfprintf(stdout, fmt, ap);
-	va_end(ap);
-	return (ret);
-}
-
-           #include <stdarg.h>
-           #include <stdio.h>
-           #include <stdlib.h>
-
-           char *
-           newfmt(const char *fmt, ...)
-           {
-                   char *p;
-                   va_list ap;
-
-                   if ((p = malloc(128)) == NULL)
-                           return (NULL);
-                   va_start(ap, fmt);
-                   (void) vsnprintf(p, 128, fmt, ap);
-                   va_end(ap);
-                   return (p);
-           }
-*/
 int
 nlog(const char *fmt,...)
 {
@@ -283,17 +252,11 @@ wikiview(char *filename)
 char           *
 get_param(char *pname, struct yuarel_param * params, int sz)
 {
-	char           *msg;
-	int 		msgl;
-	msgl = strlen("this is the msg mdfile:") + strlen(pname) + 1;
-	msg = malloc(msgl);
-	if (msg != NULL) {
-		strlcpy(msg, "this is the msg:", msgl);
-		strlcat(msg, pname, msgl);
-		wikilog(msg);
-	}
-	for (int i = 0; i < sz; i++) {
+	nlog("get_param( %s )", pname);
 
-	}
+	for (int i = 0; i < sz; i++)
+		if (params[i].key != NULL)
+			if (strcmp(pname, params[i].key) == 0)
+				return params[i].val;
 	return NULL;
 }

@@ -16,6 +16,7 @@ main(void)
 	char           *val;
 	char           *qs;
 	int 		ret;
+	char           *param;
 
 	params = malloc(sizeof(*params) * 10);
 	if (params == NULL) {
@@ -62,9 +63,11 @@ main(void)
 	} else if (strcmp(params[0].key, "index") == 0) {
 		wikiindex();
 	} else if (strcmp(params[0].key, "view") == 0) {
-		ret = nlog("nlog nlog nlog:%s %d", "..this is the var...", 42);
-		get_param("p", params, 10);
-		wikiview("m1.md");
+		param = get_param("p", params, 10);
+		if (param != NULL)
+			wikiview(param);
+		else
+			errpage("param p not found");
 	} else {		/* unreachable ? */
 		query_params_test(params, 10);
 	}
