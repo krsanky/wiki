@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdarg.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <nanomsg/nn.h>
@@ -125,7 +126,43 @@ printf(const char *fmt, ...)
 	va_end(ap);
 	return (ret);
 }
+
+           #include <stdarg.h>
+           #include <stdio.h>
+           #include <stdlib.h>
+
+           char *
+           newfmt(const char *fmt, ...)
+           {
+                   char *p;
+                   va_list ap;
+
+                   if ((p = malloc(128)) == NULL)
+                           return (NULL);
+                   va_start(ap, fmt);
+                   (void) vsnprintf(p, 128, fmt, ap);
+                   va_end(ap);
+                   return (p);
+           }
 */
+int
+nlog(const char *fmt,...)
+{
+	char           *p;
+	va_list 	ap;
+	int 		ret;
+
+	if ((p = malloc(256)) == NULL)
+		return 0;
+	va_start(ap, fmt);
+	ret = vsnprintf(p, 256, fmt, ap);
+
+	va_end(ap);
+	ret = wikilog(p);
+	free(p);
+	return ret;
+}
+
 int
 wikilog(char *msg)
 {
@@ -210,33 +247,21 @@ dir:%s\
 
 
 void
-wikiview(char * filename) 
+wikiview(char *filename)
 {
-/*
-	char	*msg;
-	int	msgl;
-	msgl = strlen("this is the msg mdfile:")+strlen(filename)+1;
-	msg = malloc(msgl);
-	if (msg != NULL) {
-		strlcpy(msg, "this is the msg:", msgl);
-		strlcat(msg, filename, msgl);
-		wikilog(msg);
-	}
-*/
-
 	int 		val;
 	MMIOT          *mmiot;
 	FILE           *mdfile;
-	char		*fullpath;
-	int		fpl;
+	char           *fullpath;
+	int 		fpl;
 
 	fpl = sizeof(WIKI_ROOT) + 1 + strlen(filename);
 	fullpath = malloc(fpl);
 	strlcpy(fullpath, WIKI_ROOT, fpl);
 	strlcat(fullpath, "/", fpl);
 	strlcat(fullpath, filename, fpl);
-	
-	
+
+
 	mdfile = fopen(fullpath, "r");
 	free(fullpath);
 	if (mdfile == NULL) {
@@ -249,9 +274,26 @@ wikiview(char * filename)
 	myhtml_topnav();
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS);
 	myhtml_footer();
-	/*val ????*/
+	/* val ???? */
 
 	if (mdfile != NULL)
 		fclose(mdfile);
 }
 
+char           *
+get_param(char *pname, struct yuarel_param * params, int sz)
+{
+	char           *msg;
+	int 		msgl;
+	msgl = strlen("this is the msg mdfile:") + strlen(pname) + 1;
+	msg = malloc(msgl);
+	if (msg != NULL) {
+		strlcpy(msg, "this is the msg:", msgl);
+		strlcat(msg, pname, msgl);
+		wikilog(msg);
+	}
+	for (int i = 0; i < sz; i++) {
+
+	}
+	return NULL;
+}

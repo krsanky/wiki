@@ -1,4 +1,4 @@
-CFLAGS=	-W -Wall -O2
+CFLAGS=	-W -Wall -O2 -std=c99
 
 all: wiki.cgi nanologger nanoclient
 

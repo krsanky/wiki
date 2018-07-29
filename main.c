@@ -11,16 +11,18 @@ int
 main(void)
 {
 	struct yuarel_param *params;
-	int 		p        , ret;
-	params = malloc(sizeof(*params) * 10);
+	int 		p;
 	char           *msg;
 	char           *val;
+	char           *qs;
+	int 		ret;
 
+	params = malloc(sizeof(*params) * 10);
 	if (params == NULL) {
 		puts("error with malloc");
 		return EXIT_FAILURE;
 	}
-	char           *qs = getenv("QUERY_STRING");
+	qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
 		errpage("error with QUERY_STRING");
 		return EXIT_FAILURE;
@@ -60,6 +62,8 @@ main(void)
 	} else if (strcmp(params[0].key, "index") == 0) {
 		wikiindex();
 	} else if (strcmp(params[0].key, "view") == 0) {
+		ret = nlog("nlog nlog nlog:%s %d", "..this is the var...", 42);
+		get_param("p", params, 10);
 		wikiview("m1.md");
 	} else {		/* unreachable ? */
 		query_params_test(params, 10);
