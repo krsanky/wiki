@@ -1,15 +1,4 @@
 #include "myhtml.h"
-/*
-<!DOCTYPE html>
-<html><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Better Motherfucking Website</title>
-
-<style type="text/css">
-body{margin:40px auto;max-width:650px;line-height:1.6;font-size:18px;color:#444; padding:0 10px}
-h1,h2,h3{line-height:1.2}
-</style>
-*/
 
 void
 myhtml_header()
@@ -20,7 +9,7 @@ myhtml_header()
 <head><meta charset='utf-8'>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <head>\
-<title>wiki</title>\
+<title>oldcode wiki</title>\
 <style type='text/css'>\
 body{margin:40px auto;max-width:80%%;line-height:1.6;font-size:18px;color:#444; padding:0 10px}\
 h1,h2,h3{line-height:1.2}\
@@ -54,8 +43,10 @@ void
 myhtml_breadcrumbs(char *dir, char *page)
 {
 	printf("/");
+
 	if (dir != NULL) {
 		printf("%s", dir);
+		/* test test1.c */	
 	}
 	if (page != NULL) {
 		printf(" &rarr; %s", page);
