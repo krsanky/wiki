@@ -27,7 +27,7 @@ h1,h2,h3{line-height:1.2}\
 </style>\
 </head>\n\
 <body>\n\
-<header><h1>Oldcode WIKI</h1></header>\
+<header><h1>Oldcode Wiki</h1></header>\
 \n");
 }
 
@@ -47,5 +47,8 @@ myhtml_topnav()
 	printf("<a href=\"/\">home</a> ");
 	printf("<a href='/wiki.cgi?index'>index</a>\n");
 	/* printf("<a href='/edit.cgi?asd=123'>edit</a> "); */
+	printf("<hr/>\n");
+	printf("\
+<a href='#'>root</a>&rarr;<a href='#'>dir-2</a>\n");
 	printf("<hr/>\n");
 }

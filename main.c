@@ -6,6 +6,8 @@
 #include "myhtml.h"
 #include "yuarel.h"
 
+#include "settings.h"
+
 
 int
 main(void)
@@ -18,7 +20,7 @@ main(void)
 	int 		ret;
 	char           *param;
 
-	params = malloc(sizeof(*params) * 10);
+	params = malloc(sizeof(*params) * NUM_HTTP_PARAMS);
 	if (params == NULL) {
 		puts("error with malloc");
 		return EXIT_FAILURE;
@@ -29,7 +31,7 @@ main(void)
 		return EXIT_FAILURE;
 	}
 	if (strlen(qs) > 0) {
-		p = yuarel_parse_query(qs, '&', params, 10);
+		p = yuarel_parse_query(qs, '&', params, NUM_HTTP_PARAMS);
 		if (p < 0) {
 			char           *tmpstr = malloc(100);
 			if (tmpstr == NULL) {
@@ -61,15 +63,15 @@ main(void)
 			msgpage(msg);
 		}
 	} else if (strcmp(params[0].key, "index") == 0) {
-		wikiindex();
+		wikiindex(get_param("d", params, NUM_HTTP_PARAMS));
 	} else if (strcmp(params[0].key, "view") == 0) {
-		param = get_param("p", params, 10);
+		param = get_param("p", params, NUM_HTTP_PARAMS);
 		if (param != NULL)
-			wikiview(param);
+			wikiview(get_param("d", params, NUM_HTTP_PARAMS), param);
 		else
-			errpage("param p not found");
+			errpage("param p (page) not found");
 	} else {		/* unreachable ? */
-		query_params_test(params, 10);
+		query_params_test(params, NUM_HTTP_PARAMS);
 	}
 
 	return EXIT_SUCCESS;

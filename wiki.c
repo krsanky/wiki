@@ -179,33 +179,66 @@ is_md(struct dirent * de)
 }
 
 void
-wikiindex(void)
+wikiindex(char *dir_)
 {
 	struct dirent  *de;
 	DIR            *dir;
+	int 		dirl = 0;
+	char           *fulldir;
 
+	if (dir_ == NULL) {
+		fulldir = WIKI_ROOT;
+	} else {
+		dirl = sizeof(WIKI_ROOT) + strlen(dir_) + 1;
+		fulldir = malloc(dirl);
+		strlcpy(fulldir, WIKI_ROOT, dirl);
+		strlcat(fulldir, "/", dirl);
+		strlcat(fulldir, dir_, dirl);
+	}
+	nlog("dir_:%s fulldir:%s", dir_, fulldir);
 
-	dir = opendir(WIKI_ROOT);
+	dir = opendir(fulldir);
 	if (dir == NULL) {
 		errpage("could not open dir:");
 	}
+	if (dirl > 0)
+		free(fulldir);
+
 	http_headers();
 	myhtml_header();
 	myhtml_topnav();
 	printf("<ul>\n");
 	while ((de = readdir(dir)) != NULL) {
 		if (is_md(de)) {
-			printf("\
+			if (dir_ == NULL) {
+				printf("\
 <li>\
 <a href='/wiki.cgi?view&p=%s'>\
 %s\
 </a></li>\n", de->d_name, de->d_name);
-		} else if (de->d_type == DT_DIR) {
-			printf("\
+			} else {
+				printf("\
+<li>\
+<a href='/wiki.cgi?view&d=%s&p=%s'>\
+%s\
+</a></li>\n", dir_, de->d_name, de->d_name);
+
+			}
+
+		} else if ((de->d_type == DT_DIR) && (de->d_name[0] != '.')) {
+			if (dir_ == NULL) {
+				printf("\
 <li>\
 <a href='/wiki.cgi?index&d=%s'>\
 dir:%s\
 </a></li>\n", de->d_name, de->d_name);
+			} else {
+				printf("\
+<li>\
+<a href='/wiki.cgi?index&d=%s/%s'>\
+dir:%s\
+</a></li>\n", dir_, de->d_name, de->d_name);
+			}
 		}
 	}
 	printf("</ul>\n");
@@ -216,7 +249,7 @@ dir:%s\
 
 
 void
-wikiview(char *filename)
+wikiview(char *dir, char *filename)
 {
 	int 		val;
 	MMIOT          *mmiot;
@@ -225,11 +258,17 @@ wikiview(char *filename)
 	int 		fpl;
 
 	fpl = sizeof(WIKI_ROOT) + 1 + strlen(filename);
+	if (dir != NULL)
+		fpl = fpl + strlen(dir) + 1;
 	fullpath = malloc(fpl);
 	strlcpy(fullpath, WIKI_ROOT, fpl);
 	strlcat(fullpath, "/", fpl);
+	if (dir != NULL) {
+		strlcat(fullpath, dir, fpl);
+		strlcat(fullpath, "/", fpl);
+	}
 	strlcat(fullpath, filename, fpl);
-
+	nlog("wikiview fullpath:%s", fullpath);
 
 	mdfile = fopen(fullpath, "r");
 	free(fullpath);
