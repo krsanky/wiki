@@ -49,21 +49,31 @@ myhtml_breadcrumbs(char *dir, char *page)
 	char           *str = NULL;
 	char           *dir_;
 	char           *dir2;
+	char           *href_dir;
+	int 		hdl;
 
 	printf("/");
 
 	if (dir != NULL) {
+		hdl = strlen(dir) + 1 + 1;
+		href_dir = malloc(strlen(dir) + 1 + 1);
+		nlog("dir:%s", dir);
+		href_dir[0] = '\0';
 		dir_ = malloc(strlen(dir) + 1);
 		strlcpy(dir_, dir, strlen(dir) + 1);
 		dir2 = dir_;
 		do {
 			str = strsep(&dir2, "/");
-			nlog("str:%s dir2:%s", str, dir2);
+			strlcat(href_dir, "/", hdl);
+			strlcat(href_dir, str, hdl);
+			nlog("href_dir:%s str:%s dir2:%s", href_dir, str, dir2);
+
 			printf("\
- <a href='#'>%s</a> / ", str);
+ <a href='/wiki.cgi?index&d=%s'>%s</a> / ", href_dir, str);
+
 		} while (dir2 != NULL);
-		if (dir_ != NULL)
-			free(dir_);
+		free(dir_);
+		free(href_dir);
 	}
 	if (page != NULL) {
 		printf(" &rarr; %s", page);
