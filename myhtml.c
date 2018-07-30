@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <string.h>
+
+#include "util.h"
 #include "myhtml.h"
 
 void
@@ -42,11 +46,24 @@ myhtml_topnav()
 void
 myhtml_breadcrumbs(char *dir, char *page)
 {
+	char           *str = NULL;
+	char           *dir_;
+	char           *dir2;
+
 	printf("/");
 
 	if (dir != NULL) {
-		printf("%s", dir);
-		/* test test1.c */	
+		dir_ = malloc(strlen(dir) + 1);
+		strlcpy(dir_, dir, strlen(dir) + 1);
+		dir2 = dir_;
+		do {
+			str = strsep(&dir2, "/");
+			nlog("str:%s dir2:%s", str, dir2);
+			printf("\
+ <a href='#'>%s</a> / ", str);
+		} while (dir2 != NULL);
+		if (dir_ != NULL)
+			free(dir_);
 	}
 	if (page != NULL) {
 		printf(" &rarr; %s", page);

@@ -64,4 +64,3 @@ wikilog(char *msg)
 	nn_freemsg(buf);
 	return (nn_shutdown(sock, rv));
 }
-

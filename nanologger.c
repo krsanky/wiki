@@ -6,7 +6,7 @@
 #include <nanomsg/reqrep.h>
 
 #include "settings.h"
-#include "wiki.h"
+#include "util.h"
 
 FILE           *logfile;
 
@@ -33,18 +33,18 @@ dispatch(char *msg, int sock)
 		int 		sz_d = strlen(d) + 1;
 		printf("NODE0: SENDING  %s\n", d);
 		if ((bytes = nn_send(sock, d, sz_d, 0)) < 0) {
-			fatal("nn_send");
+			nn_fatal("nn_send");
 		}
 	} else if (strncmp(msg, LOG_PREFIX, sizeof(LOG_PREFIX) - 1) == 0) {
 		if ((bytes = nn_send(sock, "RCVD", 5, 0)) < 0) {
-			fatal("nn_send");
+			nn_fatal("nn_send");
 		}
 		msg = msg + sizeof(LOG_PREFIX) - 1;
 		fprintf(logfile, "log:%s\n", msg);
 		fflush(logfile);
 	} else {
 		if ((bytes = nn_send(sock, "RCVD", 5, 0)) < 0) {
-			fatal("nn_send");
+			nn_fatal("nn_send");
 		}
 		fprintf(logfile, "UNKNOWN REQUEST:%s\n", msg);
 		fflush(logfile);
@@ -58,16 +58,16 @@ server(const char *url)
 	int 		rv;
 
 	if ((sock = nn_socket(AF_SP, NN_REP)) < 0) {
-		fatal("nn_socket");
+		nn_fatal("nn_socket");
 	}
 	if ((rv = nn_bind(sock, url)) < 0) {
-		fatal("nn_bind");
+		nn_fatal("nn_bind");
 	}
 	for (;;) {
 		char           *msg = NULL;
 		int 		bytes;
 		if ((bytes = nn_recv(sock, &msg, NN_MSG, 0)) < 0) {
-			fatal("nn_recv");
+			nn_fatal("nn_recv");
 		}
 		printf("msg:%s\n", msg);
 		/*

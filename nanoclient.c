@@ -6,13 +6,7 @@
 #include <nanomsg/reqrep.h>
 
 #include "settings.h"
-
-void
-fatal(const char *func)
-{
-	fprintf(stderr, "%s: %s\n", func, nn_strerror(nn_errno()));
-	exit(1);
-}
+#include "util.h"
 
 int
 client()
@@ -24,17 +18,17 @@ client()
 	int 		rv;
 
 	if ((sock = nn_socket(AF_SP, NN_REQ)) < 0) {
-		fatal("nn_socket");
+		nn_fatal("nn_socket");
 	}
 	if ((rv = nn_connect(sock, SERVER_ENDPOINT)) < 0) {
-		fatal("nn_connect");
+		nn_fatal("nn_connect");
 	}
 	printf("NODE1: SENDING DATE REQUEST\n");
 	if ((bytes = nn_send(sock, "DATE", sz_date, 0)) < 0) {
-		fatal("nn_send");
+		nn_fatal("nn_send");
 	}
 	if ((bytes = nn_recv(sock, &buf, NN_MSG, 0)) < 0) {
-		fatal("nn_recv");
+		nn_fatal("nn_recv");
 	}
 	printf("NODE1: RECEIVED DATE %s\n", buf);
 	nn_freemsg(buf);
@@ -47,7 +41,7 @@ main(int argc, char **argv)
 	printf("I am %s argc:%d\n", argv[0], argc);
 
 	if (client() < 0)
-		fatal("nn error\n");
+		nn_fatal("nn error\n");
 
 	return 0;
 }

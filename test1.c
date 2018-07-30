@@ -2,10 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-void 
-teststrsep(char * str)
+void
+teststrsep(char *str)
 {
-	char	*str2;
+	char           *str2;
 
 	do {
 		str2 = strsep(&str, "/");
@@ -20,12 +20,10 @@ main(int argc, char **argv)
 	if (argc > 1) {
 		teststrsep(argv[1]);
 	}
-
-/* 
-arg0:./a.out argc:2 
-arg1:asd/123/rtyrty/456
-str2:asd string1:123/rtyrty/456
-*/
+	/*
+	 * arg0:./a.out argc:2 arg1:asd/123/rtyrty/456 str2:asd
+	 * string1:123/rtyrty/456
+	 */
 
 	return 0;
 }

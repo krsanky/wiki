@@ -2,11 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "wiki.h"
 #include "myhtml.h"
 #include "yuarel.h"
+#include "wiki.h"
 
 #include "settings.h"
+#include "util.h"
 
 
 int

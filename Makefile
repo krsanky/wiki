@@ -4,20 +4,21 @@ all: wiki.cgi nanologger nanoclient
 
 wiki.cgi: wiki.c main.c myhtml.c yuarel.c
 	$(CC) $(CFLAGS) -o $(.TARGET) \
-		main.c yuarel.c myhtml.c wiki.c \
+		util.c main.c yuarel.c myhtml.c wiki.c \
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg -lmarkdown 
 
 nanologger: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
 		${.TARGET}.c \
-		myhtml.c wiki.c \
+		myhtml.c util.c \
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg -lmarkdown 
 
 nanoclient: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
 		${.TARGET}.c \
+		util.c \
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg
 
