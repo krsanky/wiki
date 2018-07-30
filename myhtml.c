@@ -51,6 +51,7 @@ myhtml_breadcrumbs(char *dir, char *page)
 	char           *dir2;
 	char           *href_dir;
 	int 		hdl;
+	int 		run1 = 1;
 
 	printf("/");
 
@@ -64,7 +65,10 @@ myhtml_breadcrumbs(char *dir, char *page)
 		dir2 = dir_;
 		do {
 			str = strsep(&dir2, "/");
-			strlcat(href_dir, "/", hdl);
+			if (run1)
+				run1 = 0;
+			else
+				strlcat(href_dir, "/", hdl);
 			strlcat(href_dir, str, hdl);
 			nlog("href_dir:%s str:%s dir2:%s", href_dir, str, dir2);
 
@@ -76,7 +80,7 @@ myhtml_breadcrumbs(char *dir, char *page)
 		free(href_dir);
 	}
 	if (page != NULL) {
-		printf(" &rarr; %s", page);
+		printf("%s", page);
 	}
 	printf("<hr/>\n");
 }
