@@ -48,7 +48,17 @@ myhtml_topnav()
 	printf("<a href='/wiki.cgi?index'>index</a>\n");
 	/* printf("<a href='/edit.cgi?asd=123'>edit</a> "); */
 	printf("<hr/>\n");
-	printf("\
-<a href='#'>root</a>&rarr;<a href='#'>dir-2</a>\n");
+}
+
+void
+myhtml_breadcrumbs(char *dir, char *page)
+{
+	printf("/");
+	if (dir != NULL) {
+		printf("%s", dir);
+	}
+	if (page != NULL) {
+		printf(" &rarr; %s", page);
+	}
 	printf("<hr/>\n");
 }

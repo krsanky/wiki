@@ -207,6 +207,7 @@ wikiindex(char *dir_)
 	http_headers();
 	myhtml_header();
 	myhtml_topnav();
+	myhtml_breadcrumbs(dir_, NULL);
 	printf("<ul>\n");
 	while ((de = readdir(dir)) != NULL) {
 		if (is_md(de)) {
@@ -280,6 +281,7 @@ wikiview(char *dir, char *filename)
 	http_headers();
 	myhtml_header();
 	myhtml_topnav();
+	myhtml_breadcrumbs(dir, filename);
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS);
 	myhtml_footer();
 	/* val ???? */
