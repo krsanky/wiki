@@ -67,8 +67,7 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 	int 		run1 = 1;
 	char           *url;
 
-	printf("\
-/ <a href='/wiki.cgi?index'>root</a> / ");
+	printf("/ %s / ", make_anchor("index", NULL, NULL, "root"));
 
 	if (dir != NULL) {
 		hdl = strlen(dir) + 1 + 1;
@@ -87,8 +86,7 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 			strlcat(href_dir, str, hdl);
 			nlog("href_dir:%s str:%s dir2:%s", href_dir, str, dir2);
 
-			printf("\
- <a href='/wiki.cgi?index&d=%s'>%s</a> / ", href_dir, str);
+			printf(" %s / ", make_anchor("index", href_dir, NULL, str));
 
 		} while (dir2 != NULL);
 		free(dir_);
