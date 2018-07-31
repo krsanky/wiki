@@ -34,6 +34,7 @@ myhtml_footer()
 \n");
 }
 
+/* not used? */
 void
 myhtml_topnav(char *dir, char *page)
 {
@@ -56,7 +57,7 @@ myhtml_topnav(char *dir, char *page)
 }
 
 void
-myhtml_breadcrumbs(char *dir, char *page)
+myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 {
 	char           *str = NULL;
 	char           *dir_;
@@ -64,6 +65,7 @@ myhtml_breadcrumbs(char *dir, char *page)
 	char           *href_dir;
 	int 		hdl;
 	int 		run1 = 1;
+	char           *url;
 
 	printf("\
 / <a href='/wiki.cgi?index'>root</a> / ");
@@ -92,15 +94,15 @@ myhtml_breadcrumbs(char *dir, char *page)
 		free(dir_);
 		free(href_dir);
 	}
-	if (page != NULL) {
-		printf("%s", page);
-		if (dir == NULL) {
-			printf("\
- <a href='/wiki.cgi?edit&p=%s'>(edit)</a> ", page);
-		} else {
-			printf("\
- <a href='/wiki.cgi?edit&d=%s&p=%s'>(edit)</a> ", dir, page);
-		}
+	if ((page != NULL) && (pagetype != NULL)) {
+		printf("%s ", page);
+		/* edit */
+		url = make_anchor("edit", dir, page, "(edit)");
+		printf("%s\n", url);
+		free(url);
+
+
+
 	} else {
 		if (dir == NULL) {
 			printf("\
@@ -111,4 +113,55 @@ myhtml_breadcrumbs(char *dir, char *page)
 		}
 	}
 	printf("<hr/>\n");
+}
+
+
+/*
+ * <a href='/wiki.cgi?edit&d=%s&p=%s'>(edit)</a> ", dir, page); Return value
+ * must be free'd. The longest possible formaty string is used for the fmt
+ * size.
+ */
+char           *
+make_anchor(char *pagetype, char *dir, char *page, char *display)
+{
+	int 		max_l;
+	char           *a;
+
+	max_l = strlen("<a href='/wiki.cgi?edit&d=%s&p=%s'>(edit)</a>");
+	if (pagetype != NULL)
+		max_l += strlen(pagetype);
+	if (dir != NULL)
+		max_l += strlen(dir);
+	if (page != NULL)
+		max_l += strlen(page);
+	if (display != NULL)
+		max_l += strlen(display);
+	max_l += 1;
+	a = malloc(max_l);
+	if (a == NULL)
+		return NULL;
+
+	strlcpy(a, "<a href='/wiki.cgi?", max_l);
+	strlcat(a, pagetype, max_l);
+	strlcat(a, "&", max_l);
+
+	if (dir != NULL) {
+		strlcat(a, "d=", max_l);
+		strlcat(a, dir, max_l);
+		strlcat(a, "&", max_l);
+	}
+	if (page != NULL) {
+		strlcat(a, "p=", max_l);
+		strlcat(a, page, max_l);
+	}
+	strlcat(a, "'>", max_l);
+
+	if (display != NULL)
+		strlcat(a, display, max_l);
+	else
+		strlcat(a, pagetype, max_l);
+
+	strlcat(a, "</a>", max_l);
+
+	return a;
 }

@@ -1,4 +1,5 @@
-CFLAGS=	-W -Wall -O2 -std=c99
+CFLAGS=	-W -Wall -O2 -std=c99 -g
+#gcc -std=c99 -pedantic -Wall -Wextra -O3
 
 all: wiki.cgi nanologger nanoclient
 
@@ -21,6 +22,12 @@ nanoclient: ${.TARGET}.c
 		util.c \
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg
+
+anchortest: test1.c myhtml.c
+	$(CC) $(CFLAGS) -o $(.TARGET) \
+		util.c test1.c myhtml.c \
+		-L/usr/local/lib -I/usr/local/include \
+		-lnanomsg -lmarkdown 
 
 test:
 	@echo CURDIR:${.CURDIR}

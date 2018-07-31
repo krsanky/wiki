@@ -20,6 +20,8 @@ main(void)
 	char           *qs;
 	int 		ret;
 	char           *param;
+	char           *page;
+	char           *dir;
 
 	params = malloc(sizeof(*params) * NUM_HTTP_PARAMS);
 	if (params == NULL) {
@@ -71,6 +73,14 @@ main(void)
 			wikiview(get_param("d", params, NUM_HTTP_PARAMS), param);
 		else
 			errpage("param p (page) not found");
+	} else if (strcmp(params[0].key, "edit") == 0) {
+		page = get_param("p", params, NUM_HTTP_PARAMS);
+		dir = get_param("d", params, NUM_HTTP_PARAMS);
+		wikiedit(dir, page);
+	} else if (strcmp(params[0].key, "new") == 0) {
+		page = get_param("p", params, NUM_HTTP_PARAMS);
+		dir = get_param("d", params, NUM_HTTP_PARAMS);
+		wikinew(dir, page);
 	} else {		/* unreachable ? */
 		query_params_test(params, NUM_HTTP_PARAMS);
 	}

@@ -149,7 +149,7 @@ wikiindex(char *dir_)
 	http_headers();
 	myhtml_header();
 	/* myhtml_topnav(dir_, NULL); */
-	myhtml_breadcrumbs(dir_, NULL);
+	myhtml_breadcrumbs(dir_, NULL, NULL);
 	printf("<ul>\n");
 	while ((de = readdir(dir)) != NULL) {
 		if (is_md(de)) {
@@ -222,11 +222,9 @@ wikiview(char *dir, char *filename)
 
 	http_headers();
 	myhtml_header();
-	/* myhtml_topnav(dir, filename); */
-	myhtml_breadcrumbs(dir, filename);
+	myhtml_breadcrumbs(dir, filename, "view");
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS);
 	myhtml_footer();
-	/* val ???? */
 
 	if (mdfile != NULL)
 		fclose(mdfile);
@@ -242,4 +240,19 @@ get_param(char *pname, struct yuarel_param * params, int sz)
 			if (strcmp(pname, params[i].key) == 0)
 				return params[i].val;
 	return NULL;
+}
+
+void
+wikiedit(char *dir, char *page)
+{
+	http_headers();
+	myhtml_header();
+	myhtml_breadcrumbs(dir, page, "edit");
+	myhtml_footer();
+}
+
+void
+wikinew(char *dir, char *page)
+{
+	msgpage("new");
 }

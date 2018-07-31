@@ -9,4 +9,6 @@ void 		msgpage  (char *);
 void 		query_params_test(struct yuarel_param *, int);
 void 		wikiindex(char *);
 void 		wikiview (char *, char *);
+void 		wikiedit (char *, char *);
+void 		wikinew  (char *, char *);
 char           *get_param(char *, struct yuarel_param *, int);
