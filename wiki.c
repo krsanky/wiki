@@ -248,11 +248,15 @@ wikiedit(char *dir, char *page)
 	http_headers();
 	myhtml_header();
 	myhtml_breadcrumbs(dir, page, "edit");
+	myhtml_textarea();
 	myhtml_footer();
 }
 
 void
 wikinew(char *dir, char *page)
 {
-	msgpage("new");
+	http_headers();
+	myhtml_header();
+	myhtml_breadcrumbs(dir, page, "new");
+	myhtml_footer();
 }
