@@ -65,7 +65,6 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 	char           *href_dir;
 	int 		hdl;
 	int 		run1 = 1;
-	char           *url;
 
 	printf("/ %s / ", make_anchor("index", NULL, NULL, "root"));
 
@@ -77,6 +76,7 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 		dir_ = malloc(strlen(dir) + 1);
 		strlcpy(dir_, dir, strlen(dir) + 1);
 		dir2 = dir_;
+
 		do {
 			str = strsep(&dir2, "/");
 			if (run1)
@@ -89,26 +89,21 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 			printf(" %s / ", make_anchor("index", href_dir, NULL, str));
 
 		} while (dir2 != NULL);
+
 		free(dir_);
 		free(href_dir);
+
 	}
 	if ((page != NULL) && (pagetype != NULL)) {
 		printf("%s ", page);
-		/* edit */
-		url = make_anchor("edit", dir, page, "(edit)");
-		printf("%s\n", url);
-		free(url);
-
+		if (strcmp(pagetype, "view") == 0)
+			printf("%s\n", make_anchor("edit", dir, page, "(edit)"));
+		else if (strcmp(pagetype, "edit") == 0)
+			printf("%s\n", make_anchor("view", dir, page, "(view)"));
 
 
 	} else {
-		if (dir == NULL) {
-			printf("\
-<a href='/wiki.cgi?new'>[new]</a> ");
-		} else {
-			printf("\
-<a href='/wiki.cgi?new&d=%s'>[new]</a> ", dir);
-		}
+		printf("%s  ", make_anchor("new", dir, NULL, "[new]"));
 	}
 	printf("<hr/>\n");
 }
