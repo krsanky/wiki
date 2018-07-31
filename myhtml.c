@@ -65,8 +65,11 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 	char           *href_dir;
 	int 		hdl;
 	int 		run1 = 1;
+	char           *a;
 
-	printf("/ %s / ", make_anchor("index", NULL, NULL, "root"));
+	a = make_anchor("index", NULL, NULL, "root");
+	printf("/ %s / ", a);
+	free(a);
 
 	if (dir != NULL) {
 		hdl = strlen(dir) + 1 + 1;
@@ -86,7 +89,9 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 			strlcat(href_dir, str, hdl);
 			nlog("href_dir:%s str:%s dir2:%s", href_dir, str, dir2);
 
-			printf(" %s / ", make_anchor("index", href_dir, NULL, str));
+			a = make_anchor("index", href_dir, NULL, str);
+			printf(" %s / ", a);
+			free(a);
 
 		} while (dir2 != NULL);
 
@@ -96,12 +101,15 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 	}
 	if ((page != NULL) && (pagetype != NULL)) {
 		printf("%s ", page);
-		if (strcmp(pagetype, "view") == 0)
-			printf("%s\n", make_anchor("edit", dir, page, "(edit)"));
-		else if (strcmp(pagetype, "edit") == 0)
-			printf("%s\n", make_anchor("view", dir, page, "(view)"));
-
-
+		if (strcmp(pagetype, "view") == 0) {
+			a = make_anchor("edit", dir, page, "(edit)");
+			printf("%s\n", a);
+			free(a);
+		} else if (strcmp(pagetype, "edit") == 0) {
+			a = make_anchor("view", dir, page, "(view)");
+			printf("%s\n", a);
+			free(a);
+		}
 	} else {
 		printf("%s  ", make_anchor("new", dir, NULL, "[new]"));
 	}
