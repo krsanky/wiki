@@ -36,7 +36,7 @@ query_params_test(struct yuarel_param * params, int sz)
 	http_headers();
 
 	myhtml_header();
-	myhtml_topnav(NULL, NULL);
+	/* myhtml_topnav(NULL, NULL); */
 	printf("<dl>\n");
 	while (sz-- > 0) {
 		printf("<dt>%s</dt><dd>%s</dd>\n", params[sz].key, params[sz].val);
@@ -52,7 +52,7 @@ mainpage(void)
 	http_headers();
 
 	myhtml_header();
-	myhtml_topnav(NULL, NULL);
+	/* myhtml_topnav(NULL, NULL); */
 	printf("\
 <p>wiki wiki wiki</p>\n\
 <ul>\n\
@@ -70,7 +70,7 @@ errpage(char *error)
 	http_headers();
 
 	myhtml_header();
-	myhtml_topnav(NULL, NULL);
+	/* myhtml_topnav(NULL, NULL); */
 	printf("\
 <p style='color:red;'>%s</p>\n", error);
 	myhtml_footer();
@@ -82,7 +82,7 @@ msgpage(char *msg)
 	http_headers();
 
 	myhtml_header();
-	myhtml_topnav(NULL, NULL);
+	/* myhtml_topnav(NULL, NULL); */
 	printf("\
 <p style='color:green;'>%s</p>\n", msg);
 	myhtml_footer();
@@ -148,7 +148,7 @@ wikiindex(char *dir_)
 
 	http_headers();
 	myhtml_header();
-	myhtml_topnav(dir_, NULL);
+	/* myhtml_topnav(dir_, NULL); */
 	myhtml_breadcrumbs(dir_, NULL);
 	printf("<ul>\n");
 	while ((de = readdir(dir)) != NULL) {
@@ -222,7 +222,7 @@ wikiview(char *dir, char *filename)
 
 	http_headers();
 	myhtml_header();
-	myhtml_topnav(dir, filename);
+	/* myhtml_topnav(dir, filename); */
 	myhtml_breadcrumbs(dir, filename);
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS);
 	myhtml_footer();

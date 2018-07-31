@@ -94,6 +94,21 @@ myhtml_breadcrumbs(char *dir, char *page)
 	}
 	if (page != NULL) {
 		printf("%s", page);
+		if (dir == NULL) {
+			printf("\
+ <a href='/wiki.cgi?edit&p=%s'>(edit)</a> ", page);
+		} else {
+			printf("\
+ <a href='/wiki.cgi?edit&d=%s&p=%s'>(edit)</a> ", dir, page);
+		}
+	} else {
+		if (dir == NULL) {
+			printf("\
+<a href='/wiki.cgi?new'>[new]</a> ");
+		} else {
+			printf("\
+<a href='/wiki.cgi?new&d=%s'>[new]</a> ", dir);
+		}
 	}
 	printf("<hr/>\n");
 }
