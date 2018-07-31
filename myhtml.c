@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "util.h"
@@ -34,12 +35,23 @@ myhtml_footer()
 }
 
 void
-myhtml_topnav()
+myhtml_topnav(char *dir, char *page)
 {
 	printf("<hr/>\n");
 	printf("<a href=\"/\">home</a> ");
 	printf("<a href='/wiki.cgi?index'>index</a>\n");
-	/* printf("<a href='/edit.cgi?asd=123'>edit</a> "); */
+	if (page != NULL) {
+		printf("\
+<a href='/wiki.cgi?edit&d=%s&p=%s'>edit</a> ", dir, page);
+	} else {
+		if (dir == NULL) {
+			printf("\
+<a href='/wiki.cgi?new'>new</a> ");
+		} else {
+			printf("\
+<a href='/wiki.cgi?new&d=%s'>new</a> ", dir);
+		}
+	}
 	printf("<hr/>\n");
 }
 
@@ -53,7 +65,8 @@ myhtml_breadcrumbs(char *dir, char *page)
 	int 		hdl;
 	int 		run1 = 1;
 
-	printf("/");
+	printf("\
+/ <a href='/wiki.cgi?index'>root</a> / ");
 
 	if (dir != NULL) {
 		hdl = strlen(dir) + 1 + 1;
