@@ -245,10 +245,44 @@ get_param(char *pname, struct yuarel_param * params, int sz)
 void
 wikiedit(char *dir, char *page)
 {
+	int 		fpl;
+	char           *fullpath;
+	FILE           *mdfile;
+	char 		ch;
+
+	fpl = sizeof(WIKI_ROOT) + 1 + strlen(page);
+	if (dir != NULL)
+		fpl = fpl + strlen(dir) + 1;
+	fullpath = malloc(fpl);
+	strlcpy(fullpath, WIKI_ROOT, fpl);
+	strlcat(fullpath, "/", fpl);
+	if (dir != NULL) {
+		strlcat(fullpath, dir, fpl);
+		strlcat(fullpath, "/", fpl);
+	}
+	strlcat(fullpath, page, fpl);
+	nlog("wikiview fullpath:%s", fullpath);
+
+	mdfile = fopen(fullpath, "r");
+	free(fullpath);
+	if (mdfile == NULL) {
+		errpage("cannot open input file:");
+		return;
+	}
 	http_headers();
 	myhtml_header();
 	myhtml_breadcrumbs(dir, page, "edit");
-	myhtml_textarea();
+	myhtml_textarea_open();
+
+	ch = fgetc(mdfile);
+	while (ch != EOF) {
+		printf("%c", ch);
+		ch = fgetc(mdfile);
+	}
+
+	fclose(mdfile);
+
+	myhtml_textarea_close();
 	myhtml_footer();
 }
 

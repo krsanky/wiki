@@ -168,13 +168,19 @@ make_anchor(char *pagetype, char *dir, char *page, char *display)
 }
 
 void
-myhtml_textarea()
+myhtml_textarea_open()
 {
 	printf("\
 <form action='/wiki.cgi?editform' method='post'>\n\
-<textarea name=\"wikiformtext\" rows='36' cols='80'>seeme ...</textarea>\n\
+<textarea name=\"wikiformtext\" rows='26' cols='80'>");
+}
+
+void
+myhtml_textarea_close()
+{
+	printf("\
+</textarea>\n\
 <br/>\n\
 <button type='submit'>submit</button>\n\
 </form>\n");
-
 }
