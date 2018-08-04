@@ -171,16 +171,19 @@ void
 myhtml_textarea_open()
 {
 	printf("\
-<form action='/wiki.cgi?editform' method='post'>\n\
+<form action='/wiki.cgi?editform' method='post' \
+ enctype='application/x-www-form-urlencoded'>\n\
 <textarea name=\"wikiformtext\" rows='26' cols='80'>");
 }
 
 void
-myhtml_textarea_close()
+myhtml_textarea_close(char *dir, char *page)
 {
 	printf("\
 </textarea>\n\
 <br/>\n\
 <button type='submit'>submit</button>\n\
-</form>\n");
+<input type='hidden' name='dir' value='%s'/>\
+<input type='hidden' name='page' value='%s'/>\
+</form>\n", dir, page);
 }

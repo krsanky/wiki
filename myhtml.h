@@ -4,4 +4,4 @@ void 		myhtml_topnav(char *, char *);
 void 		myhtml_breadcrumbs(char *, char *, char *);
 char           *make_anchor(char *, char *, char *, char *);
 void 		myhtml_textarea_open();
-void 		myhtml_textarea_close();
+void 		myhtml_textarea_close(char *, char *);

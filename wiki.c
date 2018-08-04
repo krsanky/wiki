@@ -270,6 +270,7 @@ wikiedit(char *dir, char *page)
 		return;
 	}
 	http_headers();
+	/* form_http_headers(); */
 	myhtml_header();
 	myhtml_breadcrumbs(dir, page, "edit");
 	myhtml_textarea_open();
@@ -282,7 +283,88 @@ wikiedit(char *dir, char *page)
 
 	fclose(mdfile);
 
-	myhtml_textarea_close();
+	myhtml_textarea_close(dir, page);
+	myhtml_footer();
+}
+
+inline int 
+ishex(int x)
+{
+	return (x >= '0' && x <= '9') ||
+	(x >= 'a' && x <= 'f') ||
+	(x >= 'A' && x <= 'F');
+}
+
+int 
+urldecode(const char *s, char *dec)
+{
+	char           *o;
+	const char     *end = s + strlen(s);
+	int 		c;
+
+	for (o = dec; s <= end; o++) {
+		c = *s++;
+		if (c == '+')
+			c = ' ';
+		else if (c == '%' && (!ishex(*s++) ||
+				      !ishex(*s++) ||
+				      !sscanf(s - 2, "%2x", &c)))
+			return -1;
+
+		if (dec)
+			*o = c;
+	}
+
+	return o - dec;
+}
+
+void
+wikieditform()
+{
+	/*
+	 * This is HTTP so must be sent before any content. printf "Location:
+	 * http://newdomain.com/newfile.pl\n\n"; printf "Location:
+	 * /newfile.pl\n\n"; CONTENT_LENGTH=362
+	 * CONTENT_TYPE=application/x-www-form-urlencoded REQUEST_METHOD=POST
+	 * 
+	 * char buffer[10]; read(STDIN_FILENO, buffer, 10);
+	 */
+	char           *RM;
+	char           *CL_;
+	int 		CL;
+	char           *buf;
+	char           *decode;
+	int 		ret;
+
+	RM = getenv("REQUEST_METHOD");
+	CL_ = getenv("CONTENT_LENGTH");
+	if (CL_ != NULL)
+		CL = atoi(CL_);
+	else
+		CL = -1;
+	nlog("editform()...RM:%s CL:%d", RM, CL);
+
+	if (CL > 0) {
+		buf = malloc(CL + 1);
+		decode = malloc(CL + 1);
+		fread(buf, CL, 1, stdin);
+		nlog("buf:%s", buf);
+		ret = urldecode(buf, decode);
+		if (ret > 0)
+			nlog("decode:%s", decode);
+		else
+			nlog("decode: error");
+		free(buf);
+		free(decode);
+	} else {
+		nlog("editform error getting CONTENT_LENGTH value");
+	}
+
+
+	http_headers();
+	myhtml_header();
+	myhtml_breadcrumbs(NULL, NULL, NULL);
+	showenv();
 	myhtml_footer();
 }
 

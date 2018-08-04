@@ -81,6 +81,8 @@ main(void)
 		page = get_param("p", params, NUM_HTTP_PARAMS);
 		dir = get_param("d", params, NUM_HTTP_PARAMS);
 		wikinew(dir, page);
+	} else if (strcmp(params[0].key, "editform") == 0) {
+		wikieditform();
 	} else {		/* unreachable ? */
 		query_params_test(params, NUM_HTTP_PARAMS);
 	}
