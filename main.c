@@ -25,7 +25,7 @@ main(void)
 
 	params = malloc(sizeof(*params) * NUM_HTTP_PARAMS);
 	if (params == NULL) {
-		puts("error with malloc");
+		errpage("error with malloc");
 		return EXIT_FAILURE;
 	}
 	qs = getenv("QUERY_STRING");
@@ -36,17 +36,11 @@ main(void)
 	if (strlen(qs) > 0) {
 		p = yuarel_parse_query(qs, '&', params, NUM_HTTP_PARAMS);
 		if (p < 0) {
-			char           *tmpstr = malloc(100);
-			if (tmpstr == NULL) {
-				errpage("error with yuarel_parse_query()");
-			} else {
-				snprintf(tmpstr, 99, "error with yuarel_parse_query() [QUERY_STRING:%s][len:%lu]", qs, strlen(qs));
-				errpage(tmpstr);
-				free(tmpstr);
-			}
+			errpage("error with yuarel_parse_query()");
 			return EXIT_FAILURE;
 		}
 	}
+
 	if ((strlen(qs) < 1) || (p < 1)) {
 		mainpage();
 	} else if (strcmp(params[0].key, "start") == 0) {

@@ -231,7 +231,7 @@ wikiview(char *dir, char *filename)
 }
 
 char           *
-get_param(char *pname, struct yuarel_param * params, int sz)
+get_param(char *pname, struct yuarel_param *params, int sz)
 {
 	nlog("get_param( %s )", pname);
 
@@ -287,7 +287,7 @@ wikiedit(char *dir, char *page)
 	myhtml_footer();
 }
 
-inline int 
+int
 ishex(int x)
 {
 	return (x >= '0' && x <= '9') ||
@@ -295,7 +295,7 @@ ishex(int x)
 	(x >= 'A' && x <= 'F');
 }
 
-int 
+int
 urldecode(const char *s, char *dec)
 {
 	char           *o;
@@ -321,20 +321,15 @@ urldecode(const char *s, char *dec)
 void
 wikieditform()
 {
-	/*
-	 * This is HTTP so must be sent before any content. printf "Location:
-	 * http://newdomain.com/newfile.pl\n\n"; printf "Location:
-	 * /newfile.pl\n\n"; CONTENT_LENGTH=362
-	 * CONTENT_TYPE=application/x-www-form-urlencoded REQUEST_METHOD=POST
-	 * 
-	 * char buffer[10]; read(STDIN_FILENO, buffer, 10);
-	 */
+	struct yuarel_param *params;
 	char           *RM;
 	char           *CL_;
 	int 		CL;
 	char           *buf;
-	char           *decode;
 	int 		ret;
+	int 		p;
+	char		*wikiformtext;
+	char		*rawwikiformtext;
 
 	RM = getenv("REQUEST_METHOD");
 	CL_ = getenv("CONTENT_LENGTH");
@@ -342,20 +337,35 @@ wikieditform()
 		CL = atoi(CL_);
 	else
 		CL = -1;
+
 	nlog("editform()...RM:%s CL:%d", RM, CL);
 
 	if (CL > 0) {
 		buf = malloc(CL + 1);
-		decode = malloc(CL + 1);
 		fread(buf, CL, 1, stdin);
 		nlog("buf:%s", buf);
-		ret = urldecode(buf, decode);
-		if (ret > 0)
-			nlog("decode:%s", decode);
-		else
-			nlog("decode: error");
+
+		params = malloc(sizeof(*params) + NUM_HTTP_PARAMS);
+		p = yuarel_parse_query(buf, '&', params, NUM_HTTP_PARAMS);
+		if (p < 0) {
+			nlog("error with yuarel_parse_query()");
+		} else {
+			nlog("param-0 k:%s v:%s", params[0].key, params[0].val);
+		}
+		rawwikiformtext = get_param("wikiformtext", params, NUM_HTTP_PARAMS);
+		
+		nlog("rawwikiformtext:%s", rawwikiformtext);
+		/*
+		wikiformtext = malloc(strlen(wikiformtext) + 1);
+		ret = urldecode(rawwikiformtext, wikiformtext);
+		nlog("wikiformtext:%s", wikiformtext);
+		if (ret > 0) {
+			nlog("wikiformtext:%s", wikiformtext);
+		}
+		*/
+		
+		free(params);
 		free(buf);
-		free(decode);
 	} else {
 		nlog("editform error getting CONTENT_LENGTH value");
 	}
