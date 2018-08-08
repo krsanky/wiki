@@ -119,7 +119,7 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 
 /*
  * <a href='/wiki.cgi?edit&d=%s&p=%s'>(edit)</a> ", dir, page); Return value
- * must be free'd. The longest possible formaty string is used for the fmt
+ * must be free'd. The longest possible format string is used for the fmt
  * size.
  */
 char           *

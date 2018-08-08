@@ -355,13 +355,13 @@ wikieditform()
 		rawwikiformtext = get_param("wikiformtext", params, NUM_HTTP_PARAMS);
 		
 		nlog("rawwikiformtext:%s", rawwikiformtext);
-		/*
-		wikiformtext = malloc(strlen(wikiformtext) + 1);
+		wikiformtext = malloc(strlen(rawwikiformtext) + 1);
 		ret = urldecode(rawwikiformtext, wikiformtext);
 		nlog("wikiformtext:%s", wikiformtext);
 		if (ret > 0) {
 			nlog("wikiformtext:%s", wikiformtext);
 		}
+		/*
 		*/
 		
 		free(params);
@@ -370,12 +370,7 @@ wikieditform()
 		nlog("editform error getting CONTENT_LENGTH value");
 	}
 
-
-	http_headers();
-	myhtml_header();
-	myhtml_breadcrumbs(NULL, NULL, NULL);
-	showenv();
-	myhtml_footer();
+	printf("Status: 302 Moved\r\nLocation: http://www.google.com/\r\n\r\n");
 }
 
 void
