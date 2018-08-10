@@ -166,6 +166,44 @@ make_anchor(char *pagetype, char *dir, char *page, char *display)
 
 	return a;
 }
+/*
+ * must be free'd. The longest possible format string is used for the fmt
+ */
+char           *
+make_url(char *pagetype, char *dir, char *page)
+{
+	int 		max_l;
+	char           *a;
+
+	max_l = strlen("/wiki.cgi?edit&d=%s&p=%s");
+	if (pagetype != NULL)
+		max_l += strlen(pagetype);
+	if (dir != NULL)
+		max_l += strlen(dir);
+	if (page != NULL)
+		max_l += strlen(page);
+	max_l += 1;
+	a = malloc(max_l);
+	if (a == NULL)
+		return NULL;
+
+	strlcpy(a, "/wiki.cgi?", max_l);
+	strlcat(a, pagetype, max_l);
+	strlcat(a, "&", max_l);
+
+	if (dir != NULL) {
+		strlcat(a, "d=", max_l);
+		strlcat(a, dir, max_l);
+		strlcat(a, "&", max_l);
+	}
+	if (page != NULL) {
+		strlcat(a, "p=", max_l);
+		strlcat(a, page, max_l);
+	}
+	strlcat(a, "", max_l);
+
+	return a;
+}
 
 void
 myhtml_textarea_open()
@@ -183,7 +221,13 @@ myhtml_textarea_close(char *dir, char *page)
 </textarea>\n\
 <br/>\n\
 <button type='submit'>submit</button>\n\
-<input type='hidden' name='dir' value='%s'/>\
-<input type='hidden' name='page' value='%s'/>\
-</form>\n", dir, page);
+<input type='hidden' name='page' value='%s' />\n", page);
+
+	if (dir != NULL)
+		printf("\
+<input type='hidden' name='dir' value='%s'/>\n", dir);
+
+	printf("\
+</form>\n");
 }
+

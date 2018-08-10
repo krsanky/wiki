@@ -5,5 +5,6 @@
 #define LOG_PREFIX "LOG"
 #define WIKI_ROOT "content"
 #define NUM_HTTP_PARAMS 10
+#define HTML_NULL_MARKER "21345nullybullypoop123"
 
 #endif

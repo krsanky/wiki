@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "myhtml.h"
-#include "yuarel.h"
+#include "params.h"
 #include "wiki.h"
 
 #include "settings.h"
@@ -13,37 +13,21 @@
 int
 main(void)
 {
-	struct yuarel_param *params;
-	int 		p;
-	char           *msg;
-	char           *val;
 	char           *qs;
-	int 		ret;
-	char           *param;
 	char           *page;
 	char           *dir;
 
-	params = malloc(sizeof(*params) * NUM_HTTP_PARAMS);
-	if (params == NULL) {
-		errpage("error with malloc");
-		return EXIT_FAILURE;
-	}
 	qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
 		errpage("error with QUERY_STRING");
 		return EXIT_FAILURE;
 	}
-	if (strlen(qs) > 0) {
-		p = yuarel_parse_query(qs, '&', params, NUM_HTTP_PARAMS);
-		if (p < 0) {
-			errpage("error with yuarel_parse_query()");
-			return EXIT_FAILURE;
-		}
-	}
 
+	/*
 	if ((strlen(qs) < 1) || (p < 1)) {
 		mainpage();
-	} else if (strcmp(params[0].key, "start") == 0) {
+	}
+	else if (strcmp(params[0].key, "start") == 0) {
 		msgpage("start");
 	} else if (strcmp(params[0].key, "logtest") == 0) {
 		if (params[0].val != NULL)
@@ -77,9 +61,8 @@ main(void)
 		wikinew(dir, page);
 	} else if (strcmp(params[0].key, "editform") == 0) {
 		wikieditform();
-	} else {		/* unreachable ? */
-		query_params_test(params, NUM_HTTP_PARAMS);
 	}
+	*/
 
 	return EXIT_SUCCESS;
 }

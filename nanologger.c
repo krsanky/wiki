@@ -40,7 +40,7 @@ dispatch(char *msg, int sock)
 			nn_fatal("nn_send");
 		}
 		msg = msg + sizeof(LOG_PREFIX) - 1;
-		fprintf(logfile, "log:%s\n", msg);
+		fprintf(logfile, "%s\n", msg);
 		fflush(logfile);
 	} else {
 		if ((bytes = nn_send(sock, "RCVD", 5, 0)) < 0) {

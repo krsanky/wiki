@@ -16,6 +16,20 @@ nn_fatal(const char *func)
 }
 
 int
+is_md(struct dirent * de)
+{
+	char           *ext;
+	ext = strrchr(de->d_name, '.');
+	if (ext != NULL) {
+		ext++;
+		if (strcasecmp(ext, "md") == 0)
+			if (de->d_type == DT_REG)
+				return 1;
+	}
+	return 0;
+}
+
+int
 nlog(const char *fmt,...)
 {
 	char           *p;
@@ -64,3 +78,43 @@ wikilog(char *msg)
 	nn_freemsg(buf);
 	return (nn_shutdown(sock, rv));
 }
+
+void
+redirect(char *url)
+{
+	printf("Status: 302 Moved\r\nLocation: %s\r\n\r\n", url);
+}
+
+int
+ishex(int x)
+{
+	return (x >= '0' && x <= '9') ||
+	(x >= 'a' && x <= 'f') ||
+	(x >= 'A' && x <= 'F');
+}
+
+int
+urldecode(const char *s, char *dec)
+{
+	char           *o;
+	const char     *end = s + strlen(s);
+	int 		c;
+
+	for (o = dec; s <= end; o++) {
+		c = *s++;
+		if (c == '+')
+			c = ' ';
+		else if (c == '%' && (!ishex(*s++) ||
+				      !ishex(*s++) ||
+				      !sscanf(s - 2, "%2x", &c)))
+			return -1;
+
+		if (dec)
+			*o = c;
+	}
+
+	return o - dec;
+}
+
+
+

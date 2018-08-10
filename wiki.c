@@ -2,13 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <dirent.h>
 #include <unistd.h>
+#include <dirent.h>
 #include <mkdio.h>
 
 #include "wiki.h"
 #include "myhtml.h"
-#include "yuarel.h"
+#include "params.h"
 #include "settings.h"
 #include "util.h"
 
@@ -19,31 +19,6 @@ void
 http_headers(void)
 {
 	printf("Content-type: text/html\n\n");
-}
-
-void
-query_params_test(struct yuarel_param * params, int sz)
-{
-	char           *qs = getenv("QUERY_STRING");
-	if (qs == NULL) {
-		errpage("error with QUERY_STRING");
-		return;
-	}
-	if (sz < 0) {
-		errpage("error with yuarel_parse_query()");
-		return;
-	}
-	http_headers();
-
-	myhtml_header();
-	/* myhtml_topnav(NULL, NULL); */
-	printf("<dl>\n");
-	while (sz-- > 0) {
-		printf("<dt>%s</dt><dd>%s</dd>\n", params[sz].key, params[sz].val);
-	}
-	printf("</dl>\n");
-
-	myhtml_footer();
 }
 
 void
@@ -106,19 +81,6 @@ showenv()
 	printf("</pre>\n");
 }
 
-int
-is_md(struct dirent * de)
-{
-	char           *ext;
-	ext = strrchr(de->d_name, '.');
-	if (ext != NULL) {
-		ext++;
-		if (strcasecmp(ext, "md") == 0)
-			if (de->d_type == DT_REG)
-				return 1;
-	}
-	return 0;
-}
 
 void
 wikiindex(char *dir_)
@@ -230,18 +192,6 @@ wikiview(char *dir, char *filename)
 		fclose(mdfile);
 }
 
-char           *
-get_param(char *pname, struct yuarel_param *params, int sz)
-{
-	nlog("get_param( %s )", pname);
-
-	for (int i = 0; i < sz; i++)
-		if (params[i].key != NULL)
-			if (strcmp(pname, params[i].key) == 0)
-				return params[i].val;
-	return NULL;
-}
-
 void
 wikiedit(char *dir, char *page)
 {
@@ -287,49 +237,24 @@ wikiedit(char *dir, char *page)
 	myhtml_footer();
 }
 
-int
-ishex(int x)
-{
-	return (x >= '0' && x <= '9') ||
-	(x >= 'a' && x <= 'f') ||
-	(x >= 'A' && x <= 'F');
-}
-
-int
-urldecode(const char *s, char *dec)
-{
-	char           *o;
-	const char     *end = s + strlen(s);
-	int 		c;
-
-	for (o = dec; s <= end; o++) {
-		c = *s++;
-		if (c == '+')
-			c = ' ';
-		else if (c == '%' && (!ishex(*s++) ||
-				      !ishex(*s++) ||
-				      !sscanf(s - 2, "%2x", &c)))
-			return -1;
-
-		if (dec)
-			*o = c;
-	}
-
-	return o - dec;
-}
-
+/**
+ * This answers the POST from wikiedit.
+ * This is the first form handling code.
+ */
 void
 wikieditform()
 {
-	struct yuarel_param *params;
 	char           *RM;
 	char           *CL_;
 	int 		CL;
 	char           *buf;
 	int 		ret;
 	int 		p;
-	char		*wikiformtext;
-	char		*rawwikiformtext;
+	char           *wikiformtext;
+	char           *rawwikiformtext;
+	char           *redir;
+	char           *dir;
+	char           *page;
 
 	RM = getenv("REQUEST_METHOD");
 	CL_ = getenv("CONTENT_LENGTH");
@@ -344,7 +269,7 @@ wikieditform()
 		buf = malloc(CL + 1);
 		fread(buf, CL, 1, stdin);
 		nlog("buf:%s", buf);
-
+/*
 		params = malloc(sizeof(*params) + NUM_HTTP_PARAMS);
 		p = yuarel_parse_query(buf, '&', params, NUM_HTTP_PARAMS);
 		if (p < 0) {
@@ -353,7 +278,7 @@ wikieditform()
 			nlog("param-0 k:%s v:%s", params[0].key, params[0].val);
 		}
 		rawwikiformtext = get_param("wikiformtext", params, NUM_HTTP_PARAMS);
-		
+
 		nlog("rawwikiformtext:%s", rawwikiformtext);
 		wikiformtext = malloc(strlen(rawwikiformtext) + 1);
 		ret = urldecode(rawwikiformtext, wikiformtext);
@@ -361,16 +286,26 @@ wikieditform()
 		if (ret > 0) {
 			nlog("wikiformtext:%s", wikiformtext);
 		}
-		/*
-		*/
-		
+
+		dir = get_param("dir", params, NUM_HTTP_PARAMS);
+		if (dir == NULL)
+			nlog("dir==NULL");
+		else
+			nlog("dir!=NULL");
+		page = get_param("page", params, NUM_HTTP_PARAMS);
+
+		redir = make_url("edit", dir, page);
+		nlog("dir:%s page:%s redir:%s", dir, page, redir);
+		redirect(redir);
+		free(redir);
+
 		free(params);
+*/
 		free(buf);
 	} else {
 		nlog("editform error getting CONTENT_LENGTH value");
 	}
 
-	printf("Status: 302 Moved\r\nLocation: http://www.google.com/\r\n\r\n");
 }
 
 void
