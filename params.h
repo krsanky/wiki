@@ -15,13 +15,11 @@ struct params {
 
 };
 
-struct param {
+typedef struct param {
 	char           *key;
 	char           *val;
-};
+} PARAM;
 
-/*
-extern int 	
-yuarel_parse_query(char *query, char delimiter, struct yuarel_param * params, int max_params);
-*/
+int	params_parse_query(char *, PARAM *, int);
+void	params_test();
 

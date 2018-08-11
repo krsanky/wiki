@@ -22,7 +22,7 @@ nanoclient: ${.TARGET}.c
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg
 
-params_test: ${.TARGET}.c
+params_test: ${.TARGET}.c params.c params.h
 	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
 		params.c \
 		-L/usr/local/lib -I/usr/local/include 
