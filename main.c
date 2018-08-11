@@ -9,19 +9,18 @@
 #include "settings.h"
 #include "util.h"
 
-
 int
 main(void)
 {
-	char           *qs;
-	char           *page;
-	char           *dir;
+	char	*qs;
 
 	qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
 		errpage("error with QUERY_STRING");
 		return EXIT_FAILURE;
 	}
+	nlog("QUERY_STRING:%s", qs);
+	msgpage("asd");
 
 	/*
 	if ((strlen(qs) < 1) || (p < 1)) {

@@ -1,5 +1,4 @@
 CFLAGS=	-W -Wall -O2 -std=c99 -g
-#gcc -std=c99 -pedantic -Wall -Wextra -O3
 
 all: wiki.cgi nanologger nanoclient
 
@@ -22,6 +21,11 @@ nanoclient: ${.TARGET}.c
 		util.c \
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg
+
+params_test: ${.TARGET}.c
+	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
+		params.c \
+		-L/usr/local/lib -I/usr/local/include 
 
 anchortest: test1.c myhtml.c
 	$(CC) $(CFLAGS) -o $(.TARGET) \
@@ -50,7 +54,7 @@ indent:
 	./indent-all.sh
 
 clean:
-	rm -f writef myserver nanologger nanoclient mdtest
+	rm -f writef myserver nanologger nanoclient mdtest params_test
 	rm -rf a.out *.BAK *.cgi
 cleanlogs: 
 	rm -rf nlog.txt log.txt
