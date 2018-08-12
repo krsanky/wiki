@@ -68,7 +68,7 @@ params_get(char *key, PARAM * params, int max_params)
 	for (int i=0; i<max_params; i++) {
 		if (params[i].key != NULL)
 			if (strcmp(key, params[i].key) == 0)
-				return params[i].key;
+				return params[i].val;
 	}
 	return NULL;
 }

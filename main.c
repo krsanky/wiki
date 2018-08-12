@@ -54,6 +54,7 @@ main(void)
 		wikiindex(params_get("d", params, NUM_HTTP_PARAMS));
 	} else if (strcmp(params[0].key, "view") == 0) {
 		param = params_get("p", params, NUM_HTTP_PARAMS);
+		nlog("main view param:%s", param);
 		if (param != NULL)
 			wikiview(params_get("d", params, NUM_HTTP_PARAMS), param);
 		else

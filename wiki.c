@@ -154,7 +154,7 @@ dir:%s\
 
 
 void
-wikiview(char *dir, char *filename)
+wikiview(char *dir, char *page)
 {
 	int 		val;
 	MMIOT          *mmiot;
@@ -162,7 +162,8 @@ wikiview(char *dir, char *filename)
 	char           *fullpath;
 	int 		fpl;
 
-	fpl = sizeof(WIKI_ROOT) + 1 + strlen(filename);
+	nlog("here in wikiview(%s, %s)", dir, page);
+	fpl = sizeof(WIKI_ROOT) + 1 + strlen(page);
 	if (dir != NULL)
 		fpl = fpl + strlen(dir) + 1;
 	fullpath = malloc(fpl);
@@ -172,7 +173,7 @@ wikiview(char *dir, char *filename)
 		strlcat(fullpath, dir, fpl);
 		strlcat(fullpath, "/", fpl);
 	}
-	strlcat(fullpath, filename, fpl);
+	strlcat(fullpath, page, fpl);
 	nlog("wikiview fullpath:%s", fullpath);
 
 	mdfile = fopen(fullpath, "r");
@@ -184,7 +185,7 @@ wikiview(char *dir, char *filename)
 
 	http_headers();
 	myhtml_header();
-	myhtml_breadcrumbs(dir, filename, "view");
+	myhtml_breadcrumbs(dir, page, "view");
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS);
 	myhtml_footer();
 
