@@ -55,7 +55,7 @@ indent:
 
 clean:
 	rm -f writef myserver nanologger nanoclient mdtest params_test
-	rm -rf a.out *.BAK *.cgi
+	rm -rf a.out *.BAK *.cgi *.core
 cleanlogs: 
 	rm -rf nlog.txt log.txt
 

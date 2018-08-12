@@ -2,6 +2,7 @@ bin/
 usr/
 *.cgi
 *.pdf
+*.zip
 *.core
 *.BAK
 a.out
