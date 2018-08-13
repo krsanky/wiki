@@ -230,4 +230,3 @@ myhtml_textarea_close(char *dir, char *page)
 	printf("\
 </form>\n");
 }
-

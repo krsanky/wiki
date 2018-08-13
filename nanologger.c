@@ -24,10 +24,7 @@ void
 dispatch(char *msg, int sock)
 {
 	int 		bytes;
-	/*
-		fprintf(logfile, "received request:%s sz:%lu\n", msg, strlen(msg));
-		fflush(logfile);
-	*/
+
 	if (strcmp(msg, "DATE") == 0) {
 		char           *d = date();
 		int 		sz_d = strlen(d) + 1;

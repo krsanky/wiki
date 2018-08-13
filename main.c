@@ -12,14 +12,14 @@
 int
 main(void)
 {
-	char		*qs;
-	PARAM		*params;
-	char		*param;
-	char		*page;
-	char		*dir;
-	char		*val;
-	char		*msg;
-	int		ret;
+	char           *qs;
+	PARAM          *params;
+	char           *param;
+	char           *page;
+	char           *dir;
+	char           *val;
+	char           *msg;
+	int 		ret;
 
 	qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
@@ -70,7 +70,6 @@ main(void)
 	} else if (strcmp(params[0].key, "editform") == 0) {
 		wikieditform();
 	}
-
 	params_free(params, NUM_HTTP_PARAMS);
 	return EXIT_SUCCESS;
 }

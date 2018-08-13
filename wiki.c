@@ -248,14 +248,6 @@ wikieditform()
 	char           *RM;
 	char           *CL_;
 	int 		CL;
-	char           *buf;
-	int 		ret;
-	int 		p;
-	char           *wikiformtext;
-	char           *rawwikiformtext;
-	char           *redir;
-	char           *dir;
-	char           *page;
 
 	RM = getenv("REQUEST_METHOD");
 	CL_ = getenv("CONTENT_LENGTH");
@@ -264,48 +256,9 @@ wikieditform()
 	else
 		CL = -1;
 
-	nlog("editform()...RM:%s CL:%d", RM, CL);
+	nlog("editform() RM:%s CL:%d", RM, CL);
 
-	if (CL > 0) {
-		buf = malloc(CL + 1);
-		fread(buf, CL, 1, stdin);
-		nlog("buf:%s", buf);
-/*
-		params = malloc(sizeof(*params) + NUM_HTTP_PARAMS);
-		p = yuarel_parse_query(buf, '&', params, NUM_HTTP_PARAMS);
-		if (p < 0) {
-			nlog("error with yuarel_parse_query()");
-		} else {
-			nlog("param-0 k:%s v:%s", params[0].key, params[0].val);
-		}
-		rawwikiformtext = get_param("wikiformtext", params, NUM_HTTP_PARAMS);
-
-		nlog("rawwikiformtext:%s", rawwikiformtext);
-		wikiformtext = malloc(strlen(rawwikiformtext) + 1);
-		ret = urldecode(rawwikiformtext, wikiformtext);
-		nlog("wikiformtext:%s", wikiformtext);
-		if (ret > 0) {
-			nlog("wikiformtext:%s", wikiformtext);
-		}
-
-		dir = get_param("dir", params, NUM_HTTP_PARAMS);
-		if (dir == NULL)
-			nlog("dir==NULL");
-		else
-			nlog("dir!=NULL");
-		page = get_param("page", params, NUM_HTTP_PARAMS);
-
-		redir = make_url("edit", dir, page);
-		nlog("dir:%s page:%s redir:%s", dir, page, redir);
-		redirect(redir);
-		free(redir);
-
-		free(params);
-*/
-		free(buf);
-	} else {
-		nlog("editform error getting CONTENT_LENGTH value");
-	}
+	msgpage("hi!");
 
 }
 
