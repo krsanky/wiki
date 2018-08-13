@@ -247,18 +247,40 @@ wikieditform()
 {
 	char           *RM;
 	char           *CL_;
+	char           *CT;
 	int 		CL;
+	char buf[1024];
+	int l = 0;
 
 	RM = getenv("REQUEST_METHOD");
 	CL_ = getenv("CONTENT_LENGTH");
+	CT = getenv("CONTENT_TYPE");
 	if (CL_ != NULL)
 		CL = atoi(CL_);
 	else
 		CL = -1;
 
-	nlog("editform() RM:%s CL:%d", RM, CL);
+	nlog("editform() RM[%s] CT[%s] CL[%d]", RM, CT, CL);
 
-	msgpage("hi!");
+/*
+while ((length = fread(reqdata, 1, 64 * 1024, stdin)) > 0)
+    {
+	    // and feed it to the parser:
+		    multipart_parser_execute(parser, reqdata, length);
+			}
+			char buffer[NUM_ALPHA + 1];
+			 
+			   if (( stream = fopen("mylib/myfile", "r"))!= NULL )
+			     {
+				 memset(buffer, 0, sizeof(buffer));
+				     num = fread( buffer, sizeof( char ), NUM_ALPHA, stream );
+
+*/
+	l = fread(buf, 1, 1023, stdin); 
+	nlog("l:%d", l);
+	nlog("buf:%s", buf);
+
+	mainpage();
 
 }
 
