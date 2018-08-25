@@ -6,7 +6,7 @@
 #include "settings.h"
 
 int
-main(int argc, char **argv)
+test_url_params(char * arg)
 {
 	PARAM          *params;
 	char           *query;
@@ -16,10 +16,9 @@ main(int argc, char **argv)
 	params = malloc(sizeof(PARAM) * NUM_HTTP_PARAMS);
 	params_initialize(params, NUM_HTTP_PARAMS);
 
-	printf("%s argc:%d\n", argv[0], argc);
 
-	if (argc > 1) {
-		query = argv[1];
+	if (arg != NULL) {
+		query = arg;
 	} else {
 		query = "noval&default=123123&querquer=123asd";
 	}
@@ -35,5 +34,17 @@ main(int argc, char **argv)
 	printf("params_get:%s\n", tmp);
 
 	params_free(params, NUM_HTTP_PARAMS);
+
+	return ret;
+}
+
+int
+main(int argc, char **argv)
+{
+	printf("%s argc:%d\n", argv[0], argc);
+	
+	printf("test_url_params(): %d\n", test_url_params(NULL));
 	return EXIT_SUCCESS;
 }
+
+
