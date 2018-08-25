@@ -26,7 +26,7 @@ main(void)
 		errpage("error with QUERY_STRING");
 		return EXIT_FAILURE;
 	}
-	nlog("QUERY_STRING:%s", qs);
+	nlog("main.c main() QUERY_STRING:%s", qs);
 
 	params = malloc(sizeof(PARAM) * NUM_HTTP_PARAMS);
 	params_initialize(params, NUM_HTTP_PARAMS);

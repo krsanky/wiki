@@ -1,10 +1,15 @@
-CFLAGS=	-W -Wall -O2 -std=c99 -g
+CFLAGS=		-W -Wall -O2 -std=c99 -g
+SOURCES=	wiki.c main.c myhtml.c params.c forms.c util.c
+HDRS=		wiki.h myhtml.h params.h forms.h util.h
+BINS=		wiki.cgi nanologger nanoclient
+TESTBINS=	test_forms params_test anchortest mdtest.cgi writef
 
-all: wiki.cgi nanologger nanoclient
+all: $(BINS)
 
-wiki.cgi: wiki.c main.c myhtml.c params.c
+# BIN 
+wiki.cgi: $(SOURCES) $(HDRS)
 	$(CC) $(CFLAGS) -o $(.TARGET) \
-		util.c main.c params.c myhtml.c wiki.c \
+		${SOURCES} \
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg -lmarkdown 
 
@@ -19,6 +24,13 @@ nanoclient: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
 		${.TARGET}.c \
 		util.c \
+		-L/usr/local/lib -I/usr/local/include \
+		-lnanomsg
+
+# TEST 
+test_forms: ${.TARGET}.c forms.c forms.h
+	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
+		forms.c util.c \
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg
 
@@ -49,6 +61,7 @@ writef: ${.TARGET}.c
 		${.TARGET}.c \
 		-lmarkdown \
 
+# UTIL 
 indent:
 	@echo "indenting all code..."
 	./indent-all.sh

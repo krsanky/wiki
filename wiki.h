@@ -11,3 +11,4 @@ void 		wikiview (char *, char *);
 void 		wikiedit (char *, char *);
 void 		wikieditform();
 void 		wikinew  (char *, char *);
+char           *parse_boundary(char *);

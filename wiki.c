@@ -11,6 +11,7 @@
 #include "params.h"
 #include "settings.h"
 #include "util.h"
+#include "forms.h"
 
 extern char   **environ;
 
@@ -199,7 +200,7 @@ wikiedit(char *dir, char *page)
 	int 		fpl;
 	char           *fullpath;
 	FILE           *mdfile;
-	char 		ch;
+	char 		c;
 
 	fpl = sizeof(WIKI_ROOT) + 1 + strlen(page);
 	if (dir != NULL)
@@ -221,15 +222,18 @@ wikiedit(char *dir, char *page)
 		return;
 	}
 	http_headers();
-	/* form_http_headers(); */
 	myhtml_header();
 	myhtml_breadcrumbs(dir, page, "edit");
 	myhtml_textarea_open();
 
-	ch = fgetc(mdfile);
-	while (ch != EOF) {
-		printf("%c", ch);
-		ch = fgetc(mdfile);
+	while ((c = fgetc(mdfile)) != EOF) {
+		printf("%c", c);
+/*
+		if (c == '\n')
+			nlog("wikedit form \\n");
+		if (c == '\r')
+			nlog("wikedit form \\r");
+*/
 	}
 
 	fclose(mdfile);
@@ -249,8 +253,11 @@ wikieditform()
 	char           *CL_;
 	char           *CT;
 	int 		CL;
-	char buf[1024];
-	int l = 0;
+	char 		buf      [1024];
+	int 		l = 0;
+	char           *boundary;
+	PARAM          *params;
+	int		NPARAMS = 4;
 
 	RM = getenv("REQUEST_METHOD");
 	CL_ = getenv("CONTENT_LENGTH");
@@ -260,28 +267,34 @@ wikieditform()
 	else
 		CL = -1;
 
-	nlog("editform() RM[%s] CT[%s] CL[%d]", RM, CT, CL);
+	/*nlog("editform() RM[%s] CT[%s] CL[%d]", RM, CT, CL);*/
 
-/*
-while ((length = fread(reqdata, 1, 64 * 1024, stdin)) > 0)
-    {
-	    // and feed it to the parser:
-		    multipart_parser_execute(parser, reqdata, length);
-			}
-			char buffer[NUM_ALPHA + 1];
-			 
-			   if (( stream = fopen("mylib/myfile", "r"))!= NULL )
-			     {
-				 memset(buffer, 0, sizeof(buffer));
-				     num = fread( buffer, sizeof( char ), NUM_ALPHA, stream );
+	boundary = parse_boundary(CT);
 
-*/
-	l = fread(buf, 1, 1023, stdin); 
-	nlog("l:%d", l);
+	l = fread(buf, 1, 1023, stdin);
+	/*nlog("l:%d", l);*/
+
+	params = malloc(sizeof(PARAM) * NPARAMS);
+	params_initialize(params, NPARAMS);
+	params_parse_multipart_POST(buf, boundary, params, NPARAMS);
+	/*
+	for (int i=0; i<10; i++) nlog("i:%d", buf[i]);
 	nlog("buf:%s", buf);
+	*/
 
-	mainpage();
+	http_headers();
+	myhtml_header();
+	myhtml_breadcrumbs(NULL, NULL, "edit");
 
+	printf("<pre>\n");
+	printf("boundary[%s]\n", boundary);
+	printf("buf:\n%s\n", buf);
+	printf("<pre>\n");
+
+	myhtml_footer();
+
+	params_free(params, NPARAMS);
+	free(boundary);
 }
 
 void

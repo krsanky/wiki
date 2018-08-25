@@ -8,6 +8,7 @@
 #include <assert.h>
 
 #include "params.h"
+#include "util.h"
 
 void
 params_initialize(PARAM * params, int max_params)
@@ -141,3 +142,52 @@ params_urldecode(char *s, char *dec)
 
 	return o - dec;
 }
+
+int
+isone_formdata_header(char * txt)
+{
+	return 0;
+}
+
+void		
+params_parse_multipart_POST(char * text, char * boundary, PARAM * params, int max_params)
+{
+	char	*bstart;
+	int	textl = strlen(text);
+	char	*text2 = text;
+
+	nlog("%d %s", strlen(boundary), boundary);
+	nlog("text2 start:%d", *text);
+	while ((bstart = strstr(text2, boundary)) != NULL) {
+		nlog("bstart:%d text2:%d %s", *bstart, *text2, bstart+5);
+		text2 = text2 + strlen(boundary);
+	}
+}
+/*
+
+Thu Aug 16 18:44:03 EDT 2018
+13 -- CR -- carriage return
+10 -- LF -- line feed
+buf:
+-----------------------------827348801294700888940551440
+Content-Disposition: form-data; name="wikiformtext"
+
+# Title1
+
+* thing1
+* thing2
+* thing3
+
+
+-----------------------------827348801294700888940551440
+Content-Disposition: form-data; name="page"
+
+asdasd.md
+-----------------------------827348801294700888940551440
+Content-Disposition: form-data; name="dir"
+
+d1
+-----------------------------827348801294700888940551440--
+*/
+
+
