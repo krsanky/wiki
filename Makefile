@@ -36,8 +36,9 @@ test_forms: ${.TARGET}.c forms.c forms.h
 
 params_test: ${.TARGET}.c params.c params.h
 	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
-		params.c \
-		-L/usr/local/lib -I/usr/local/include 
+		params.c util.c \
+		-L/usr/local/lib -I/usr/local/include \
+		-lnanomsg
 
 anchortest: test1.c myhtml.c
 	$(CC) $(CFLAGS) -o $(.TARGET) \
