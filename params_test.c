@@ -5,6 +5,13 @@
 #include "params.h"
 #include "settings.h"
 
+void 
+exit_err(char *msg) 
+{
+	printf("err:%s\n", msg);
+	exit(1);
+}
+
 int
 test_url_params(char *arg)
 {
@@ -42,13 +49,22 @@ int
 test_POST(char *f)
 {
 	FILE	       *pfile;
+	long		numbytes;
+	char		*buf;
+
 	if (f == NULL)
 		f = "test/post_data_1.txt";
-	if ((pfile = fopen(f, "r")) == NULL) {
-		printf("error opening %s\n", f);
-		EXIT_FAILURE;
-	}
+	if ((pfile = fopen(f, "r")) == NULL) 
+		exit_err("error opening file");
+	fseek(pfile, 0L, SEEK_END);
+	numbytes = ftell(pfile);
+	printf("num bytes:%ld\n", numbytes);
 
+	/* reset */
+	fseek(pfile, 0L, SEEK_SET);
+
+	buf = malloc(numbytes); /* +1 ? */
+	if (buf == NULL) exit_err("malloc");
 
 	if (pfile != NULL)
 		fclose(pfile);
