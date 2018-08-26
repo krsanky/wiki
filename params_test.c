@@ -66,6 +66,10 @@ test_POST(char *f)
 	buf = malloc(numbytes); /* +1 ? */
 	if (buf == NULL) exit_err("malloc");
 
+	fread(buf, 1, numbytes, pfile);
+	printf("file:\n%s\n", buf);
+
+	free(buf);
 	if (pfile != NULL)
 		fclose(pfile);
 	return 0;
