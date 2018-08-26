@@ -6,12 +6,12 @@
 #include "settings.h"
 
 int
-test_url_params(char * arg)
+test_url_params(char *arg)
 {
-	PARAM          *params;
-	char           *query;
-	int 		ret;
-	char           *tmp;
+	PARAM	       *params;
+	char	       *query;
+	int		ret;
+	char	       *tmp;
 
 	params = malloc(sizeof(PARAM) * NUM_HTTP_PARAMS);
 	params_initialize(params, NUM_HTTP_PARAMS);
@@ -39,12 +39,27 @@ test_url_params(char * arg)
 }
 
 int
-main(int argc, char **argv)
+test_POST(char *f)
 {
-	printf("%s argc:%d\n", argv[0], argc);
-	
-	printf("test_url_params(): %d\n", test_url_params(NULL));
-	return EXIT_SUCCESS;
+	FILE	       *pfile;
+	if (f == NULL)
+		f = "test/post_data_1.txt";
+	pfile = fopen(f, "r");
+
+	if (pfile != NULL)
+		fclose(pfile);
+	return 0;
 }
 
+int
+main(int argc, char **argv)
+{
+	printf("-------------%s argc:%d-------------\n", argv[0], argc);
 
+	/*
+	 * printf("test_url_params(): %d\n", test_url_params(NULL));
+	 */
+	printf("test_POST(NULL): %d\n", test_POST(NULL));
+
+	return EXIT_SUCCESS;
+}
