@@ -44,7 +44,11 @@ test_POST(char *f)
 	FILE	       *pfile;
 	if (f == NULL)
 		f = "test/post_data_1.txt";
-	pfile = fopen(f, "r");
+	if ((pfile = fopen(f, "r")) == NULL) {
+		printf("error opening %s\n", f);
+		EXIT_FAILURE;
+	}
+
 
 	if (pfile != NULL)
 		fclose(pfile);
@@ -54,12 +58,17 @@ test_POST(char *f)
 int
 main(int argc, char **argv)
 {
+	char		*argv1 = NULL;
+
 	printf("-------------%s argc:%d-------------\n", argv[0], argc);
+	if (argc > 1)
+		argv1 = argv[1];
+		
 
 	/*
 	 * printf("test_url_params(): %d\n", test_url_params(NULL));
 	 */
-	printf("test_POST(NULL): %d\n", test_POST(NULL));
+	printf("test_POST(%s): %d\n", argv1, test_POST(argv1));
 
 	return EXIT_SUCCESS;
 }
