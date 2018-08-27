@@ -46,7 +46,7 @@ test_url_params(char *arg)
 }
 
 int
-test_POST(char *f)
+read_file(char *f, char **buf)
 {
 	FILE	       *pfile;
 	long		numbytes;
@@ -73,6 +73,12 @@ test_POST(char *f)
 	if (pfile != NULL)
 		fclose(pfile);
 	return 0;
+}
+
+int
+test_POST(char *f)
+{
+//params_parse_multipart_POST(char * text, char * boundary, PARAM * params, int max_params)
 }
 
 int
