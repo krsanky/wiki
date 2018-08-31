@@ -16,9 +16,9 @@ nn_fatal(const char *func)
 }
 
 int
-is_md(struct dirent * de)
+is_md(struct dirent *de)
 {
-	char           *ext;
+	char	       *ext;
 	ext = strrchr(de->d_name, '.');
 	if (ext != NULL) {
 		ext++;
@@ -32,9 +32,9 @@ is_md(struct dirent * de)
 int
 nlog(const char *fmt,...)
 {
-	char           *p;
-	va_list 	ap;
-	int 		ret;
+	char	       *p;
+	va_list		ap;
+	int		ret;
 
 	if ((p = malloc(256)) == NULL)
 		return 0;
@@ -50,12 +50,12 @@ nlog(const char *fmt,...)
 int
 wikilog(char *msg)
 {
-	char           *msg_;
-	int 		msg_l;
-	char           *buf;
-	int 		bytes = -1;
-	int 		sock;
-	int 		rv;
+	char	       *msg_;
+	int		msg_l;
+	char	       *buf;
+	int		bytes = -1;
+	int		sock;
+	int		rv;
 
 	if ((sock = nn_socket(AF_SP, NN_REQ)) < 0) {
 		nn_fatal("nn_socket");
@@ -83,4 +83,43 @@ void
 redirect(char *url)
 {
 	printf("Status: 302 Moved\r\nLocation: %s\r\n\r\n", url);
+}
+
+/*
+ * caller responsible for freeing returned pointer.
+ */
+char	       *
+my_read_file(char *f)
+{
+	FILE	       *pfile;
+	long		numbytes;
+	char	       *buf = NULL;
+
+	if (f == NULL)
+		return NULL;
+
+	if ((pfile = fopen(f, "r")) == NULL) {
+		/* exit_err("error opening file"); */
+		return NULL;
+	}
+	fseek(pfile, 0L, SEEK_END);
+	numbytes = ftell(pfile);
+	/* printf("num bytes:%ld\n", numbytes); */
+
+	/* reset */
+	fseek(pfile, 0L, SEEK_SET);
+
+	buf = malloc(numbytes);	/* +1 ? */
+	if (buf == NULL) {
+		/* exit_err("malloc"); */
+		return NULL;
+	}
+	fread(buf, 1, numbytes, pfile);
+	/*
+	 * printf("file:\n%s\n", buf); free(buf);
+	 */
+	if (pfile != NULL)
+		fclose(pfile);
+
+	return buf;
 }
