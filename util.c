@@ -123,3 +123,11 @@ my_read_file(char *f)
 
 	return buf;
 }
+
+int
+my_write_file(char *f, char *buf, int bsize)
+{
+
+}
+
+

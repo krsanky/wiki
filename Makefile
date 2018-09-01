@@ -34,7 +34,7 @@ test_forms: ${.TARGET}.c forms.c forms.h
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg
 
-params_test: ${.TARGET}.c params.c params.h
+params_test: ${.TARGET}.c params.c params.h util.h util.c 
 	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
 		params.c util.c \
 		-L/usr/local/lib -I/usr/local/include \

@@ -51,13 +51,49 @@ test_POST(char *f)
 {
 	char	       *buf;
 
-	//params_parse_multipart_POST(char *text, char *boundary, PARAM * params, int max_params)
-		buf = my_read_file(f);
-	if (buf != NULL)
+	buf = my_read_file(f);
+	if (buf != NULL) {
 		printf("ofile:\n%s\n", buf);
-	else
+	} else {
 		printf("buf == NULL\n");
+		return -1;
+	}
+
+
+
+	/*params_parse_multipart_POST(buf, boundary, PARAM * params, int max_params)*/
+
 	free(buf);
+	return 0;
+}
+
+void
+ret_mal_str()
+{
+	printf("....ret_mal_str()....\n");
+
+}
+
+void
+f1(int a)
+{
+	printf("A:%d\n", a);
+}
+
+void
+ppf(int **N)
+{
+	*N = 12;
+	printf("N:%d\n", *N);
+
+}
+
+void ppstr(char **s)
+{
+	char	*s1;
+	s1 = malloc(strlen("POOP")+1);
+	strlcpy(s1, "POOP", strlen("POOP")+1);
+	*s = s1;
 }
 
 int
@@ -72,11 +108,27 @@ main(int argc, char **argv)
 	else
 		argv1 = f;
 
-
 	/*
-	 * printf("test_url_params(): %d\n", test_url_params(NULL));
-	 */
+	printf("test_url_params(): %d\n", test_url_params(NULL));
 	printf("test_POST(%s): %d\n", argv1, test_POST(argv1));
+	*/
+
+	ret_mal_str();
+
+	void (*fun_ptr)(int);
+	fun_ptr = &f1;
+	(*fun_ptr)(10);
+
+	int n = 10;
+	printf("pre  n:%d\n", n);
+	ppf(&n);
+	printf("post n:%d\n", n);
+
+	char	*str;
+	printf("pre  str:%s\n", str);
+	ppstr(&str);
+	printf("post str:%s\n", str);
+	free(str);
 
 	return EXIT_SUCCESS;
 }
