@@ -88,19 +88,19 @@ redirect(char *url)
 /*
  * caller responsible for freeing returned pointer.
  */
-char	       *
-my_read_file(char *f)
+int
+my_read_file(char *f, char **contents)
 {
 	FILE	       *pfile;
 	long		numbytes;
 	char	       *buf = NULL;
 
 	if (f == NULL)
-		return NULL;
+		return -1;
 
 	if ((pfile = fopen(f, "r")) == NULL) {
 		/* exit_err("error opening file"); */
-		return NULL;
+		return -1;
 	}
 	fseek(pfile, 0L, SEEK_END);
 	numbytes = ftell(pfile);
@@ -112,7 +112,7 @@ my_read_file(char *f)
 	buf = malloc(numbytes);	/* +1 ? */
 	if (buf == NULL) {
 		/* exit_err("malloc"); */
-		return NULL;
+		return -1;
 	}
 	fread(buf, 1, numbytes, pfile);
 	/*
@@ -121,7 +121,8 @@ my_read_file(char *f)
 	if (pfile != NULL)
 		fclose(pfile);
 
-	return buf;
+	*contents = buf;
+	return 0;
 }
 
 int

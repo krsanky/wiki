@@ -5,5 +5,5 @@ int		is_md(struct dirent *);
 int		nlog(const char *,...);
 int		wikilog(char *);
 void		redirect(char *);
-char	       *my_read_file(char *);
+int		my_read_file(char *, char **);
 int		my_write_file(char *, char *, int);

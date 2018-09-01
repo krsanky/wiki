@@ -49,9 +49,10 @@ test_url_params(char *arg)
 int
 test_POST(char *f)
 {
-	char	       *buf;
+	char	       *buf = NULL;
+	int		ret;
 
-	buf = my_read_file(f);
+	ret = my_read_file(f, &buf);
 	if (buf != NULL) {
 		printf("ofile:\n%s\n", buf);
 	} else {
@@ -99,8 +100,8 @@ main(int argc, char **argv)
 
 	/*
 	printf("test_url_params(): %d\n", test_url_params(NULL));
-	printf("test_POST(%s): %d\n", argv1, test_POST(argv1));
 	*/
+	printf("test_POST(%s): %d\n", argv1, test_POST(argv1));
 
 	void (*fun_ptr)(int);
 	fun_ptr = &f1;
