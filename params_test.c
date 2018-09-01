@@ -68,32 +68,21 @@ test_POST(char *f)
 }
 
 void
-ret_mal_str()
+ret_mal_str(char **s)
 {
-	printf("....ret_mal_str()....\n");
+	char		*s1;
+	char		*cs = "MALLOC STRING";
 
+	s1 = malloc(strlen(cs)+1);
+	if (s1 == NULL) return;
+	strlcpy(s1, cs, strlen(cs)+1);
+	*s = s1;
 }
 
 void
 f1(int a)
 {
 	printf("A:%d\n", a);
-}
-
-void
-ppf(int **N)
-{
-	*N = 12;
-	printf("N:%d\n", *N);
-
-}
-
-void ppstr(char **s)
-{
-	char	*s1;
-	s1 = malloc(strlen("POOP")+1);
-	strlcpy(s1, "POOP", strlen("POOP")+1);
-	*s = s1;
 }
 
 int
@@ -113,22 +102,14 @@ main(int argc, char **argv)
 	printf("test_POST(%s): %d\n", argv1, test_POST(argv1));
 	*/
 
-	ret_mal_str();
-
 	void (*fun_ptr)(int);
 	fun_ptr = &f1;
 	(*fun_ptr)(10);
 
-	int n = 10;
-	printf("pre  n:%d\n", n);
-	ppf(&n);
-	printf("post n:%d\n", n);
-
-	char	*str;
-	printf("pre  str:%s\n", str);
-	ppstr(&str);
-	printf("post str:%s\n", str);
-	free(str);
+	char	*ms;
+	ret_mal_str(&ms);
+	printf("ms:%s\n", ms);
+	free(ms);
 
 	return EXIT_SUCCESS;
 }
