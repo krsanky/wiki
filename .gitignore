@@ -5,6 +5,7 @@ usr/
 *.zip
 *.core
 *.BAK
+*.del
 a.out
 content/
 examples/

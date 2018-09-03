@@ -16,10 +16,10 @@ exit_err(char *msg)
 int
 test_url_params(char *arg)
 {
-	PARAM	       *params;
-	char	       *query;
-	int		ret;
-	char	       *tmp;
+	PARAM          *params;
+	char           *query;
+	int 		ret;
+	char           *tmp;
 
 	params = malloc(sizeof(PARAM) * NUM_HTTP_PARAMS);
 	params_initialize(params, NUM_HTTP_PARAMS);
@@ -46,11 +46,48 @@ test_url_params(char *arg)
 	return ret;
 }
 
-int
-test_POST(char *f)
+void
+ret_mal_str(char **s)
 {
-	char	       *buf = NULL;
-	int		ret;
+	char           *s1;
+	char           *cs = "MALLOC STRING";
+
+	s1 = malloc(strlen(cs) + 1);
+	if (s1 == NULL)
+		return;
+	strlcpy(s1, cs, strlen(cs) + 1);
+	*s = s1;
+}
+
+void
+pointer_malloc_str_test()
+{
+	char           *ms;
+	ret_mal_str(&ms);
+	printf("ms:%s\n", ms);
+	free(ms);
+}
+
+void
+f1(int a)
+{
+	printf("A:%d\n", a);
+}
+
+void 
+ptr_func_test()
+{
+	printf("ptr_func_test()...\n");
+	void            (*fun_ptr) (int);
+	fun_ptr = &f1;
+	(*fun_ptr) (10);
+}
+
+int
+test_POST(char *b, char *f)
+{
+	char           *buf = NULL;
+	int 		ret;
 
 	ret = my_read_file(f, &buf);
 	if (buf != NULL) {
@@ -62,55 +99,36 @@ test_POST(char *f)
 
 
 
-	/*params_parse_multipart_POST(buf, boundary, PARAM * params, int max_params)*/
+	/*
+	 * params_parse_multipart_POST(buf, boundary, PARAM * params, int
+	 * max_params)
+	 */
 
 	free(buf);
 	return 0;
 }
 
-void
-ret_mal_str(char **s)
-{
-	char		*s1;
-	char		*cs = "MALLOC STRING";
-
-	s1 = malloc(strlen(cs)+1);
-	if (s1 == NULL) return;
-	strlcpy(s1, cs, strlen(cs)+1);
-	*s = s1;
-}
-
-void
-f1(int a)
-{
-	printf("A:%d\n", a);
-}
-
 int
 main(int argc, char **argv)
 {
-	char	       *argv1 = NULL;
-	char		*f = "test/post_data_1.txt";
+	char           *b, *f;
+	/*char           *f = "test/post_data_1.txt";*/
 
 	printf("::-----------%s argc:%d-------------\n", argv[0], argc);
-	if (argc > 1)
-		argv1 = argv[1];
-	else
-		argv1 = f;
+	if (argc < 3) {
+		printf("%s <boundary-str> <file>\n", argv[0]);
+		return EXIT_FAILURE;
+	} 
+	b = argv[1];
+	f = argv[2];
 
+	printf("test_POST(%s, %s): %d\n", b, f, test_POST(b, f));
 	/*
 	printf("test_url_params(): %d\n", test_url_params(NULL));
+	ptr_func_test();
+	pointer_malloc_str_test();
 	*/
-	printf("test_POST(%s): %d\n", argv1, test_POST(argv1));
 
-	void (*fun_ptr)(int);
-	fun_ptr = &f1;
-	(*fun_ptr)(10);
-
-	char	*ms;
-	ret_mal_str(&ms);
-	printf("ms:%s\n", ms);
-	free(ms);
 
 	return EXIT_SUCCESS;
 }
