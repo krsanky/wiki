@@ -29,7 +29,9 @@ void
 myhtml_footer()
 {
 	printf("\
-</body>\
+<script src='/static/hn.js'></script>\n\
+</bodyther.com
+>\
 </html>\
 \n");
 }

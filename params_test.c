@@ -112,9 +112,7 @@ int
 main(int argc, char **argv)
 {
 	char           *b, *f;
-	/*char           *f = "test/post_data_1.txt";*/
 
-	printf("::-----------%s argc:%d-------------\n", argv[0], argc);
 	if (argc < 3) {
 		printf("%s <boundary-str> <file>\n", argv[0]);
 		return EXIT_FAILURE;
@@ -128,7 +126,6 @@ main(int argc, char **argv)
 	ptr_func_test();
 	pointer_malloc_str_test();
 	*/
-
 
 	return EXIT_SUCCESS;
 }
