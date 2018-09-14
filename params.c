@@ -158,10 +158,6 @@ params_parse_multipart_POST(char * text, char * boundary, PARAM * params, int ma
 
 	nlog("%d %s", strlen(boundary), boundary);
 	nlog("text2 start:%d", *text);
-	while ((bstart = strstr(text2, boundary)) != NULL) {
-		nlog("bstart:%d text2:%d %s", *bstart, *text2, bstart+5);
-		text2 = text2 + strlen(boundary);
-	}
 }
 /*
 

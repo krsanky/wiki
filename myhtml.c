@@ -30,8 +30,7 @@ myhtml_footer()
 {
 	printf("\
 <script src='/static/hn.js'></script>\n\
-</bodyther.com
->\
+</body>\
 </html>\
 \n");
 }
@@ -109,6 +108,9 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 			free(a);
 		} else if (strcmp(pagetype, "edit") == 0) {
 			a = make_anchor("view", dir, page, "(view)");
+			printf("%s\n", a);
+			free(a);
+			a = make_anchor("delete", dir, page, "(delete)");
 			printf("%s\n", a);
 			free(a);
 		}

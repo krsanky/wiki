@@ -267,9 +267,11 @@ wikieditform()
 	else
 		CL = -1;
 
-	/*nlog("editform() RM[%s] CT[%s] CL[%d]", RM, CT, CL);*/
+	nlog("editform() RM[%s] CT[%s] CL[%d]", RM, CT, CL);
 
+	nlog("pre parse_b...");
 	boundary = parse_boundary(CT);
+	nlog("post parse_b...");
 
 	l = fread(buf, 1, 1023, stdin);
 	/*nlog("l:%d", l);*/

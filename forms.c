@@ -13,7 +13,7 @@ char *
 parse_boundary(char * ct_hdr)
 {
 	char	*first, *rest, *restf;
-	char	*boundary;
+	char	*boundary = NULL;
 
 	restf = rest = strdup(ct_hdr);
 	assert(rest != NULL);
@@ -23,9 +23,6 @@ parse_boundary(char * ct_hdr)
 
 	if (strcasecmp("BOUNDARY", first) == 0) {
 		boundary = strdup(rest);
-		assert(boundary != NULL);
-	} else {
-		boundary = NULL;
 	}
 
 	free(restf);
