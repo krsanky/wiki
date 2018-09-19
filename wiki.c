@@ -273,8 +273,10 @@ wikieditform()
 	boundary = parse_boundary(CT);
 	nlog("post parse_b...");
 
+	/* consider null-terminating this ... */
+	/* using CL ????? */
 	l = fread(buf, 1, 1023, stdin);
-	/*nlog("l:%d", l);*/
+	/* nlog("l:%d", l); */
 
 	params = malloc(sizeof(PARAM) * NPARAMS);
 	params_initialize(params, NPARAMS);

@@ -156,34 +156,13 @@ params_parse_multipart_POST(char * text, char * boundary, PARAM * params, int ma
 	int	textl = strlen(text);
 	char	*text2 = text;
 
-	nlog("%d %s", strlen(boundary), boundary);
-	nlog("text2 start:%d", *text);
+	printf("%d %s\n", strlen(boundary), boundary);
+	printf("text start:%d\n", *text);
+
+	/* change the last elem to a \0 */
+	printf("strlen text:%d\n", strlen(text));
+
 }
-/*
 
-Thu Aug 16 18:44:03 EDT 2018
-13 -- CR -- carriage return
-10 -- LF -- line feed
-buf:
------------------------------827348801294700888940551440
-Content-Disposition: form-data; name="wikiformtext"
-
-# Title1
-
-* thing1
-* thing2
-* thing3
-
-
------------------------------827348801294700888940551440
-Content-Disposition: form-data; name="page"
-
-asdasd.md
------------------------------827348801294700888940551440
-Content-Disposition: form-data; name="dir"
-
-d1
------------------------------827348801294700888940551440--
-*/
 
 

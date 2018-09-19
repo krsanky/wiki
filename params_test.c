@@ -97,13 +97,14 @@ test_POST(char *b, char *f)
 		return -1;
 	}
 
+	PARAM          *params;
+	int		nump = 10;
+	params = malloc(sizeof(PARAM) * nump);
+	params_initialize(params, nump);
+	 
+	params_parse_multipart_POST(buf, b, params, nump);
 
-
-	/*
-	 * params_parse_multipart_POST(buf, boundary, PARAM * params, int
-	 * max_params)
-	 */
-
+	params_free(params, nump);
 	free(buf);
 	return 0;
 }
@@ -111,16 +112,20 @@ test_POST(char *b, char *f)
 int
 main(int argc, char **argv)
 {
-	char           *b, *f;
+	char		*b1 = "----WebKitFormBoundary4I8D3cAgAWb1bauA";
+	char		*f1 = "tmpPOST123.txt";
 
+	/*
+	char           *b, *f;
 	if (argc < 3) {
 		printf("%s <boundary-str> <file>\n", argv[0]);
 		return EXIT_FAILURE;
 	} 
 	b = argv[1];
 	f = argv[2];
+	*/
 
-	printf("test_POST(%s, %s): %d\n", b, f, test_POST(b, f));
+	printf("test_POST(%s, %s): %d\n", b1, f1, test_POST(b1, f1));
 	/*
 	printf("test_url_params(): %d\n", test_url_params(NULL));
 	ptr_func_test();
@@ -129,3 +134,5 @@ main(int argc, char **argv)
 
 	return EXIT_SUCCESS;
 }
+
+
