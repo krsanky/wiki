@@ -152,15 +152,36 @@ isone_formdata_header(char * txt)
 void		
 params_parse_multipart_POST(char * text, char * boundary, PARAM * params, int max_params)
 {
-	char	*bstart;
+	char	*b;
+	char	*start = text;
+	char	*cur = text;
 	int	textl = strlen(text);
 	char	*text2 = text;
 
 	printf("%d %s\n", strlen(boundary), boundary);
 	printf("text start:%d\n", *text);
 
-	/* change the last elem to a \0 */
 	printf("strlen text:%d\n", strlen(text));
+/*
+	b = strstr(text, boundary);	
+	if (b != NULL) {
+		printf("b %d [%.125s]\n", *b, b);
+	} else {
+		printf("b is NULL\n");
+	}
+	b = strstr(b+1, boundary);
+	if (b != NULL) {
+		printf("b %d [%.125s]\n", *b, b);
+	} else {
+		printf("b is NULL\n");
+	}
+*/
+/* BAD!!!!! */
+	while ((b = strstr(cur, boundary)) != NULL) {
+		printf("b %d [%.125s]\n", *b, b);
+		cur += 8;
+		if (cur > (start + textl)) break;
+	}
 
 }
 

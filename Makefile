@@ -1,24 +1,24 @@
-CFLAGS=		-W -Wall -O2 -std=c99 -g
+CFLAGS +=		-W -Wall -O2 -std=c99 -g
+LDFLAGS = -lnanomsg -lmarkdown
+
 SOURCES=	wiki.c main.c myhtml.c params.c forms.c util.c
 HDRS=		wiki.h myhtml.h params.h forms.h util.h
 BINS=		wiki.cgi nanologger nanoclient
-TESTBINS=	test_forms params_test anchortest mdtest.cgi writef
 
 all: $(BINS)
 
-# BIN 
 wiki.cgi: $(SOURCES) $(HDRS)
 	$(CC) $(CFLAGS) -o $(.TARGET) \
 		${SOURCES} \
 		-L/usr/local/lib -I/usr/local/include \
-		-lnanomsg -lmarkdown 
+		$(LDFLAGS)
 
 nanologger: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
 		${.TARGET}.c \
 		myhtml.c util.c \
 		-L/usr/local/lib -I/usr/local/include \
-		-lnanomsg -lmarkdown 
+		$(LDFLAGS)
 
 nanoclient: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
@@ -28,6 +28,9 @@ nanoclient: ${.TARGET}.c
 		-lnanomsg
 
 # TEST 
+strstrp: ${.TARGET}.c util.c
+	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c util.c
+
 test_forms: ${.TARGET}.c forms.c forms.h
 	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
 		forms.c util.c \
@@ -44,7 +47,7 @@ anchortest: test1.c myhtml.c
 	$(CC) $(CFLAGS) -o $(.TARGET) \
 		util.c test1.c myhtml.c \
 		-L/usr/local/lib -I/usr/local/include \
-		-lnanomsg -lmarkdown 
+		$(LDFLAGS)
 
 test:
 	@echo CURDIR:${.CURDIR}

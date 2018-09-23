@@ -109,12 +109,13 @@ my_read_file(char *f, char **contents)
 	/* reset */
 	fseek(pfile, 0L, SEEK_SET);
 
-	buf = malloc(numbytes);	/* +1 ? */
+	buf = malloc(numbytes + 1);
 	if (buf == NULL) {
 		/* exit_err("malloc"); */
 		return -1;
 	}
 	fread(buf, 1, numbytes, pfile);
+	buf[numbytes] = '\0'; /* make sure there is a closing nul */
 	/*
 	 * printf("file:\n%s\n", buf); free(buf);
 	 */

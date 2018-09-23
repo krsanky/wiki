@@ -1,0 +1,18 @@
+wd123qwdqwd123qwdqwd
+icking "Post Your Answer", you acknowledge that you have read our
+updated terms of service, privacy policy and cookie policy, and
+that your continued use of the website is subject to these policies.
+wd123qwdqwd123qwdqwd usly works for C-"string"s only, as those are
+0-terminated.  It won't work (char-)arrays in general.  – alk May
+2 '15 at 7:03 By clicking "Post Your Answer", you acknowledge that
+you have read our updated terms of service, privacy policy and
+cookie policy, and that your continued use of the website is subject
+to these policies.
+wd123qwdqwd123qwdqwd
+2 '15 at 7:03 By clicking "Post Your Answer", you acknowledge that
+you have read our updated terms of service, privacy policy and
+wd123qwdqwd123qwdqwd
+updated terms of service, privacy policy and cookie policy, and
+usly works for C-"string"s only, as those are
+wd123qwdqwd123qwdqwd
+
