@@ -51,7 +51,20 @@ main(void)
 	printf("txt:\n%.25s...\n", txt);
 
 	s1 = strstr(txt, b);
-	printf("strstr:\n%.15s\n", s1);
+	printf("strstr:\n%.45s\n", s1);
+
+	s1 = strstr(s1+1, b);
+	printf("strstr:\n%.45s\n", s1);
+
+	s1 = strstr(s1+1, b);
+	printf("strstr:\n%.45s\n", s1);
+
+	printf("=====RESET=====\n\n");
+	s1 = txt;
+	while ((s1 = strstr(s1, b)) != NULL) {
+		printf("strstr:\n%.45s\n", s1);
+		s1 += 1;
+	}
 
 	free(txt);
 	return EXIT_SUCCESS;
