@@ -48,18 +48,8 @@ main(void)
 	char	       *txt = NULL;
 
 	r = my_read_file(fn, &txt);
-	printf("txt:\n%.25s...\n", txt);
+	printf("txt:\n%.25s...\n\n", txt);
 
-	s1 = strstr(txt, b);
-	printf("strstr:\n%.45s\n", s1);
-
-	s1 = strstr(s1+1, b);
-	printf("strstr:\n%.45s\n", s1);
-
-	s1 = strstr(s1+1, b);
-	printf("strstr:\n%.45s\n", s1);
-
-	printf("=====RESET=====\n\n");
 	s1 = txt;
 	while ((s1 = strstr(s1, b)) != NULL) {
 		printf("strstr:\n%.45s\n", s1);
