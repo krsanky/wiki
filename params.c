@@ -144,24 +144,28 @@ params_urldecode(char *s, char *dec)
 }
 
 int
-isone_formdata_header(char * txt)
+isone_formdata_header(char *txt)
 {
 	return 0;
 }
 
-void		
-params_parse_multipart_POST(char * text, char * boundary, PARAM * params, int max_params)
+void
+params_parse_multipart_POST(char *text, char *boundary, PARAM * params, int max_params)
 {
-	char	       *s1;
-	char	       *txt = NULL;
+	char           *s1;
+	char           *p1;
+	char           *txt = NULL;
+	char           *buf;
 
 	s1 = text;
 	while ((s1 = strstr(s1, boundary)) != NULL) {
 		printf("strstr:\n%.85s\n", s1);
+		/* try to print content... line */
+		p1 = s1 + strlen(boundary);
+		p1 += 1;	/* eat \n */
+		printf("P1:\n%.85s\n", p1);
+
 		s1 += 1;
 	}
 	printf("do what now?\n");
 }
-
-
-
