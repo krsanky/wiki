@@ -149,7 +149,7 @@ isone_formdata_header(char *txt)
 	return 0;
 }
 
-void
+int
 params_parse_multipart_POST(char *text, char *boundary, PARAM * params, int max_params)
 {
 	char           *s1;
@@ -157,15 +157,36 @@ params_parse_multipart_POST(char *text, char *boundary, PARAM * params, int max_
 	char           *txt = NULL;
 	char           *buf;
 
+	char           *first;
+	char           *cpy;
+
+	char		*boundaryp = NULL;
+	boundaryp = malloc(strlen(boundary)+3);
+	if (boundaryp == NULL)
+		return -1;
+	strlcpy(boundaryp, "--", strlen(boundary)+3);
+	strlcat(boundaryp, boundary, strlen(boundary)+3);
+	printf("boundaryp[%s]\n", boundaryp);
+
 	s1 = text;
 	while ((s1 = strstr(s1, boundary)) != NULL) {
-		printf("strstr:\n%.85s\n", s1);
-		/* try to print content... line */
+		printsep();
+
 		p1 = s1 + strlen(boundary);
 		p1 += 1;	/* eat \n */
-		printf("P1:\n%.85s\n", p1);
+
+		cpy = strdup(p1);
+		if (cpy == NULL)
+			break;
+		while ((first = strsep(&cpy, "\r\n")) != NULL) {
+			printf("FIRST:%s\n", first);
+		}
+		printf("----FIRSTbreak\n");
+
+		free(cpy);
 
 		s1 += 1;
 	}
-	printf("do what now?\n");
+
+	free(boundaryp);
 }

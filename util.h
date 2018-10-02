@@ -7,3 +7,5 @@ int		wikilog(char *);
 void		redirect(char *);
 int		my_read_file(char *, char **);
 int		my_write_file(char *, char *, int);
+void		printsep();
+

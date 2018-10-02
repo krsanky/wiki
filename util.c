@@ -132,4 +132,10 @@ my_write_file(char *f, char *buf, int bsize)
 
 }
 
+void
+printsep()
+{
+	printf("-----------------------------------------------------------------------\n");
+}
+
 

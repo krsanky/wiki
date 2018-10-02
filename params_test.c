@@ -91,7 +91,7 @@ test_POST(char *b, char *f)
 
 	ret = my_read_file(f, &buf);
 	if (buf != NULL) {
-		printf("ofile:\n%s\n", buf);
+		/* printf("ofile:\n%s\n", buf); */
 	} else {
 		printf("buf == NULL\n");
 		return -1;
