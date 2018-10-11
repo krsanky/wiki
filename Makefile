@@ -65,6 +65,14 @@ writef: ${.TARGET}.c
 		${.TARGET}.c \
 		-lmarkdown \
 
+# CGI WEB SETUP TEST
+
+cgi123: ${.TARGET}.c
+	$(CC) -o ${.TARGET}.cgi \
+		-L/usr/local/lib -I/usr/local/include \
+		${.TARGET}.c \
+		-lmarkdown \
+
 # UTIL 
 indent:
 	@echo "indenting all code..."
