@@ -24,15 +24,12 @@ http_headers(void)
 }
 
 void
-mainpage(void)
+testpage(void)
 {
 	http_headers();
 
 	myhtml_header();
-	/* myhtml_topnav(NULL, NULL); */
 	printf("\
-<p>wiki wiki wiki</p>\n\
-<ul>\n\
 <li><a href='/wiki.cgi?index'>index</a></li>\
 </ul>\n");
 

@@ -33,7 +33,7 @@ main(void)
 	params_parse_query(qs, params, NUM_HTTP_PARAMS);
 
 	if (strlen(qs) < 1) {
-		mainpage();
+		wikiindex(NULL);
 	} else if (strcmp(params[0].key, "start") == 0) {
 		msgpage("start");
 	} else if (strcmp(params[0].key, "logtest") == 0) {
@@ -71,6 +71,8 @@ main(void)
 		wikieditform();
 	} else if (strcmp(params[0].key, "delete") == 0) {
 			msgpage("delete...");
+	} else if (strcmp(params[0].key, "test") == 0) {
+		testpage();
 	}
 	params_free(params, NUM_HTTP_PARAMS);
 	return EXIT_SUCCESS;

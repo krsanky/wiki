@@ -71,7 +71,7 @@ indent:
 	./indent-all.sh
 
 clean:
-	rm -f writef myserver nanologger nanoclient mdtest params_test
+	rm -f writef nanoclient mdtest params_test
 	rm -rf a.out *.BAK *.cgi *.core
 cleanlogs: 
 	rm -rf nlog.txt log.txt
