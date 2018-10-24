@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <mkdio.h>
+#include <fcntl.h>
 
 #include "wiki.h"
 #include "myhtml.h"
@@ -101,6 +102,14 @@ wikiindex(char *dir_)
 		strlcat(fulldir, dir_, dirl);
 	}
 	nlog("dir_:%s fulldir:%s", dir_, fulldir);
+
+	/* need to see if fulldir exists before attempt to open */
+	int test = open(fulldir, O_DIRECTORY);
+	if (test < 0) {
+		errpage("could not open dir:");
+		return;
+	}
+	close(test);
 
 	dir = opendir(fulldir);
 	if (dir == NULL) {

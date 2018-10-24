@@ -3,7 +3,7 @@ LDFLAGS = -lnanomsg -lmarkdown
 
 SOURCES=	wiki.c main.c myhtml.c params.c forms.c util.c
 HDRS=		wiki.h myhtml.h params.h forms.h util.h
-BINS=		wiki.cgi nanologger nanoclient
+BINS=		wiki.cgi nanoclient
 
 all: $(BINS)
 
@@ -13,13 +13,7 @@ wiki.cgi: $(SOURCES) $(HDRS)
 		-L/usr/local/lib -I/usr/local/include \
 		$(LDFLAGS)
 
-nanologger: ${.TARGET}.c
-	$(CC) $(CFLAGS) -o ${.TARGET} \
-		${.TARGET}.c \
-		myhtml.c util.c \
-		-L/usr/local/lib -I/usr/local/include \
-		$(LDFLAGS)
-
+# move to nanologger???
 nanoclient: ${.TARGET}.c
 	$(CC) $(CFLAGS) -o ${.TARGET} \
 		${.TARGET}.c \
@@ -66,14 +60,12 @@ writef: ${.TARGET}.c
 		-lmarkdown \
 
 # CGI WEB SETUP TEST
-
 cgi123: ${.TARGET}.c
 	$(CC) -o ${.TARGET}.cgi \
 		-L/usr/local/lib -I/usr/local/include \
 		${.TARGET}.c \
 		-lmarkdown \
 
-# UTIL 
 indent:
 	@echo "indenting all code..."
 	./indent-all.sh

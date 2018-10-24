@@ -22,4 +22,5 @@ params_test
 test_forms
 bgplg/
 graphs/
+*.tgz
 
