@@ -259,7 +259,8 @@ wikieditform()
 	char           *CL_;
 	char           *CT;
 	int 		CL;
-	char 		buf      [1024];
+	/*char 		buf      [1024];*/
+	char		*buf;
 	int 		l = 0;
 	char           *boundary;
 	PARAM          *params;
@@ -279,32 +280,54 @@ wikieditform()
 	boundary = parse_boundary(CT);
 	nlog("post parse_b...");
 
-	/* consider null-terminating this ... */
-	/* using CL ????? */
-	l = fread(buf, 1, 1023, stdin);
-	/* nlog("l:%d", l); */
+
+/*
+In my code, you see a lot of constructs where it's buf, offset, and
+length.  The buf variable points to the start of the buffer and is
+never incremented.  The length variable is the max length of the
+buffer and likewise never changes.  It's the offset variable that
+is incremented throughout.
+*/
 
 	params = malloc(sizeof(PARAM) * NPARAMS);
 	params_initialize(params, NPARAMS);
-	params_parse_multipart_POST(buf, boundary, params, NPARAMS);
-	/*
-	for (int i=0; i<10; i++) nlog("i:%d", buf[i]);
-	nlog("buf:%s", buf);
-	*/
 
+
+
+	/* -- display -- */
 	http_headers();
 	myhtml_header();
 	myhtml_breadcrumbs(NULL, NULL, "edit");
 
+
+
+
+
+
+
+	buf = malloc(CL);
+	/* try using CONTENT_LENGTH */
+	if (buf != NULL) {
+		l = fread(buf, 1, CL, stdin);
+		params_parse_multipart_POST(buf, boundary, params, NPARAMS);
+	}
+
+
+
+
 	printf("<pre>\n");
 	printf("boundary[%s]\n", boundary);
 	printf("buf:\n%s\n", buf);
-	printf("<pre>\n");
+	printf("</pre>\n");
 
+	printf("<hr/>\n");
+	showenv();
 	myhtml_footer();
 
 	params_free(params, NPARAMS);
 	free(boundary);
+	free(buf);
+	free(NULL);
 }
 
 void

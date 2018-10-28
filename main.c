@@ -70,7 +70,7 @@ main(void)
 	} else if (strcmp(params[0].key, "editform") == 0) {
 		wikieditform();
 	} else if (strcmp(params[0].key, "delete") == 0) {
-			msgpage("delete...");
+		msgpage("delete...");
 	} else if (strcmp(params[0].key, "test") == 0) {
 		testpage();
 	}

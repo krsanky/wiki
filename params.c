@@ -152,41 +152,19 @@ isone_formdata_header(char *txt)
 int
 params_parse_multipart_POST(char *text, char *boundary, PARAM * params, int max_params)
 {
-	char           *s1;
-	char           *p1;
-	char           *txt = NULL;
-	char           *buf;
+	printf("<pre>\n");
+	printf("params_parse_multipart_POST(---------\n");
+	printf("BODY:\n");
+	printf("%s\n===\n", text);
+	char		*start;
+	char		*end;
+	start = strstr(text, boundary);
+	printf("match1[[[%.120s]]]\n", start);
+	end = strstr(start, boundary);
+	 
 
-	char           *first;
-	char           *cpy;
-
-	char		*boundaryp = NULL;
-	boundaryp = malloc(strlen(boundary)+3);
-	if (boundaryp == NULL)
-		return -1;
-	strlcpy(boundaryp, "--", strlen(boundary)+3);
-	strlcat(boundaryp, boundary, strlen(boundary)+3);
-	printf("boundaryp[%s]\n", boundaryp);
-
-	s1 = text;
-	while ((s1 = strstr(s1, boundary)) != NULL) {
-		printsep();
-
-		p1 = s1 + strlen(boundary);
-		p1 += 1;	/* eat \n */
-
-		cpy = strdup(p1);
-		if (cpy == NULL)
-			break;
-		while ((first = strsep(&cpy, "\r\n")) != NULL) {
-			printf("FIRST:%s\n", first);
-		}
-		printf("----FIRSTbreak\n");
-
-		free(cpy);
-
-		s1 += 1;
-	}
-
-	free(boundaryp);
+	printf("</pre>\n");
 }
+
+
+
