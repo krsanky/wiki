@@ -70,11 +70,14 @@ indent:
 	@echo "indenting all code..."
 	./indent-all.sh
 
+deploy: wiki.cgi
+	cp wiki.cgi wikieditform.php ../htdocs/
+
 clean:
 	rm -f writef nanoclient mdtest params_test
 	rm -rf a.out *.BAK *.cgi *.core
 cleanlogs: 
 	rm -rf nlog.txt log.txt
 
-.PHONY: test clean cleanlogs indent
+.PHONY: test clean cleanlogs indent deploy
 

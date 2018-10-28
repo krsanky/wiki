@@ -189,12 +189,13 @@ make_url(char *pagetype, char *dir, char *page)
 
 /*
  enctype='application/x-www-form-urlencoded'>\n\
+<form action='/wiki.cgi?editform' method='post' \
 */
 void
 myhtml_textarea_open()
 {
 	printf("\
-<form action='/wiki.cgi?editform' method='post' \
+<form action='/wikieditform.php' method='post' \
  enctype='multipart/form-data'>\n\
 <textarea name=\"wikiformtext\" rows='26' cols='80'>");
 }
