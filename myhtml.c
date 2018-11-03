@@ -188,7 +188,7 @@ make_url(char *pagetype, char *dir, char *page)
 }
 
 /*
- enctype='application/x-www-form-urlencoded'>\n\
+ enctype='multipart/form-data'>\n\
 <form action='/wiki.cgi?editform' method='post' \
 */
 void
@@ -196,7 +196,7 @@ myhtml_textarea_open()
 {
 	printf("\
 <form action='/wikieditform.php' method='post' \
- enctype='multipart/form-data'>\n\
+ enctype='application/x-www-form-urlencoded'>\n\
 <textarea name=\"wikiformtext\" rows='26' cols='80'>");
 }
 
