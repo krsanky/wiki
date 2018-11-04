@@ -248,7 +248,8 @@ wikiedit(char *dir, char *page)
 	myhtml_footer();
 }
 
-/**
+/* This is being handled by wikieditform.php currently.
+ *
  * This answers the POST from wikiedit.
  * This is the first form handling code.
  */
@@ -331,10 +332,108 @@ is incremented throughout.
 }
 
 void
-wikinew(char *dir, char *page)
+wikinew(char *dir)
 {
 	http_headers();
 	myhtml_header();
-	myhtml_breadcrumbs(dir, page, "new");
+	myhtml_breadcrumbs(dir, NULL, "new");
+	myhtml_new(dir);
 	myhtml_footer();
 }
+
+void
+wikinewform()
+{
+	char           *RM;
+	char           *CL_;
+	char           *CT;
+	int 		CL;
+	char		*buf;
+	int		l;
+
+	PARAM          *params;
+	int		NPARAMS = 5;
+	char		*page;
+	char		*dir;
+
+	RM = getenv("REQUEST_METHOD");
+	CL_ = getenv("CONTENT_LENGTH");
+	CT = getenv("CONTENT_TYPE");
+	if (CL_ != NULL)
+		CL = atoi(CL_);
+	else
+		CL = -1;
+
+	nlog("wikinewform() RM[%s] CT[%s] CL[%d]", RM, CT, CL);
+
+	buf = malloc(CL);
+	if (buf != NULL) {
+		l = fread(buf, 1, CL, stdin);
+		nlog("buf:%s", buf);
+		/*
+		main.c main() QUERY_STRING:newform
+		wikinewform() RM[POST] CT[application/x-www-form-urlencoded] CL[22]                                             
+		buf:page=123qwd&dir=dir123
+		*/
+		params = malloc(sizeof(PARAM) * NPARAMS);
+		params_initialize(params, NPARAMS);
+		params_parse_query(buf, params, NPARAMS);
+
+		page = params_get("page", params, NPARAMS);
+		dir = params_get("dir", params, NPARAMS);
+		nlog("make new file dir:%s page:%s", dir, page);
+
+
+
+		/* this is 2nd use, maybe this could be a util method */
+		char		*fullpath;
+		FILE           *newfile;
+		int		fpl;
+
+		fpl = sizeof(WIKI_ROOT) + 1 + strlen(page);
+		if (dir != NULL)
+			fpl = fpl + strlen(dir) + 1;
+		fullpath = malloc(fpl);
+		strlcpy(fullpath, WIKI_ROOT, fpl);
+		strlcat(fullpath, "/", fpl);
+		if (dir != NULL) {
+			strlcat(fullpath, dir, fpl);
+			strlcat(fullpath, "/", fpl);
+		}
+		strlcat(fullpath, page, fpl);
+		nlog("wikinewform:: fullpath:%s", fullpath);
+
+		newfile = fopen(fullpath, "a");
+		free(fullpath);
+		if (newfile == NULL) {
+			errpage("cannot create file:");
+			return;
+		}
+		if (newfile != NULL)
+			fclose(newfile);
+
+
+
+
+
+		params_free(params, NPARAMS);
+	}
+	free(buf);
+
+
+	http_headers();
+	myhtml_header();
+	myhtml_breadcrumbs(NULL, NULL, NULL);
+	myhtml_footer();
+}
+
+void
+wikidelete()
+{
+	http_headers();
+	myhtml_header();
+	//myhtml_breadcrumbs(dir, page, NULL);
+	myhtml_footer();
+}
+
+

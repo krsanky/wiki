@@ -216,3 +216,28 @@ myhtml_textarea_close(char *dir, char *page)
 	printf("\
 </form>\n");
 }
+
+void
+myhtml_new(char * dir)
+{
+	printf("\
+<form action='/wiki.cgi?newform' method='post' \
+  enctype='application/x-www-form-urlencoded'>\n");
+
+	printf("\
+<input type='text' name='page' />\n");
+
+	printf("\
+<button type='submit'>submit</button>\n");
+
+	if (dir != NULL)
+		printf("\
+<input type='hidden' name='dir' value='%s'/>\n", dir);
+
+	printf("\
+</form>\n");
+
+}
+
+
+

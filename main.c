@@ -63,14 +63,15 @@ main(void)
 		page = params_get("p", params, NUM_HTTP_PARAMS);
 		dir = params_get("d", params, NUM_HTTP_PARAMS);
 		wikiedit(dir, page);
-	} else if (strcmp(params[0].key, "new") == 0) {
-		page = params_get("p", params, NUM_HTTP_PARAMS);
-		dir = params_get("d", params, NUM_HTTP_PARAMS);
-		wikinew(dir, page);
 	} else if (strcmp(params[0].key, "editform") == 0) {
 		wikieditform();
+	} else if (strcmp(params[0].key, "new") == 0) {
+		dir = params_get("d", params, NUM_HTTP_PARAMS);
+		wikinew(dir);
+	} else if (strcmp(params[0].key, "newform") == 0) {
+		wikinewform();
 	} else if (strcmp(params[0].key, "delete") == 0) {
-		msgpage("delete...");
+		wikidelete();
 	} else if (strcmp(params[0].key, "test") == 0) {
 		testpage();
 	}

@@ -8,7 +8,12 @@ void 		msgpage  (char *);
 
 void 		wikiindex(char *);
 void 		wikiview (char *, char *);
+
 void 		wikiedit (char *, char *);
 void 		wikieditform();
-void 		wikinew  (char *, char *);
-char           *parse_boundary(char *);
+
+void 		wikinew  (char *);
+void 		wikinewform();
+
+void		wikidelete();
+
