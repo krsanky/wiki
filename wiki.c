@@ -242,7 +242,8 @@ wikiedit(char *dir, char *page)
 */
 	}
 
-	fclose(mdfile);
+	if (mdfile != NULL)
+		fclose(mdfile);
 
 	myhtml_textarea_close(dir, page);
 	myhtml_footer();
@@ -340,7 +341,6 @@ wikinew(char *dir)
 	myhtml_new(dir);
 	myhtml_footer();
 }
-
 void
 wikinewform()
 {
@@ -384,7 +384,6 @@ wikinewform()
 		nlog("make new file dir:%s page:%s", dir, page);
 
 
-
 		/* this is 2nd use, maybe this could be a util method */
 		char		*fullpath;
 		FILE           *newfile;
@@ -412,19 +411,21 @@ wikinewform()
 		if (newfile != NULL)
 			fclose(newfile);
 
-
-
-
-
 		params_free(params, NPARAMS);
-	}
+
+		/*redirect();*/
+		msgpage("new file created");
+		return;
+	} 
+		
 	free(buf);
-
-
+	errpage("error creating new file");
+/*
 	http_headers();
 	myhtml_header();
 	myhtml_breadcrumbs(NULL, NULL, NULL);
 	myhtml_footer();
+*/
 }
 
 void
