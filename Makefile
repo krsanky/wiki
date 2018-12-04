@@ -72,6 +72,7 @@ indent:
 
 deploy: wiki.cgi
 	cp wiki.cgi wikieditform.php ../htdocs/
+	cp -r static ../htdocs/
 
 clean:
 	rm -f writef nanoclient mdtest params_test

@@ -28,7 +28,7 @@ void
 myhtml_footer()
 {
 	printf("\
-<script src='/static/hn.js'></script>\n\
+<script src='/static/jquery-3.3.1.min.js'></script>\n\
 </body>\
 </html>\
 \n");
@@ -110,7 +110,7 @@ make_anchor(char *pagetype, char *dir, char *page, char *display)
 	int 		max_l;
 	char           *a;
 
-	max_l = strlen("<a href='/wiki.cgi?edit&d=%s&p=%s'>(edit)</a>");
+	max_l = strlen("<a href='/wiki.cgi?edit&amp;d=%s&amp;p=%s'>(edit)</a>");
 	if (pagetype != NULL)
 		max_l += strlen(pagetype);
 	if (dir != NULL)
@@ -126,12 +126,12 @@ make_anchor(char *pagetype, char *dir, char *page, char *display)
 
 	strlcpy(a, "<a href='/wiki.cgi?", max_l);
 	strlcat(a, pagetype, max_l);
-	strlcat(a, "&", max_l);
+	strlcat(a, "&amp;", max_l);
 
 	if (dir != NULL) {
 		strlcat(a, "d=", max_l);
 		strlcat(a, dir, max_l);
-		strlcat(a, "&", max_l);
+		strlcat(a, "&amp;", max_l);
 	}
 	if (page != NULL) {
 		strlcat(a, "p=", max_l);
