@@ -6,6 +6,7 @@ if (array_key_exists('dir', $_POST)) {
 $filename .= $_POST['page'];
 
 $ret = file_put_contents($filename, $_POST['wikiformtext']);
+//check for errors like permissions
 
 $location = "Location: /wiki.cgi?view&";
 $location .= "ret={$ret}&";
