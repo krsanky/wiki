@@ -420,20 +420,40 @@ wikinewform()
 		
 	free(buf);
 	errpage("error creating new file");
-/*
-	http_headers();
-	myhtml_header();
-	myhtml_breadcrumbs(NULL, NULL, NULL);
-	myhtml_footer();
-*/
 }
 
 void
-wikidelete()
+wikidelete(char *dir, char *page)
 {
+	char		*delpath;
+	int		dpl = strlen(WIKI_ROOT) + 1 + 10; // eol and to not count slashes
+	if (dir != NULL) 
+		dpl += strlen(dir);
+	if (page != NULL)
+	 	dpl += strlen(page);
+	nlog("WIKIDELETE dir:%s page:%si l:%d", dir, page, dpl);
+	delpath = malloc(dpl);
+	if (delpath != NULL) {
+		strlcpy(delpath, WIKI_ROOT, dpl); 
+		if (dir != NULL) {
+			strlcat(delpath, "/", dpl); 
+			strlcat(delpath, dir, dpl);
+		}
+		if (page != NULL) {
+			strlcat(delpath, "/", dpl); 
+			strlcat(delpath, page, dpl);
+		}
+		nlog("delpath:%s", delpath);
+		unlink(delpath);
+		free(delpath);
+	}
+
+
 	http_headers();
 	myhtml_header();
 	//myhtml_breadcrumbs(dir, page, NULL);
+	printf("\
+<h1>del p:%s d:%s</h1>\n", page, dir);
 	myhtml_footer();
 }
 

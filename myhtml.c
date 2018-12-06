@@ -94,6 +94,7 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 		}
 	} else {
 		printf("%s  ", make_anchor("new", dir, NULL, "[new]"));
+		printf("%s  ", make_anchor("delete", dir, NULL, "[delete]"));
 	}
 	printf("<hr/>\n");
 }

@@ -71,7 +71,9 @@ main(void)
 	} else if (strcmp(params[0].key, "newform") == 0) {
 		wikinewform();
 	} else if (strcmp(params[0].key, "delete") == 0) {
-		wikidelete();
+		page = params_get("p", params, NUM_HTTP_PARAMS);
+		dir = params_get("d", params, NUM_HTTP_PARAMS);
+		wikidelete(dir, page);
 	} else if (strcmp(params[0].key, "test") == 0) {
 		testpage();
 	}

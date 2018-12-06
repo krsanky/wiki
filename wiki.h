@@ -15,5 +15,4 @@ void 		wikieditform();
 void 		wikinew  (char *);
 void 		wikinewform();
 
-void		wikidelete();
-
+void 		wikidelete(char *, char *);
