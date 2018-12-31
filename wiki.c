@@ -437,21 +437,26 @@ wikidelete(char *dir, char *page)
 			strlcat(delpath, "/", dpl);
 			strlcat(delpath, dir, dpl);
 		}
-		if (page != NULL) {
-			strlcat(delpath, "/", dpl);
-			strlcat(delpath, page, dpl);
-		}
 		nlog("delpath:%s", delpath);
 		unlink(delpath);
 		free(delpath);
-		msgpage("file/dir deleted?");
+		/* msgpage("file/dir deleted?"); */
+
+		/* redir to dir or WIKI_ROOT */
+		self_redirect("index", dir, NULL);
 		return;
 	}
 	errpage("error deleting");
 }
 
-int
-get_wlinks(FILE * dir, wlink ** ws)
+/*
+typedef struct wikipage {
+	char 		url      [256];
+	char 		name     [128];
+} 		Page;
+*/
+int 
+GetPages(FILE * dir, Page **ps)
 {
 	/*
 		int 		ratesBufSize = 9;
@@ -464,9 +469,11 @@ get_wlinks(FILE * dir, wlink ** ws)
 }
 
 int
-alpha 
-wlinks(wlink ** ws)
+AlphaPages(Page **ps)
 {
 	/* iterate thru and keep moving A to front */
 	return 0;
 }
+
+
+

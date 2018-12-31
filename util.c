@@ -50,6 +50,7 @@ nlog(const char *fmt,...)
 int
 wikilog(char *msg)
 {
+	char		LOG_PREFIX[] = "LOG";
 	char           *msg_;
 	int 		msg_l;
 	char           *buf;
@@ -83,6 +84,36 @@ void
 redirect(char *url)
 {
 	printf("Status: 302 Moved\r\nLocation: %s\r\n\r\n", url);
+}
+int
+self_redirect(char * main, char * dir, char * page)
+{
+	int		redirl;
+	char		*redir;
+
+	redirl = strlen("/wiki.cgi?") + strlen(main) + 1;
+	if (dir != NULL)
+		redirl += strlen(dir) + strlen("d=&");
+	if (page != NULL)
+		redirl += strlen(page) + strlen("p=&");
+	nlog("main:%s dir:%s page:%s redirl:%d", main, dir, page, redirl);
+	if ((redir = malloc(redirl)) != NULL) {
+		strlcpy(redir, "/wiki.cgi?index&", redirl);
+		if (dir != NULL) {
+			strlcat(redir, "d=", redirl);
+			strlcat(redir, dir, redirl);
+			strlcat(redir, "&", redirl);
+		}
+		if (page != NULL) {
+			strlcat(redir, "p=", redirl);
+			strlcat(redir, page, redirl);
+			strlcat(redir, "&", redirl);
+		}
+		nlog("redir:%s", redir);
+		redirect(redir);
+		return 0;
+	}
+	return 1;
 }
 
 /*

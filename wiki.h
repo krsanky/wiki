@@ -17,9 +17,9 @@ void 		wikinewform();
 
 void 		wikidelete(char *, char *);
 
-typedef struct wikilink {
+typedef struct wikipage {
 	char 		url      [256];
 	char 		name     [128];
-} 		wlink;		/* better names? wlink Wlink Wikilink ? */
-int 		get_wlinks(FILE *, wlink **);
-int 		alpha_wlinks(wlink **);
+} 		Page;
+int 		GetPages(FILE *, Page **);
+int 		AlphaPages(Page **);

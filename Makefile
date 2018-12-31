@@ -1,5 +1,5 @@
-#CFLAGS +=		-W -Wall -O2 -std=c99 -g
-CFLAGS +=		-O2 -std=c99 -g
+CFLAGS +=		-W -Wall -O2 -std=c99 -g
+#CFLAGS +=		-O2 -std=c99 -g
 LDFLAGS = -lnanomsg -lmarkdown
 
 SOURCES=	wiki.c main.c myhtml.c params.c forms.c util.c
