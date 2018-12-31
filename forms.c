@@ -9,11 +9,11 @@
  * return value should be passed to free()
 CONTENT_TYPE=multipart/form-data; boundary=---------------------------804515248930748430817995068
 */
-char *
-parse_boundary(char * ct_hdr)
+char           *
+parse_boundary(char *ct_hdr)
 {
-	char	*first, *rest, *restf;
-	char	*boundary = NULL;
+	char           *first, *rest, *restf;
+	char           *boundary = NULL;
 
 	restf = rest = strdup(ct_hdr);
 	assert(rest != NULL);
@@ -24,8 +24,6 @@ parse_boundary(char * ct_hdr)
 	if (strcasecmp("BOUNDARY", first) == 0) {
 		boundary = strdup(rest);
 	}
-
 	free(restf);
 	return boundary;
 }
-

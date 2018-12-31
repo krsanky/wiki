@@ -74,7 +74,7 @@ f1(int a)
 	printf("A:%d\n", a);
 }
 
-void 
+void
 ptr_func_test()
 {
 	printf("ptr_func_test()...\n");
@@ -98,10 +98,10 @@ test_POST(char *b, char *f)
 	}
 
 	PARAM          *params;
-	int		nump = 10;
+	int 		nump = 10;
 	params = malloc(sizeof(PARAM) * nump);
 	params_initialize(params, nump);
-	 
+
 	params_parse_multipart_POST(buf, b, params, nump);
 
 	params_free(params, nump);
@@ -112,15 +112,15 @@ test_POST(char *b, char *f)
 int
 main(int argc, char **argv)
 {
-	char		*b1 = "----WebKitFormBoundary4I8D3cAgAWb1bauA";
-	char		*f1 = "tmpPOST123.txt";
+	char           *b1 = "----WebKitFormBoundary4I8D3cAgAWb1bauA";
+	char           *f1 = "tmpPOST123.txt";
 
 	/*
 	char           *b, *f;
 	if (argc < 3) {
 		printf("%s <boundary-str> <file>\n", argv[0]);
 		return EXIT_FAILURE;
-	} 
+	}
 	b = argv[1];
 	f = argv[2];
 	*/
@@ -134,5 +134,3 @@ main(int argc, char **argv)
 
 	return EXIT_SUCCESS;
 }
-
-

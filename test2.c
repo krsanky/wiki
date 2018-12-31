@@ -1,7 +1,7 @@
-char	*
+char           *
 remove_all_spaces(char *data)
 {
-	char	*in, *out;
+	char           *in, *out;
 
 	for (in = out = data; *in != '\0', in++)
 		if (*in != ' ')
@@ -15,10 +15,9 @@ remove_all_spaces(char *data)
 char
 itoa(int i)
 {
-	char	c;
+	char 		c;
 	if (i >= 0 && i <= 9)
 		c = i + '0';
 
 	return c;
 }
-

@@ -8,9 +8,9 @@
 int
 my_read_file(char *f, char **contents)
 {
-	FILE	       *pfile;
-	long		numbytes;
-	char	       *buf = NULL;
+	FILE           *pfile;
+	long 		numbytes;
+	char           *buf = NULL;
 
 	if (f == NULL)
 		return -1;
@@ -41,11 +41,11 @@ my_read_file(char *f, char **contents)
 int
 main(void)
 {
-	char	       *fn = "searchstring.txt";
-	char	       *b = "wd123qwdqwd123qwdqwd";
-	int		r;
-	char	       *s1;
-	char	       *txt = NULL;
+	char           *fn = "searchstring.txt";
+	char           *b = "wd123qwdqwd123qwdqwd";
+	int 		r;
+	char           *s1;
+	char           *txt = NULL;
 
 	r = my_read_file(fn, &txt);
 	printf("txt:\n%.25s...\n\n", txt);

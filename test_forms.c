@@ -6,12 +6,12 @@
 #include "forms.h"
 #include "util.h"
 
-char * CT = "CONTENT_TYPE=multipart/form-data; boundary=---------------------------804515248930748430817995068";
+char           *CT = "CONTENT_TYPE=multipart/form-data; boundary=---------------------------804515248930748430817995068";
 
 int
 main(int argc, char **argv)
 {
-	char	*boundary;
+	char           *boundary;
 
 	printf("%s argc:%d\n", argv[0], argc);
 
@@ -21,4 +21,3 @@ main(int argc, char **argv)
 	free(boundary);
 	return EXIT_SUCCESS;
 }
-

@@ -219,7 +219,7 @@ myhtml_textarea_close(char *dir, char *page)
 }
 
 void
-myhtml_new(char * dir)
+myhtml_new(char *dir)
 {
 	printf("\
 <form action='/wiki.cgi?newform' method='post' \
@@ -239,6 +239,3 @@ myhtml_new(char * dir)
 </form>\n");
 
 }
-
-
-

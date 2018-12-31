@@ -16,9 +16,9 @@ nn_fatal(const char *func)
 }
 
 int
-is_md(struct dirent *de)
+is_md(struct dirent * de)
 {
-	char	       *ext;
+	char           *ext;
 	ext = strrchr(de->d_name, '.');
 	if (ext != NULL) {
 		ext++;
@@ -32,9 +32,9 @@ is_md(struct dirent *de)
 int
 nlog(const char *fmt,...)
 {
-	char	       *p;
-	va_list		ap;
-	int		ret;
+	char           *p;
+	va_list 	ap;
+	int 		ret;
 
 	if ((p = malloc(256)) == NULL)
 		return 0;
@@ -50,12 +50,12 @@ nlog(const char *fmt,...)
 int
 wikilog(char *msg)
 {
-	char	       *msg_;
-	int		msg_l;
-	char	       *buf;
-	int		bytes = -1;
-	int		sock;
-	int		rv;
+	char           *msg_;
+	int 		msg_l;
+	char           *buf;
+	int 		bytes = -1;
+	int 		sock;
+	int 		rv;
 
 	if ((sock = nn_socket(AF_SP, NN_REQ)) < 0) {
 		nn_fatal("nn_socket");
@@ -91,9 +91,9 @@ redirect(char *url)
 int
 my_read_file(char *f, char **contents)
 {
-	FILE	       *pfile;
-	long		numbytes;
-	char	       *buf = NULL;
+	FILE           *pfile;
+	long 		numbytes;
+	char           *buf = NULL;
 
 	if (f == NULL)
 		return -1;
@@ -115,7 +115,7 @@ my_read_file(char *f, char **contents)
 		return -1;
 	}
 	fread(buf, 1, numbytes, pfile);
-	buf[numbytes] = '\0'; /* make sure there is a closing nul */
+	buf[numbytes] = '\0';	/* make sure there is a closing nul */
 	/*
 	 * printf("file:\n%s\n", buf); free(buf);
 	 */
@@ -129,7 +129,7 @@ my_read_file(char *f, char **contents)
 int
 my_write_file(char *f, char *buf, int bsize)
 {
-
+	return 0;
 }
 
 void
@@ -137,5 +137,3 @@ printsep()
 {
 	printf("-----------------------------------------------------------------------\n");
 }
-
-

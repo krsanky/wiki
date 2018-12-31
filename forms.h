@@ -1,3 +1,1 @@
-char	*parse_boundary(char *);
-
-
+char           *parse_boundary(char *);

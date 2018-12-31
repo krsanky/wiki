@@ -56,7 +56,8 @@ msgpage(char *msg)
 	http_headers();
 
 	myhtml_header();
-	/* myhtml_topnav(NULL, NULL); */
+	myhtml_breadcrumbs(NULL, NULL, NULL);
+
 	printf("\
 <p style='color:green;'>%s</p>\n", msg);
 	myhtml_footer();
@@ -80,7 +81,9 @@ showenv()
 	printf("</pre>\n");
 }
 
-
+/*
+ * Howto sort this?
+ */
 void
 wikiindex(char *dir_)
 {
@@ -100,8 +103,7 @@ wikiindex(char *dir_)
 	}
 	nlog("dir_:%s fulldir:%s", dir_, fulldir);
 
-	/* need to see if fulldir exists before attempt to open */
-	int test = open(fulldir, O_DIRECTORY);
+	int 		test = open(fulldir, O_DIRECTORY);
 	if (test < 0) {
 		errpage("could not open dir:");
 		return;
@@ -117,8 +119,8 @@ wikiindex(char *dir_)
 
 	http_headers();
 	myhtml_header();
-	/* myhtml_topnav(dir_, NULL); */
 	myhtml_breadcrumbs(dir_, NULL, NULL);
+
 	printf("<ul>\n");
 	while ((de = readdir(dir)) != NULL) {
 		if (is_md(de)) {
@@ -234,12 +236,12 @@ wikiedit(char *dir, char *page)
 
 	while ((c = fgetc(mdfile)) != EOF) {
 		printf("%c", c);
-/*
-		if (c == '\n')
-			nlog("wikedit form \\n");
-		if (c == '\r')
-			nlog("wikedit form \\r");
-*/
+		/*
+				if (c == '\n')
+					nlog("wikedit form \\n");
+				if (c == '\r')
+					nlog("wikedit form \\r");
+		*/
 	}
 
 	if (mdfile != NULL)
@@ -249,10 +251,10 @@ wikiedit(char *dir, char *page)
 	myhtml_footer();
 }
 
-/* This is being handled by wikieditform.php currently.
- *
- * This answers the POST from wikiedit.
- * This is the first form handling code.
+/*
+ * This is being handled by wikieditform.php currently.
+ * 
+ * This answers the POST from wikiedit. This is the first form handling code.
  */
 void
 wikieditform()
@@ -261,12 +263,12 @@ wikieditform()
 	char           *CL_;
 	char           *CT;
 	int 		CL;
-	/*char 		buf      [1024];*/
-	char		*buf;
+	/* char 		buf      [1024]; */
+	char           *buf;
 	int 		l = 0;
 	char           *boundary;
 	PARAM          *params;
-	int		NPARAMS = 4;
+	int 		NPARAMS = 4;
 
 	RM = getenv("REQUEST_METHOD");
 	CL_ = getenv("CONTENT_LENGTH");
@@ -283,13 +285,13 @@ wikieditform()
 	nlog("post parse_b...");
 
 
-/*
-In my code, you see a lot of constructs where it's buf, offset, and
-length.  The buf variable points to the start of the buffer and is
-never incremented.  The length variable is the max length of the
-buffer and likewise never changes.  It's the offset variable that
-is incremented throughout.
-*/
+	/*
+	In my code, you see a lot of constructs where it's buf, offset, and
+	length.  The buf variable points to the start of the buffer and is
+	never incremented.  The length variable is the max length of the
+	buffer and likewise never changes.  It's the offset variable that
+	is incremented throughout.
+	*/
 
 	params = malloc(sizeof(PARAM) * NPARAMS);
 	params_initialize(params, NPARAMS);
@@ -313,10 +315,6 @@ is incremented throughout.
 		l = fread(buf, 1, CL, stdin);
 		params_parse_multipart_POST(buf, boundary, params, NPARAMS);
 	}
-
-
-
-
 	printf("<pre>\n");
 	printf("boundary[%s]\n", boundary);
 	printf("buf:\n%s\n", buf);
@@ -348,13 +346,13 @@ wikinewform()
 	char           *CL_;
 	char           *CT;
 	int 		CL;
-	char		*buf;
-	int		l;
+	char           *buf;
+	int 		l;
 
 	PARAM          *params;
-	int		NPARAMS = 5;
-	char		*page;
-	char		*dir;
+	int 		NPARAMS = 5;
+	char           *page;
+	char           *dir;
 
 	RM = getenv("REQUEST_METHOD");
 	CL_ = getenv("CONTENT_LENGTH");
@@ -372,7 +370,7 @@ wikinewform()
 		nlog("buf:%s", buf);
 		/*
 		main.c main() QUERY_STRING:newform
-		wikinewform() RM[POST] CT[application/x-www-form-urlencoded] CL[22]                                             
+		wikinewform() RM[POST] CT[application/x-www-form-urlencoded] CL[22]
 		buf:page=123qwd&dir=dir123
 		*/
 		params = malloc(sizeof(PARAM) * NPARAMS);
@@ -385,9 +383,9 @@ wikinewform()
 
 
 		/* this is 2nd use, maybe this could be a util method */
-		char		*fullpath;
+		char           *fullpath;
 		FILE           *newfile;
-		int		fpl;
+		int 		fpl;
 
 		fpl = sizeof(WIKI_ROOT) + 1 + strlen(page);
 		if (dir != NULL)
@@ -413,11 +411,10 @@ wikinewform()
 
 		params_free(params, NPARAMS);
 
-		/*redirect();*/
+		/* redirect(); */
 		msgpage("new file created");
 		return;
-	} 
-		
+	}
 	free(buf);
 	errpage("error creating new file");
 }
@@ -425,36 +422,51 @@ wikinewform()
 void
 wikidelete(char *dir, char *page)
 {
-	char		*delpath;
-	int		dpl = strlen(WIKI_ROOT) + 1 + 10; // eol and to not count slashes
-	if (dir != NULL) 
+	char           *delpath;
+	int 		dpl = strlen(WIKI_ROOT) + 1 + 10;
+	//eol and to not count slashes
+		if (dir != NULL)
 		dpl += strlen(dir);
 	if (page != NULL)
-	 	dpl += strlen(page);
+		dpl += strlen(page);
 	nlog("WIKIDELETE dir:%s page:%si l:%d", dir, page, dpl);
 	delpath = malloc(dpl);
 	if (delpath != NULL) {
-		strlcpy(delpath, WIKI_ROOT, dpl); 
+		strlcpy(delpath, WIKI_ROOT, dpl);
 		if (dir != NULL) {
-			strlcat(delpath, "/", dpl); 
+			strlcat(delpath, "/", dpl);
 			strlcat(delpath, dir, dpl);
 		}
 		if (page != NULL) {
-			strlcat(delpath, "/", dpl); 
+			strlcat(delpath, "/", dpl);
 			strlcat(delpath, page, dpl);
 		}
 		nlog("delpath:%s", delpath);
 		unlink(delpath);
 		free(delpath);
+		msgpage("file/dir deleted?");
+		return;
 	}
-
-
-	http_headers();
-	myhtml_header();
-	//myhtml_breadcrumbs(dir, page, NULL);
-	printf("\
-<h1>del p:%s d:%s</h1>\n", page, dir);
-	myhtml_footer();
+	errpage("error deleting");
 }
 
+int
+get_wlinks(FILE * dir, wlink ** ws)
+{
+	/*
+		int 		ratesBufSize = 9;
+		*rates = malloc(sizeof(Rate) * ratesBufSize);
+	*/
+	/* just read the file(no need to open) */
 
+	return 0;
+	//line_count / 2;
+}
+
+int
+alpha 
+wlinks(wlink ** ws)
+{
+	/* iterate thru and keep moving A to front */
+	return 0;
+}

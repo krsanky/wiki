@@ -16,6 +16,5 @@ char           *params_get(char *, PARAM *, int);
 int 		params_testdb();
 int 		params_ishex(int);
 int 		params_urldecode(char *, char *);
-int		isone_formdata_header(char *);
-int		params_parse_multipart_POST(char *, char *, PARAM *, int);
-
+int 		isone_formdata_header(char *);
+int 		params_parse_multipart_POST(char *, char *, PARAM *, int);
