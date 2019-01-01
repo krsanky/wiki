@@ -1,5 +1,3 @@
-int 		ret1      (void);
-
 typedef struct param {
 	char           *key;
 	char           *val;

@@ -268,6 +268,7 @@ wikieditform()
 	int 		l = 0;
 	char           *boundary;
 	PARAM          *params;
+	PARAMS         *ps;
 	int 		NPARAMS = 4;
 
 	RM = getenv("REQUEST_METHOD");
@@ -293,9 +294,7 @@ wikieditform()
 	is incremented throughout.
 	*/
 
-	params = malloc(sizeof(PARAM) * NPARAMS);
-	params_initialize(params, NPARAMS);
-
+	ps = params_create(NPARAMS, NULL);
 
 
 	/* -- display -- */
@@ -326,7 +325,7 @@ wikieditform()
 	showenv();
 	myhtml_footer();
 
-	params_free(params, NPARAMS);
+	params_free(ps);
 	free(boundary);
 	free(buf);
 	free(NULL);
@@ -352,6 +351,7 @@ wikinewform()
 	int 		l;
 
 	PARAM          *params;
+	PARAMS         *ps;
 	int 		NPARAMS = 5;
 	char           *page;
 	char           *dir;
@@ -375,12 +375,10 @@ wikinewform()
 		wikinewform() RM[POST] CT[application/x-www-form-urlencoded] CL[22]
 		buf:page=123qwd&dir=dir123
 		*/
-		params = malloc(sizeof(PARAM) * NPARAMS);
-		params_initialize(params, NPARAMS);
-		params_parse_query(buf, params, NPARAMS);
+		ps = params_create(NPARAMS, buf);
 
-		page = params_get("page", params, NPARAMS);
-		dir = params_get("dir", params, NPARAMS);
+		page = params_get(params, "page");
+		dir = params_get(params, "dir");
 		nlog("make new file dir:%s page:%s", dir, page);
 
 
@@ -411,7 +409,7 @@ wikinewform()
 		if (newfile != NULL)
 			fclose(newfile);
 
-		params_free(params, NPARAMS);
+		params_free(ps);
 
 		/* redirect(); */
 		msgpage("new file created");
