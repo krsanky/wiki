@@ -1,20 +1,23 @@
 int 		ret1      (void);
 
-struct params {
-
-};
-
 typedef struct param {
 	char           *key;
 	char           *val;
 } 		PARAM;
 
-void 		params_initialize(PARAM *, int);
-void 		params_free(PARAM *, int);
-int 		params_parse_query(char *, PARAM *, int);
-char           *params_get(char *, PARAM *, int);
-int 		params_testdb();
+typedef struct params {
+	char           *query_string;
+	int 		nparams;
+	PARAM          *params;
+} 		PARAMS;
+
+PARAMS         *params_create(int, char *);
+int 		params_free(PARAMS *);
+int 		params_parse_query(char *, PARAMS *);
 int 		params_ishex(int);
 int 		params_urldecode(char *, char *);
+char           *params_get(PARAMS *, char *);
+
+int 		params_testdb();
 int 		isone_formdata_header(char *);
-int 		params_parse_multipart_POST(char *, char *, PARAM *, int);
+/* int 		params_parse_multipart_POST(char *, char *, PARAM *, int); */

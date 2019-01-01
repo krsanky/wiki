@@ -23,6 +23,9 @@ nanoclient: ${.TARGET}.c
 		-lnanomsg
 
 # TEST 
+must.cgi: must.c params.c
+	$(CC) $(CFLAGS) -o ${.TARGET} must.c params.c
+
 strstrp: ${.TARGET}.c util.c
 	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c util.c
 
@@ -73,11 +76,13 @@ indent:
 
 deploy: wiki.cgi
 	cp wiki.cgi wikieditform.php ../htdocs/
+	cp must.cgi ../htdocs/
 	cp -r static ../htdocs/
 
 clean:
 	rm -f writef nanoclient mdtest params_test
 	rm -rf a.out *.BAK *.cgi *.core
+	rm -rf must
 cleanlogs: 
 	rm -rf nlog.txt log.txt
 

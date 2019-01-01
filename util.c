@@ -50,7 +50,7 @@ nlog(const char *fmt,...)
 int
 wikilog(char *msg)
 {
-	char		LOG_PREFIX[] = "LOG";
+	char 		LOG_PREFIX[] = "LOG";
 	char           *msg_;
 	int 		msg_l;
 	char           *buf;
@@ -86,10 +86,10 @@ redirect(char *url)
 	printf("Status: 302 Moved\r\nLocation: %s\r\n\r\n", url);
 }
 int
-self_redirect(char * main, char * dir, char * page)
+self_redirect(char *main, char *dir, char *page)
 {
-	int		redirl;
-	char		*redir;
+	int 		redirl;
+	char           *redir;
 
 	redirl = strlen("/wiki.cgi?") + strlen(main) + 1;
 	if (dir != NULL)

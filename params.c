@@ -10,27 +10,54 @@
 #include "params.h"
 #include "util.h"
 
-void
-params_initialize(PARAM * params, int max_params)
+/*
+typedef struct params {
+	char           *query_string;
+	int		nparams;
+	PARAM          *params;
+} PARAMS;
+*/
+PARAMS         *
+params_create(int num, char *qs)
 {
-	for (int i = 0; i < max_params; i++) {
-		params[i].key = NULL;
-		params[i].val = NULL;
-	}
-}
+	//PARAM * params;
+	PARAMS         *params;
+	int 		ret;
 
-void
-params_free(PARAM * params, int max_params)
-{
-	for (int i = 0; i < max_params; i++) {
-		free(params[i].key);
-		free(params[i].val);
+	if (qs == NULL) {
+		return NULL;
 	}
-	free(params);
+	if ((params = malloc(sizeof(PARAM))) == NULL)
+		return NULL;
+	if ((params->params = malloc(sizeof(PARAM) * num)) == NULL)
+		return NULL;
+
+	for (int i = 0; i < num; i++) {
+		params->params[i].key = NULL;
+		params->params[i].val = NULL;
+	}
+
+	params->nparams = num;
+
+	ret = params_parse_query(qs, params);
+
+	return params;
 }
 
 int
-params_parse_query(char *query, PARAM * params, int max_params)
+params_free(PARAMS * ps)
+{
+	for (int i = 0; i < ps->nparams; i++) {
+		free(ps->params[i].key);
+		free(ps->params[i].val);
+	}
+	free(ps->params);
+	free(ps);
+	return 0;
+}
+
+int
+params_parse_query(char *query, PARAMS * ps)
 {
 	char           *string, *fstring;
 	char           *found;
@@ -41,19 +68,19 @@ params_parse_query(char *query, PARAM * params, int max_params)
 	assert(string != NULL);
 
 	while ((found = strsep(&string, "&")) != NULL) {
-		if (idx >= max_params)
+		if (idx >= ps->nparams)
 			break;
 
 		key = strsep(&found, "=");
 
-		params[idx].key = strdup(key);
-		assert(params[idx].key != NULL);
+		ps->params[idx].key = strdup(key);
+		assert(ps->params[idx].key != NULL);
 
 		if (found != NULL) {
-			params[idx].val = strdup(found);
-			assert(params[idx].val != NULL);
+			ps->params[idx].val = strdup(found);
+			assert(ps->params[idx].val != NULL);
 		} else {
-			params[idx].val = NULL;
+			ps->params[idx].val = NULL;
 		}
 
 		idx++;
@@ -64,12 +91,12 @@ params_parse_query(char *query, PARAM * params, int max_params)
 }
 
 char           *
-params_get(char *key, PARAM * params, int max_params)
+params_get(PARAMS * ps, char *key)
 {
-	for (int i = 0; i < max_params; i++) {
-		if (params[i].key != NULL)
-			if (strcmp(key, params[i].key) == 0)
-				return params[i].val;
+	for (int i = 0; i < ps->nparams; i++) {
+		if (ps->params[i].key != NULL)
+			if (strcmp(key, ps->params[i].key) == 0)
+				return ps->params[i].val;
 	}
 	return NULL;
 }
@@ -143,12 +170,7 @@ params_urldecode(char *s, char *dec)
 	return o - dec;
 }
 
-int
-isone_formdata_header(char *txt)
-{
-	return 0;
-}
-
+/*
 int
 params_parse_multipart_POST(char *text, char *boundary, PARAM * params, int max_params)
 {
@@ -166,3 +188,4 @@ params_parse_multipart_POST(char *text, char *boundary, PARAM * params, int max_
 	printf("</pre>\n");
 	return 0;
 }
+*/

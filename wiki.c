@@ -253,7 +253,7 @@ wikiedit(char *dir, char *page)
 
 /*
  * This is being handled by wikieditform.php currently.
- * 
+ *
  * This answers the POST from wikiedit. This is the first form handling code.
  */
 void
@@ -313,7 +313,9 @@ wikieditform()
 	/* try using CONTENT_LENGTH */
 	if (buf != NULL) {
 		l = fread(buf, 1, CL, stdin);
+		/*
 		params_parse_multipart_POST(buf, boundary, params, NPARAMS);
+		*/
 	}
 	printf("<pre>\n");
 	printf("boundary[%s]\n", boundary);
@@ -442,7 +444,6 @@ wikidelete(char *dir, char *page)
 			strlcat(delpath, "/", dpl);
 			strlcat(delpath, page, dpl);
 		}
-
 		nlog("delpath:%s", delpath);
 		unlink(delpath);
 		free(delpath);
@@ -461,8 +462,8 @@ typedef struct wikipage {
 	char 		name     [128];
 } 		Page;
 */
-int 
-GetPages(FILE * dir, Page **ps)
+int
+GetPages(FILE * dir, Page ** ps)
 {
 	/*
 		int 		ratesBufSize = 9;
@@ -475,11 +476,8 @@ GetPages(FILE * dir, Page **ps)
 }
 
 int
-AlphaPages(Page **ps)
+AlphaPages(Page ** ps)
 {
 	/* iterate thru and keep moving A to front */
 	return 0;
 }
-
-
-
