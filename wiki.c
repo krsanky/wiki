@@ -267,7 +267,6 @@ wikieditform()
 	char           *buf;
 	int 		l = 0;
 	char           *boundary;
-	PARAM          *params;
 	PARAMS         *ps;
 	int 		NPARAMS = 4;
 
@@ -350,7 +349,6 @@ wikinewform()
 	char           *buf;
 	int 		l;
 
-	PARAM          *params;
 	PARAMS         *ps;
 	int 		NPARAMS = 5;
 	char           *page;
@@ -377,8 +375,8 @@ wikinewform()
 		*/
 		ps = params_create(NPARAMS, buf);
 
-		page = params_get(params, "page");
-		dir = params_get(params, "dir");
+		page = params_get(ps, "page");
+		dir = params_get(ps, "dir");
 		nlog("make new file dir:%s page:%s", dir, page);
 
 
