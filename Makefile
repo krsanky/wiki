@@ -1,30 +1,26 @@
-CFLAGS +=		-W -Wall -O2 -std=c99 -g
-#CFLAGS +=		-O2 -std=c99 -g
-LDFLAGS = -lnanomsg -lmarkdown
+CFLAGS+= -I/usr/local/include -W -Wall -O2 -std=c99 -g
+CFLAGS+= -I/usr/local/include/json-c
+LDFLAGS+= -L/usr/local/lib -lnanomsg -lmarkdown 
+LDFLAGS+= -ljson-c
+
+#JSON_C_DIR=/path/to/json_c/install
+#CFLAGS += -I$(JSON_C_DIR)/include/json-c
+#LDFLAGS+= -L$(JSON_C_DIR)/lib -ljson-c
 
 SOURCES=	wiki.c main.c myhtml.c params.c forms.c util.c
 HDRS=		wiki.h myhtml.h params.h forms.h util.h
-BINS=		wiki.cgi nanoclient
+BINS=		wiki.cgi
 
 all: $(BINS)
 
 wiki.cgi: $(SOURCES) $(HDRS)
 	$(CC) $(CFLAGS) -o $(.TARGET) \
 		${SOURCES} \
-		-L/usr/local/lib -I/usr/local/include \
 		$(LDFLAGS)
-
-# move to nanologger???
-nanoclient: ${.TARGET}.c
-	$(CC) $(CFLAGS) -o ${.TARGET} \
-		${.TARGET}.c \
-		util.c \
-		-L/usr/local/lib -I/usr/local/include \
-		-lnanomsg
 
 # TEST 
 must.cgi: must.c params.c
-	$(CC) $(CFLAGS) -o ${.TARGET} must.c params.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o ${.TARGET} must.c params.c
 
 strstrp: ${.TARGET}.c util.c
 	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c util.c
@@ -38,13 +34,11 @@ test_forms: ${.TARGET}.c forms.c forms.h
 params_test: ${.TARGET}.c params.c params.h util.h util.c 
 	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
 		params.c util.c \
-		-L/usr/local/lib -I/usr/local/include \
-		-lnanomsg
+		$(LDFLAGS)
 
 anchortest: test1.c myhtml.c
 	$(CC) $(CFLAGS) -o $(.TARGET) \
 		util.c test1.c myhtml.c \
-		-L/usr/local/lib -I/usr/local/include \
 		$(LDFLAGS)
 
 test:

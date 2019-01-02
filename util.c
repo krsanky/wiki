@@ -8,13 +8,6 @@
 #include "settings.h"
 #include "util.h"
 
-void
-nn_fatal(const char *func)
-{
-	fprintf(stderr, "%s: %s\n", func, nn_strerror(nn_errno()));
-	exit(1);
-}
-
 int
 is_md(struct dirent * de)
 {
@@ -45,6 +38,13 @@ nlog(const char *fmt,...)
 	ret = wikilog(p);
 	free(p);
 	return ret;
+}
+
+void
+nn_fatal(const char *func)
+{
+	fprintf(stderr, "%s: %s\n", func, nn_strerror(nn_errno()));
+	exit(1);
 }
 
 int
