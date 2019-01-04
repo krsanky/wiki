@@ -1,5 +1,5 @@
-CFLAGS+= -I/usr/local/include -W -Wall -O2 -std=c99 -g
-CFLAGS+= -I/usr/local/include/json-c
+CFLAGS+= -W -Wall -O2 -std=c99 -g
+CFLAGS+= -I/usr/local/include
 LDFLAGS+= -L/usr/local/lib -lnanomsg -lmarkdown 
 LDFLAGS+= -ljson-c
 
@@ -7,15 +7,15 @@ LDFLAGS+= -ljson-c
 #CFLAGS += -I$(JSON_C_DIR)/include/json-c
 #LDFLAGS+= -L$(JSON_C_DIR)/lib -ljson-c
 
-SOURCES=	wiki.c main.c myhtml.c params.c forms.c util.c
+SRCS=	wiki.c main.c myhtml.c params.c forms.c util.c
 HDRS=		wiki.h myhtml.h params.h forms.h util.h
 BINS=		wiki.cgi
 
 all: $(BINS)
 
-wiki.cgi: $(SOURCES) $(HDRS)
+wiki.cgi: $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $(.TARGET) \
-		${SOURCES} \
+		${SRCS} \
 		$(LDFLAGS)
 
 # TEST 
@@ -44,6 +44,8 @@ anchortest: test1.c myhtml.c
 test:
 	@echo CURDIR:${.CURDIR}
 	@echo TARGET:${.TARGET} [should be 'test']
+	@echo CFLAGS: $(CFLAGS)
+	@echo LDFLAGS: ${LDFLAGS}
 
 mdtest: ${.TARGET}.c
 	$(CC) -o ${.TARGET}.cgi \

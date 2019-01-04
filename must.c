@@ -1,11 +1,49 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <json.h>
+#include <json-c/json.h>
 
 #include "params.h"
 
 void 		header   ();
+
+/*
+struct expl {  
+	struct json_object *root;  
+	int depth;  
+	struct {   
+		struct json_object *cont;   
+		struct json_object *obj;   
+		int index, count;  
+	} stack[256]; 
+};
+from mustach-json-c.c:
+
+int fmustach_json_c(const char *template, struct json_object *root, FILE *file) 
+{  
+	struct expl e;  
+	e.root = root;  
+	return fmustach(template, &itf, &e, file); 
+} 
+int fdmustach_json_c(const char *template, struct json_object *root, int fd) 
+{  
+	struct expl e;  
+	e.root = root;  
+	return fdmustach(template, &itf, &e, fd); 
+} 
+int mustach_json_c(const char *template, struct json_object *root, char **result, size_t *size) 
+{  
+	struct expl e;  
+	e.root = root;  
+	return mustach(template, &itf, &e, result, size); 
+}
+*/
+
+void
+mustachtest()
+{
+	printf("mustach test...\n");
+}
 
 void
 jsontest()
@@ -37,17 +75,20 @@ web()
 	char           *qs = getenv("QUERY_STRING");
 	char           *p1;
 
-	ps = params_create(10, qs);
 
 	header();
+	
+	if (qs != NULL) {
+		ps = params_create(10, qs);
+		p1 = params_get(ps, "p1");
+		printf("<p>%s</p>\n", p1);
 
-	p1 = params_get(ps, "p1");
-	printf("<p>%s</p>\n", p1);
 
+		p1 = params_get(ps, "qwdqwdwqp1");
+		printf("<p>[%s]</p>\n", p1);
+		params_free(ps);
+	}
 
-	p1 = params_get(ps, "qwdqwdwqp1");
-	printf("<p>[%s]</p>\n", p1);
-	params_free(ps);
 	printf("<pre>asd\n");
 	jsontest();
 	printf("</pre>\n");
@@ -64,5 +105,7 @@ int
 main()
 {
 	web();
+	mustachtest();
+
 	return EXIT_SUCCESS;
 }
