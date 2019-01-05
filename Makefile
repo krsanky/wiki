@@ -1,8 +1,11 @@
 CFLAGS+= -W -Wall -O2 -std=c99 -g
 CFLAGS+= -I/usr/local/include
+CFLAGS+= -Imtemplate
 LDFLAGS+= -L/usr/local/lib
+LDFLAGS+= -Lmtemplate
 LDFLAGS+= -lnanomsg -lmarkdown 
 LDFLAGS+= -ljson-c
+LDFLAGS+= -lmtemplate
 
 #JSON_C_DIR=/path/to/json_c/install
 #CFLAGS += -I$(JSON_C_DIR)/include/json-c
@@ -20,21 +23,24 @@ wiki.cgi: $(SRCS) $(HDRS)
 		$(LDFLAGS)
 
 # TEST 
+tmpl: $@.c mtemplate/libmtemplate.a
+	$(CC) $(CFLAGS) -o $@.cgi $@.c $(LDFLAGS)
+
 must.cgi: must.c params.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -o ${.TARGET} must.c params.c \
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ must.c params.c \
 		mustach-json-c.c mustach.c
 
-strstrp: ${.TARGET}.c util.c
-	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c util.c
+strstrp: $@.c util.c
+	$(CC) $(CFLAGS) -o $@ $@.c util.c
 
-test_forms: ${.TARGET}.c forms.c forms.h
-	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
+test_forms: $@.c forms.c forms.h
+	$(CC) $(CFLAGS) -o $@ $@.c \
 		forms.c util.c \
 		-L/usr/local/lib -I/usr/local/include \
 		-lnanomsg
 
-params_test: ${.TARGET}.c params.c params.h util.h util.c 
-	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c \
+params_test: $@.c params.c params.h util.h util.c 
+	$(CC) $(CFLAGS) -o $@ $@.c \
 		params.c util.c \
 		$(LDFLAGS)
 
@@ -45,27 +51,27 @@ anchortest: test1.c myhtml.c
 
 test:
 	@echo CURDIR:${.CURDIR}
-	@echo TARGET:${.TARGET} [should be 'test']
+	@echo TARGET:$@ [should be 'test']
 	@echo CFLAGS: $(CFLAGS)
 	@echo LDFLAGS: ${LDFLAGS}
 
-mdtest: ${.TARGET}.c
-	$(CC) -o ${.TARGET}.cgi \
+mdtest: $@.c
+	$(CC) -o $@.cgi \
 		-L/usr/local/lib -I/usr/local/include \
-		${.TARGET}.c \
+		$@.c \
 		-lmarkdown 
 
-writef: ${.TARGET}.c
-	$(CC) -o ${.TARGET} \
+writef: $@.c
+	$(CC) -o $@ \
 		-L/usr/local/lib -I/usr/local/include \
-		${.TARGET}.c \
+		$@.c \
 		-lmarkdown \
 
 # CGI WEB SETUP TEST
-cgi123: ${.TARGET}.c
-	$(CC) -o ${.TARGET}.cgi \
+cgi123: $@.c
+	$(CC) -o $@.cgi \
 		-L/usr/local/lib -I/usr/local/include \
-		${.TARGET}.c \
+		$@.c \
 		-lmarkdown \
 
 indent:
@@ -78,11 +84,9 @@ deploy: wiki.cgi
 	cp -r static ../htdocs/
 
 clean:
+	rm -rf *.cgi
 	rm -f writef nanoclient mdtest params_test
-	rm -rf a.out *.BAK *.cgi *.core
-	rm -rf must
-cleanlogs: 
-	rm -rf nlog.txt log.txt
+	rm -rf a.out *.BAK *.core
 
-.PHONY: test clean cleanlogs indent deploy
+.PHONY: test clean indent deploy
 

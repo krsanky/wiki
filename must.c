@@ -8,34 +8,34 @@
 void 		header   ();
 
 /*
-struct expl {  
-	struct json_object *root;  
-	int depth;  
-	struct {   
-		struct json_object *cont;   
-		struct json_object *obj;   
-		int index, count;  
-	} stack[256]; 
+struct expl {
+	struct json_object *root;
+	int depth;
+	struct {
+		struct json_object *cont;
+		struct json_object *obj;
+		int index, count;
+	} stack[256];
 };
 from mustach-json-c.c:
 
-int fmustach_json_c(const char *template, struct json_object *root, FILE *file) 
-{  
-	struct expl e;  
-	e.root = root;  
-	return fmustach(template, &itf, &e, file); 
-} 
-int fdmustach_json_c(const char *template, struct json_object *root, int fd) 
-{  
-	struct expl e;  
-	e.root = root;  
-	return fdmustach(template, &itf, &e, fd); 
-} 
-int mustach_json_c(const char *template, struct json_object *root, char **result, size_t *size) 
-{  
-	struct expl e;  
-	e.root = root;  
-	return mustach(template, &itf, &e, result, size); 
+int fmustach_json_c(const char *template, struct json_object *root, FILE *file)
+{
+	struct expl e;
+	e.root = root;
+	return fmustach(template, &itf, &e, file);
+}
+int fdmustach_json_c(const char *template, struct json_object *root, int fd)
+{
+	struct expl e;
+	e.root = root;
+	return fdmustach(template, &itf, &e, fd);
+}
+int mustach_json_c(const char *template, struct json_object *root, char **result, size_t *size)
+{
+	struct expl e;
+	e.root = root;
+	return mustach(template, &itf, &e, result, size);
 }
 */
 
@@ -50,7 +50,7 @@ jsontest()
 {
 	struct json_object *jobj;
 
- 	char *str = "{ \"msg-type\": [ \"0xdeadbeef\", \"irc log\" ], \
+	char           *str = "{ \"msg-type\": [ \"0xdeadbeef\", \"irc log\" ], \
   		\"msg-from\": { \"class\": \"soldier\", \"name\": \"Wixilav\" }, \
 		\"msg-to\": { \"class\": \"supreme-commander\", \"name\": \"[Redacted]\" }, \
 		\"msg-log\": [ \
@@ -77,7 +77,7 @@ web()
 
 
 	header();
-	
+
 	if (qs != NULL) {
 		ps = params_create(10, qs);
 		p1 = params_get(ps, "p1");
@@ -88,7 +88,6 @@ web()
 		printf("<p>[%s]</p>\n", p1);
 		params_free(ps);
 	}
-
 	printf("<pre>asd\n");
 	printf("</pre>\n");
 }
