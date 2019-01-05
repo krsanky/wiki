@@ -1,6 +1,7 @@
 CFLAGS+= -W -Wall -O2 -std=c99 -g
 CFLAGS+= -I/usr/local/include
-LDFLAGS+= -L/usr/local/lib -lnanomsg -lmarkdown 
+LDFLAGS+= -L/usr/local/lib
+LDFLAGS+= -lnanomsg -lmarkdown 
 LDFLAGS+= -ljson-c
 
 #JSON_C_DIR=/path/to/json_c/install
@@ -20,7 +21,8 @@ wiki.cgi: $(SRCS) $(HDRS)
 
 # TEST 
 must.cgi: must.c params.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -o ${.TARGET} must.c params.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o ${.TARGET} must.c params.c \
+		mustach-json-c.c mustach.c
 
 strstrp: ${.TARGET}.c util.c
 	$(CC) $(CFLAGS) -o ${.TARGET} ${.TARGET}.c util.c

@@ -90,7 +90,6 @@ web()
 	}
 
 	printf("<pre>asd\n");
-	jsontest();
 	printf("</pre>\n");
 }
 
@@ -105,6 +104,7 @@ int
 main()
 {
 	web();
+	jsontest();
 	mustachtest();
 
 	return EXIT_SUCCESS;
