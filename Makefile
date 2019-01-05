@@ -7,28 +7,21 @@ LDFLAGS+= -lnanomsg -lmarkdown
 LDFLAGS+= -ljson-c
 LDFLAGS+= -lmtemplate
 
-#JSON_C_DIR=/path/to/json_c/install
-#CFLAGS += -I$(JSON_C_DIR)/include/json-c
-#LDFLAGS+= -L$(JSON_C_DIR)/lib -ljson-c
+SRCS= wiki.c main.c myhtml.c params.c forms.c util.c
+HDRS= wiki.h myhtml.h params.h forms.h util.h
 
-SRCS=	wiki.c main.c myhtml.c params.c forms.c util.c
-HDRS=		wiki.h myhtml.h params.h forms.h util.h
-BINS=		wiki.cgi
+all: wiki
 
-all: $(BINS)
-
-wiki.cgi: $(SRCS) $(HDRS)
-	$(CC) $(CFLAGS) -o $(.TARGET) \
-		${SRCS} \
-		$(LDFLAGS)
+wiki: $(SRCS) $(HDRS)
+	$(CC) $(CFLAGS) -o $@ ${SRCS} $(LDFLAGS)
 
 # TEST 
 tmpl: $@.c mtemplate/libmtemplate.a params.c
 	$(CC) $(CFLAGS) -o $@ $@.c params.c $(LDFLAGS)
 
-must.cgi: must.c params.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ must.c params.c \
-		mustach-json-c.c mustach.c
+#json 
+must: $@.c params.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ must.c params.c
 
 strstrp: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c
@@ -67,7 +60,6 @@ writef: $@.c
 		$@.c \
 		-lmarkdown \
 
-# CGI WEB SETUP TEST
 cgi123: $@.c
 	$(CC) -o $@.cgi \
 		-L/usr/local/lib -I/usr/local/include \
@@ -78,9 +70,10 @@ indent:
 	@echo "indenting all code..."
 	./indent-all.sh
 
-deploy: wiki.cgi
-	cp wiki.cgi wikieditform.php ../htdocs/
-	cp must.cgi ../htdocs/
+deploy: wiki must tmpl
+	cp wiki ../htdocs/wiki.cgi
+	cp wikieditform.php ../htdocs/
+	cp must ../htdocs/must.cgi
 	cp tmpl ../htdocs/tmpl.cgi
 	cp -r static ../htdocs/
 
