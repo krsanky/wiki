@@ -23,8 +23,8 @@ wiki.cgi: $(SRCS) $(HDRS)
 		$(LDFLAGS)
 
 # TEST 
-tmpl: $@.c mtemplate/libmtemplate.a
-	$(CC) $(CFLAGS) -o $@.cgi $@.c $(LDFLAGS)
+tmpl: $@.c mtemplate/libmtemplate.a params.c
+	$(CC) $(CFLAGS) -o $@ $@.c params.c $(LDFLAGS)
 
 must.cgi: must.c params.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ must.c params.c \
@@ -81,12 +81,14 @@ indent:
 deploy: wiki.cgi
 	cp wiki.cgi wikieditform.php ../htdocs/
 	cp must.cgi ../htdocs/
+	cp tmpl ../htdocs/tmpl.cgi
 	cp -r static ../htdocs/
 
 clean:
 	rm -rf *.cgi
 	rm -f writef nanoclient mdtest params_test
 	rm -rf a.out *.BAK *.core
+	rm -rf tmpl
 
 .PHONY: test clean indent deploy
 
