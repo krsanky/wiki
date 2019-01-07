@@ -5,7 +5,7 @@ typedef struct param {
 
 typedef struct params {
 	char           *query_string;
-	int 		nparams;
+	int 		len;
 	PARAM          *params;
 } 		PARAMS;
 

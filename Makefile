@@ -76,6 +76,7 @@ deploy: wiki must tmpl
 	cp must ../htdocs/must.cgi
 	cp tmpl ../htdocs/tmpl.cgi
 	cp -r static ../htdocs/
+	cp -r templates ../htdocs/
 
 clean:
 	rm -rf *.cgi

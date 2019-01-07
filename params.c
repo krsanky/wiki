@@ -10,17 +10,9 @@
 #include "params.h"
 #include "util.h"
 
-/*
-typedef struct params {
-	char           *query_string;
-	int		nparams;
-	PARAM          *params;
-} PARAMS;
-*/
 PARAMS         *
 params_create(int num, char *qs)
 {
-	//PARAM * params;
 	PARAMS         *params;
 	int 		ret;
 
@@ -37,7 +29,7 @@ params_create(int num, char *qs)
 		params->params[i].val = NULL;
 	}
 
-	params->nparams = num;
+	params->len = num;
 
 	ret = params_parse_query(qs, params);
 
@@ -47,7 +39,9 @@ params_create(int num, char *qs)
 int
 params_free(PARAMS * ps)
 {
-	for (int i = 0; i < ps->nparams; i++) {
+	if (ps == NULL)
+		return 0;
+	for (int i = 0; i < ps->len; i++) {
 		free(ps->params[i].key);
 		free(ps->params[i].val);
 	}
@@ -68,7 +62,7 @@ params_parse_query(char *query, PARAMS * ps)
 	assert(string != NULL);
 
 	while ((found = strsep(&string, "&")) != NULL) {
-		if (idx >= ps->nparams)
+		if (idx >= ps->len)
 			break;
 
 		key = strsep(&found, "=");
@@ -93,7 +87,7 @@ params_parse_query(char *query, PARAMS * ps)
 char           *
 params_get(PARAMS * ps, char *key)
 {
-	for (int i = 0; i < ps->nparams; i++) {
+	for (int i = 0; i < ps->len; i++) {
 		if (ps->params[i].key != NULL)
 			if (strcmp(key, ps->params[i].key) == 0)
 				return ps->params[i].val;

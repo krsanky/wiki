@@ -16,7 +16,6 @@
 
 extern char   **environ;
 
-
 void
 http_headers(void)
 {

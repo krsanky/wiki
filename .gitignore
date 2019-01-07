@@ -1,13 +1,11 @@
-bin/
-usr/
 *.core
 *.BAK
 content/
 
-*.cgi
-nanoclient
 params_test
 test_forms
 
 mustach/
 tmpl
+wiki
+must
