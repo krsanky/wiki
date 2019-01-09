@@ -36,9 +36,9 @@ showtemplate(char *t_)
 		printf("success opening templ. file");
 	}
 
-	size_t		tlen = 0;
-	int		len = 0;
-	char		buf[8192];
+	size_t 		tlen = 0;
+	int 		len = 0;
+	char 		buf      [8192];
 	/* read file into char * template */
 	for (;;) {
 		if ((len = read(tfd, buf, sizeof(buf))) == -1) {
@@ -52,16 +52,16 @@ showtemplate(char *t_)
 			errx(1, "template length exceeds SIZE_T_MAX");
 		if ((template = realloc(template, tlen + len + 1)) == NULL)
 			errx(1, "realloc(template, %zu) failed",
-			    tlen + len + 1);
+			     tlen + len + 1);
 		memcpy(template + tlen, buf, len);
 		*(template + tlen + len) = '\0';
 		tlen += len;
 	}
 	close(tfd);
-	printf("<pre>\n%s\n</pre>\n", template);
+	printf("\nraw templ.\n:<pre>\n%s\n</pre>\n", template);
 
 	/* instantiate mtemplate object */
-	char errbuf[1024];
+	char 		errbuf   [1024];
 	if ((t = mtemplate_parse(template, errbuf, sizeof(errbuf))) == NULL)
 		printf("mtemplate_parse error\n");
 
@@ -70,10 +70,10 @@ showtemplate(char *t_)
 		printf("mdict_new error");
 
 	/* Add some values to the namespace (ignoring errors) */
-	mdict_insert_ss(namespace, "program_name", "example"); /* String */
-	mdict_insert_si(namespace, "program_version", 2008);   /* Integer */
-	mdict_insert_sa(namespace, "features");                /* Empty array */
-	mdict_insert_sd(namespace, "credits");                 /* Empty dictionary */
+	mdict_insert_ss(namespace, "program_name", "example");	/* String */
+	mdict_insert_si(namespace, "program_version", 2008);	/* Integer */
+	mdict_insert_sa(namespace, "features");	/* Empty array */
+	mdict_insert_sd(namespace, "credits");	/* Empty dictionary */
 
 	/* Fill in the array and dictionary */
 	tmp = mdict_item_s(namespace, "features");
@@ -85,10 +85,20 @@ showtemplate(char *t_)
 
 
 
-	/* Run the template with this namespace, and send the output to stdout */
+	/*
+	 * Run the template with this namespace, and send the output to
+	 * stdout
 	if (mtemplate_run_stdio(t, namespace, stdout, errbuf, sizeof(errbuf)) == -1)
 		errx(1, "mtemplate_run_stdio: %s", errbuf);
+	 */
+	char *tout;
+	if (mtemplate_run_mbuf(t, namespace, &tout, errbuf, sizeof(errbuf)) == -1)
+		errx(1, "mtemplate_run_mbuf: %s", errbuf);
+	printf("<div style='color:yellow;background-color:red;'>%s</div>\n<h1>poop</h1>\n", tout);
 
+	free(tout);
+	mobject_free(namespace);
+	mtemplate_free(t);
 	free(t__);
 }
 
