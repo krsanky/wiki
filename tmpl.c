@@ -9,10 +9,57 @@
 #include "mtemplate.h"
 #include "params.h"
 
+/*
+ * tbuf should be freed by caller.
+ */
+int
+read_template_file(char *filename, char **tbuf)
+{
+	int 		tfd;
+	size_t 		tlen = 0;
+	int 		len = 0;
+	char 		buf      [8192];
+	/*char           *template = NULL;*/
+
+	if ((tfd = open(filename, O_RDONLY)) == -1) {
+		/*printf("err opening template file:%s", t__);*/
+		return -1;
+	}
+	/* read file into char * template */
+	for (;;) {
+		if ((len = read(tfd, buf, sizeof(buf))) == -1) {
+			if (errno == EINTR || errno == EAGAIN)
+				continue;
+			/*err(1, "read");*/
+			return -1;
+		}
+		if (len == 0) {
+			break;
+		}
+		if (tlen + len + 1 < tlen) {
+			/*errx(1, "template length exceeds SIZE_T_MAX");*/
+			return -1;
+		}
+		if ((*tbuf = realloc(*tbuf, tlen + len + 1)) == NULL) {
+			/*
+			errx(1, "realloc(*tbuf, %zu) failed",
+			     tlen + len + 1);
+			*/
+			return -1;
+		}
+		memcpy(*tbuf + tlen, buf, len);
+		*(*tbuf + tlen + len) = '\0';
+		tlen += len;
+	}
+	close(tfd);
+	/*printf("\nraw templ.\n:<pre>\n%s\n</pre>\n", *tbuf);*/
+
+	return 0;
+}
+
 void
 showtemplate(char *t_)
 {
-	int 		tfd;
 	char           *t__;
 	int 		t__l;
 	char           *template = NULL;
@@ -30,35 +77,10 @@ showtemplate(char *t_)
 	strlcat(t__, "/", t__l);
 	strlcat(t__, t_, t__l);
 
-	if ((tfd = open(t__, O_RDONLY)) == -1) {
-		printf("err opening template file:%s", t__);
-	} else {
-		printf("success opening templ. file");
-	}
-
-	size_t 		tlen = 0;
-	int 		len = 0;
-	char 		buf      [8192];
-	/* read file into char * template */
-	for (;;) {
-		if ((len = read(tfd, buf, sizeof(buf))) == -1) {
-			if (errno == EINTR || errno == EAGAIN)
-				continue;
-			err(1, "read");
-		}
-		if (len == 0)
-			break;
-		if (tlen + len + 1 < tlen)
-			errx(1, "template length exceeds SIZE_T_MAX");
-		if ((template = realloc(template, tlen + len + 1)) == NULL)
-			errx(1, "realloc(template, %zu) failed",
-			     tlen + len + 1);
-		memcpy(template + tlen, buf, len);
-		*(template + tlen + len) = '\0';
-		tlen += len;
-	}
-	close(tfd);
+	if (read_template_file(t__, &template) != 0)
+		printf("read_template_file() error\n");
 	printf("\nraw templ.\n:<pre>\n%s\n</pre>\n", template);
+
 
 	/* instantiate mtemplate object */
 	char 		errbuf   [1024];
@@ -96,6 +118,7 @@ showtemplate(char *t_)
 		errx(1, "mtemplate_run_mbuf: %s", errbuf);
 	printf("<div style='color:yellow;background-color:red;'>%s</div>\n<h1>poop</h1>\n", tout);
 
+	free(template);
 	free(tout);
 	mobject_free(namespace);
 	mtemplate_free(t);
@@ -130,6 +153,7 @@ void
 header()
 {
 	printf("Content-type: text/html\n\n");
+	printf("<h1>hey</h1>\n");
 }
 
 int
