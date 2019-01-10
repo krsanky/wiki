@@ -16,6 +16,9 @@ wiki: $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ ${SRCS} $(LDFLAGS)
 
 # TEST 
+test_util: $@.c util.c
+	$(CC) $(CFLAGS) -o $@ $@.c util.c $(LDFLAGS)
+
 tmpl: $@.c mtemplate/libmtemplate.a params.c
 	$(CC) $(CFLAGS) -o $@ $@.c params.c $(LDFLAGS)
 

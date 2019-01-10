@@ -6,6 +6,7 @@
 #include <nanomsg/reqrep.h>
 
 #include "settings.h"
+
 #include "util.h"
 
 int
@@ -117,7 +118,7 @@ self_redirect(char *main, char *dir, char *page)
 }
 
 /*
- * caller responsible for freeing returned pointer.
+ * caller responsible for freeing contents
  */
 int
 my_read_file(char *f, char **contents)
@@ -157,14 +158,38 @@ my_read_file(char *f, char **contents)
 	return 0;
 }
 
-int
-my_write_file(char *f, char *buf, int bsize)
-{
-	return 0;
-}
-
 void
 printsep()
 {
 	printf("-----------------------------------------------------------------------\n");
 }
+
+int
+cat_strings(char **buf, int nargs, ...)
+{
+	char		*v;
+	va_list		ap;
+	int		len = 0;
+
+	va_start(ap, nargs);
+	for (int i=0; i<nargs; i++) {
+		v = va_arg(ap, char *);
+		len += strlen(v);
+	}
+	len += 1;
+	va_end(ap);
+
+	if ((*buf = malloc(len)) == NULL)
+		return -1;
+	strlcpy(*buf, "", len);
+
+	va_start(ap, nargs);
+	for (int i=0; i<nargs; i++) 
+		strlcat(*buf, va_arg(ap, char *), len);
+	va_end(ap);
+
+	return 0;
+}
+
+
+
