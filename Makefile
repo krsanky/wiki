@@ -74,11 +74,10 @@ indent:
 	@echo "indenting all code..."
 	./indent-all.sh
 
-deploy: wiki must tmpl
+deploy: wiki must 
 	cp wiki ../htdocs/wiki.cgi
 	cp wikieditform.php ../htdocs/
 	cp must ../htdocs/must.cgi
-	cp tmpl ../htdocs/tmpl.cgi
 	cp -r static ../htdocs/
 	cp -r templates ../htdocs/
 

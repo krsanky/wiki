@@ -37,46 +37,53 @@ make_dummy_namespace()
 }
 
 void
-render(char *tmplfn, struct mobject *namespace)
+render(char *tmplfn, struct mobject * namespace)
 {
-	printf("render 42\n");
-	int		ret;
-	char		*tbuf = NULL;
-	struct mtemplate *t;
+	int 		ret = -1;
+	char           *tbuf = NULL;
+	struct mtemplate *t = NULL;
+	char           *tout = NULL;
 
 	printf("tmpl_readfile fn:%s\n", tmplfn);
 	ret = tmpl_readfile(tmplfn, &tbuf);
 	if (ret != 0) {
 		printf("error ret:%d\n", ret);
-		return;
+		goto end;
 	}
-	printf("render 52\n");
-
 	if ((t = mtemplate_parse(tbuf, NULL, 0)) == NULL) {
 		printf("mtemplate_parse error\n");
-		return;
+		goto end;
 	}
-
-	printf("render 57\n");
-	char           *tout;
 	if (mtemplate_run_mbuf(t, namespace, &tout, NULL, 0) == -1) {
 		printf("error mtemplate_run_mbuf");
-		return;
+		goto end;
 	}
 	printf("<div style='color:yellow;background-color:red;'>%s</div>\n<h1>poop</h1>\n", tout);
 
+	if (mtemplate_run_stdio(t, namespace, stdout, NULL, 0) == -1) {
+		printf("error mtemplate_run_mbuf");
+		goto end;
+	}
+	/*
+	goto l2;
+	printf("pre l2\n");
+	l2:
+	printf("post l2\n");
+	*/
+
+end:
 	free(tbuf);
 	free(tout);
-	mtemplate_free(t);
+	if (t == NULL)
+		mtemplate_free(t);
 }
 
 int
 main()
 {
-	int		ret;
-	char		fn[] = "templates/t1.m";
-	char		fn2[] = "templates/t1.m";
-	char		*buf;
+	int 		ret;
+	char 		fn       [] = "templates/t1.m";
+	char           *buf;
 
 	printf("test tmpl_readfile(): %s\n", fn);
 	ret = tmpl_readfile(fn, &buf);
@@ -92,6 +99,5 @@ main()
 	render(fn, namespace);
 
 	mobject_free(namespace);
-	printf("fn:%s fn2%s\n", fn, fn2);
 	return 0;
 }

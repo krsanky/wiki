@@ -129,10 +129,7 @@ tmpl_readfile(char *filename, char **tbuf)
 
 /* tmp delete */
 int
-tmpl_render(struct mtemplate *tmpl, struct mobject *namespace, char **buf)
+tmpl_render(struct mtemplate * tmpl, struct mobject * namespace, char **buf)
 {
 	return mtemplate_run_mbuf(tmpl, namespace, buf, NULL, 0);
 }
-
-
-
