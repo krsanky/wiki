@@ -7,8 +7,8 @@
 int
 main()
 {
-	int		ret;
-	char		*buf;
+	int 		ret;
+	char           *buf;
 
 	printf("hey!\n");
 	ret = cat_strings(&buf, 2, "asd..", "qwe..");

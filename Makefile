@@ -3,14 +3,15 @@ CFLAGS+= -I/usr/local/include
 CFLAGS+= -Imtemplate
 LDFLAGS+= -L/usr/local/lib
 LDFLAGS+= -Lmtemplate
-LDFLAGS+= -lnanomsg -lmarkdown 
+LDFLAGS+= -lmarkdown 
+LDFLAGS+= -lnanomsg
 LDFLAGS+= -ljson-c
 LDFLAGS+= -lmtemplate
 
+all: wiki
+
 SRCS= wiki.c main.c myhtml.c params.c forms.c util.c
 HDRS= wiki.h myhtml.h params.h forms.h util.h
-
-all: wiki
 
 wiki: $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ ${SRCS} $(LDFLAGS)
@@ -19,8 +20,8 @@ wiki: $(SRCS) $(HDRS)
 test_util: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c $(LDFLAGS)
 
-tmpl: $@.c mtemplate/libmtemplate.a params.c
-	$(CC) $(CFLAGS) -o $@ $@.c params.c $(LDFLAGS)
+test_tmpl: $@.c mtemplate/libmtemplate.a params.c tmpl.c
+	$(CC) $(CFLAGS) -o $@ $@.c params.c tmpl.c $(LDFLAGS)
 
 #json 
 must: $@.c params.c
@@ -86,6 +87,7 @@ clean:
 	rm -f writef nanoclient mdtest params_test
 	rm -rf a.out *.BAK *.core
 	rm -rf tmpl
+	rm -rf test_tmpl
 
 .PHONY: test clean indent deploy
 

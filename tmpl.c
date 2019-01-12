@@ -6,56 +6,10 @@
 #include <errno.h>
 #include <err.h>
 
-#include "mtemplate.h"
 #include "params.h"
+#include "mtemplate.h"
 
-/*
- * tbuf should be freed by caller.
- */
-int
-read_template_file(char *filename, char **tbuf)
-{
-	int 		tfd;
-	size_t 		tlen = 0;
-	int 		len = 0;
-	char 		buf      [8192];
-	/*char           *template = NULL;*/
-
-	if ((tfd = open(filename, O_RDONLY)) == -1) {
-		/*printf("err opening template file:%s", t__);*/
-		return -1;
-	}
-	/* read file into char * template */
-	for (;;) {
-		if ((len = read(tfd, buf, sizeof(buf))) == -1) {
-			if (errno == EINTR || errno == EAGAIN)
-				continue;
-			/*err(1, "read");*/
-			return -1;
-		}
-		if (len == 0) {
-			break;
-		}
-		if (tlen + len + 1 < tlen) {
-			/*errx(1, "template length exceeds SIZE_T_MAX");*/
-			return -1;
-		}
-		if ((*tbuf = realloc(*tbuf, tlen + len + 1)) == NULL) {
-			/*
-			errx(1, "realloc(*tbuf, %zu) failed",
-			     tlen + len + 1);
-			*/
-			return -1;
-		}
-		memcpy(*tbuf + tlen, buf, len);
-		*(*tbuf + tlen + len) = '\0';
-		tlen += len;
-	}
-	close(tfd);
-	/*printf("\nraw templ.\n:<pre>\n%s\n</pre>\n", *tbuf);*/
-
-	return 0;
-}
+#include "tmpl.h"
 
 void
 showtemplate(char *t_)
@@ -77,7 +31,7 @@ showtemplate(char *t_)
 	strlcat(t__, "/", t__l);
 	strlcat(t__, t_, t__l);
 
-	if (read_template_file(t__, &template) != 0)
+	if (tmpl_readfile(t__, &template) != 0)
 		printf("read_template_file() error\n");
 	printf("\nraw templ.\n:<pre>\n%s\n</pre>\n", template);
 
@@ -113,7 +67,7 @@ showtemplate(char *t_)
 	if (mtemplate_run_stdio(t, namespace, stdout, errbuf, sizeof(errbuf)) == -1)
 		errx(1, "mtemplate_run_stdio: %s", errbuf);
 	 */
-	char *tout;
+	char           *tout;
 	if (mtemplate_run_mbuf(t, namespace, &tout, errbuf, sizeof(errbuf)) == -1)
 		errx(1, "mtemplate_run_mbuf: %s", errbuf);
 	printf("<div style='color:yellow;background-color:red;'>%s</div>\n<h1>poop</h1>\n", tout);
@@ -125,42 +79,60 @@ showtemplate(char *t_)
 	free(t__);
 }
 
-void
-web()
-{
-	PARAMS         *ps;
-	char           *qs = getenv("QUERY_STRING");
-	char           *t = NULL;
-
-	if (qs != NULL) {
-		ps = params_create(10, qs);
-		t = params_get(ps, "t");
-		if (t != NULL)
-			t = strdup(t);
-		params_free(ps);
-	}
-	if (t != NULL) {
-		printf("<h1>t:[%s]</h1>\n", t);
-		showtemplate(t);
-	} else {
-		printf("<h1>t NULL</h1>\n");
-	}
-	free(NULL);
-	free(t);
-}
-
-void
-header()
-{
-	printf("Content-type: text/html\n\n");
-	printf("<h1>hey</h1>\n");
-}
-
+/*
+ * tbuf should be freed by caller.
+ */
 int
-main()
+tmpl_readfile(char *filename, char **tbuf)
 {
-	header();
-	web();
+	int 		tfd;
+	size_t 		tlen = 0;
+	int 		len = 0;
+	char 		buf      [8192];
+	/* char           *template = NULL; */
 
-	return EXIT_SUCCESS;
+	if ((tfd = open(filename, O_RDONLY)) == -1) {
+		/* printf("err opening template file:%s", t__); */
+		return -1;
+	}
+	/* read file into char * template */
+	for (;;) {
+		if ((len = read(tfd, buf, sizeof(buf))) == -1) {
+			if (errno == EINTR || errno == EAGAIN)
+				continue;
+			/* err(1, "read"); */
+			return -1;
+		}
+		if (len == 0) {
+			break;
+		}
+		if (tlen + len + 1 < tlen) {
+			/* errx(1, "template length exceeds SIZE_T_MAX"); */
+			return -1;
+		}
+		if ((*tbuf = realloc(*tbuf, tlen + len + 1)) == NULL) {
+			/*
+			errx(1, "realloc(*tbuf, %zu) failed",
+			     tlen + len + 1);
+			*/
+			return -1;
+		}
+		memcpy(*tbuf + tlen, buf, len);
+		*(*tbuf + tlen + len) = '\0';
+		tlen += len;
+	}
+	close(tfd);
+	/* printf("\nraw templ.\n:<pre>\n%s\n</pre>\n", *tbuf); */
+
+	return 0;
 }
+
+/* tmp delete */
+int
+tmpl_render(struct mtemplate *tmpl, struct mobject *namespace, char **buf)
+{
+	return mtemplate_run_mbuf(tmpl, namespace, buf, NULL, 0);
+}
+
+
+

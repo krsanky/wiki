@@ -2,13 +2,13 @@
 #include <stdarg.h>
 
 void
-f1(int n, ...)
+f1(int n,...)
 {
-	char		*v;
-	va_list ap;
+	char           *v;
+	va_list 	ap;
 	va_start(ap, n);
 
-	for (int i=0; i<n; i++) {
+	for (int i = 0; i < n; i++) {
 		v = va_arg(ap, char *);
 		printf("%d %s\n", i, v);
 	}

@@ -165,14 +165,14 @@ printsep()
 }
 
 int
-cat_strings(char **buf, int nargs, ...)
+cat_strings(char **buf, int nargs,...)
 {
-	char		*v;
-	va_list		ap;
-	int		len = 0;
+	char           *v;
+	va_list 	ap;
+	int 		len = 0;
 
 	va_start(ap, nargs);
-	for (int i=0; i<nargs; i++) {
+	for (int i = 0; i < nargs; i++) {
 		v = va_arg(ap, char *);
 		len += strlen(v);
 	}
@@ -184,12 +184,9 @@ cat_strings(char **buf, int nargs, ...)
 	strlcpy(*buf, "", len);
 
 	va_start(ap, nargs);
-	for (int i=0; i<nargs; i++) 
+	for (int i = 0; i < nargs; i++)
 		strlcat(*buf, va_arg(ap, char *), len);
 	va_end(ap);
 
 	return 0;
 }
-
-
-
