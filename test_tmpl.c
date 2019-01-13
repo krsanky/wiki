@@ -54,12 +54,15 @@ render(char *tmplfn, struct mobject * namespace)
 		printf("mtemplate_parse error\n");
 		goto end;
 	}
+
+	/* store template in var , and printf it */
 	if (mtemplate_run_mbuf(t, namespace, &tout, NULL, 0) == -1) {
 		printf("error mtemplate_run_mbuf");
 		goto end;
 	}
-	printf("<div style='color:yellow;background-color:red;'>%s</div>\n<h1>poop</h1>\n", tout);
+	printf("<div style='color:yellow;background-color:red;'>%s</div>\n", tout);
 
+	/* output templatye directly to stdio */
 	if (mtemplate_run_stdio(t, namespace, stdout, NULL, 0) == -1) {
 		printf("error mtemplate_run_mbuf");
 		goto end;
