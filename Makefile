@@ -16,6 +16,9 @@ HDRS= wiki.h myhtml.h params.h forms.h util.h
 wiki: $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ ${SRCS} $(LDFLAGS)
 
+sample: $@.c util.c
+	$(CC) $(CFLAGS) -o $@ $@.c $(LDFLAGS)
+
 # TEST 
 test_util: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c $(LDFLAGS)
@@ -78,6 +81,7 @@ deploy: wiki must
 	cp wiki ../htdocs/wiki.cgi
 	cp wikieditform.php ../htdocs/
 	cp must ../htdocs/must.cgi
+	cp sample ../htdocs/sample.cgi
 	cp -r static ../htdocs/
 	cp -r templates ../htdocs/
 
@@ -87,6 +91,7 @@ clean:
 	rm -rf a.out *.BAK *.core
 	rm -rf tmpl
 	rm -rf test_tmpl
+	rm -rf sample
 
 .PHONY: test clean indent deploy
 
