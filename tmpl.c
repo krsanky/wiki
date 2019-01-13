@@ -127,9 +127,35 @@ tmpl_readfile(char *filename, char **tbuf)
 	return 0;
 }
 
-/* tmp delete */
 int
-tmpl_render(struct mtemplate * tmpl, struct mobject * namespace, char **buf)
+tmpl_render(char *tmplfn, struct mobject *namespace)
 {
-	return mtemplate_run_mbuf(tmpl, namespace, buf, NULL, 0);
+	int 		ret = -1;
+	char           *tbuf = NULL;
+	struct mtemplate *t = NULL;
+
+	ret = tmpl_readfile(tmplfn, &tbuf);
+	if (ret != 0) {
+		/*printf("error ret:%d\n", ret);*/
+		goto end;
+	}
+
+	/* parse-and-cache ? */  
+	if ((t = mtemplate_parse(tbuf, NULL, 0)) == NULL) {
+		/*printf("mtemplate_parse error\n");*/
+		goto end;
+	}
+
+	if (mtemplate_run_stdio(t, namespace, stdout, NULL, 0) == -1) {
+		/*printf("error mtemplate_run_mbuf");*/
+		goto end;
+	}
+
+	ret = 0;
+
+end:
+	free(tbuf);
+	if (t == NULL)
+		mtemplate_free(t);
+	return ret;
 }

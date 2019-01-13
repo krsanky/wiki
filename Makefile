@@ -8,7 +8,7 @@ LDFLAGS+= -lnanomsg
 LDFLAGS+= -ljson-c
 LDFLAGS+= -lmtemplate
 
-all: wiki
+all: wiki sample
 
 SRCS= wiki.c main.c myhtml.c params.c forms.c util.c
 HDRS= wiki.h myhtml.h params.h forms.h util.h
@@ -17,13 +17,13 @@ wiki: $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ ${SRCS} $(LDFLAGS)
 
 sample: $@.c util.c
-	$(CC) $(CFLAGS) -o $@ $@.c util.c $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $@.c util.c tmpl.c $(LDFLAGS)
 
 # TEST 
 test_util: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c $(LDFLAGS)
 
-test_tmpl: $@.c mtemplate/libmtemplate.a params.c tmpl.c
+test_tmpl: $@.c params.c tmpl.c
 	$(CC) $(CFLAGS) -o $@ $@.c params.c tmpl.c $(LDFLAGS)
 
 #json 

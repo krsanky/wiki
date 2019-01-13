@@ -37,7 +37,7 @@ make_dummy_namespace()
 }
 
 void
-render(char *tmplfn, struct mobject * namespace)
+_render(char *tmplfn, struct mobject * namespace)
 {
 	int 		ret = -1;
 	char           *tbuf = NULL;
@@ -99,7 +99,7 @@ main()
 	struct mobject *namespace = NULL;
 	namespace = make_dummy_namespace();
 
-	render(fn, namespace);
+	_render(fn, namespace);
 
 	mobject_free(namespace);
 	return 0;
