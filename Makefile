@@ -17,7 +17,7 @@ wiki: $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ ${SRCS} $(LDFLAGS)
 
 sample: $@.c util.c
-	$(CC) $(CFLAGS) -o $@ $@.c $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $@.c util.c $(LDFLAGS)
 
 # TEST 
 test_util: $@.c util.c
@@ -86,7 +86,7 @@ deploy: wiki must
 	cp -r templates ../htdocs/
 
 clean:
-	rm -rf *.cgi
+	rm -rf wiki
 	rm -f writef nanoclient mdtest params_test
 	rm -rf a.out *.BAK *.core
 	rm -rf tmpl

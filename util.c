@@ -9,6 +9,12 @@
 
 #include "util.h"
 
+void
+http_headers()
+{
+	printf("Content-type: text/html\n\n");
+}
+
 int
 is_md(struct dirent * de)
 {
@@ -21,24 +27,6 @@ is_md(struct dirent * de)
 				return 1;
 	}
 	return 0;
-}
-
-int
-nlog(const char *fmt,...)
-{
-	char           *p;
-	va_list 	ap;
-	int 		ret;
-
-	if ((p = malloc(256)) == NULL)
-		return 0;
-	va_start(ap, fmt);
-	ret = vsnprintf(p, 256, fmt, ap);
-
-	va_end(ap);
-	ret = wikilog(p);
-	free(p);
-	return ret;
 }
 
 void
@@ -79,6 +67,24 @@ wikilog(char *msg)
 	free(msg_);
 	nn_freemsg(buf);
 	return (nn_shutdown(sock, rv));
+}
+
+int
+nlog(const char *fmt,...)
+{
+	char           *p;
+	va_list 	ap;
+	int 		ret;
+
+	if ((p = malloc(256)) == NULL)
+		return 0;
+	va_start(ap, fmt);
+	ret = vsnprintf(p, 256, fmt, ap);
+
+	va_end(ap);
+	ret = wikilog(p);
+	free(p);
+	return ret;
 }
 
 void

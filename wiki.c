@@ -17,12 +17,6 @@
 extern char   **environ;
 
 void
-http_headers(void)
-{
-	printf("Content-type: text/html\n\n");
-}
-
-void
 testpage(void)
 {
 	http_headers();

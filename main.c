@@ -2,18 +2,16 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "util.h"
 #include "myhtml.h"
 #include "params.h"
 #include "wiki.h"
-
 #include "settings.h"
-#include "util.h"
 
 int
 main(void)
 {
 	char           *qs;
-	PARAM          *params;
 	PARAMS         *ps;
 	char           *param;
 	char           *page;
@@ -46,7 +44,7 @@ main(void)
 		if (ps->params[0].val != NULL) {
 			msg = ps->params[0].val;
 		}
-		if ((ret = wikilog(val)) < 0) {
+		if ((ret = nlog(val)) < 0) {
 			errpage(msg);
 		} else {
 			msgpage(msg);

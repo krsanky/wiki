@@ -1,5 +1,6 @@
 #include <dirent.h>
 
+void		http_headers();
 int 		is_md     (struct dirent *);
 int 		nlog      (const char *,...);
 void 		redirect (char *);
