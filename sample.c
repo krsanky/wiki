@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <mtemplate.h>
 
-#include "tmpl.h"
-#include "mtemplate.h"
 #include "util.h"
+#include "tmpl.h"
 
 int
 main()
