@@ -1,40 +1,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <mtemplate.h>
 
 #include "util.h"
+#include "tmpl.h"
 
 #include "myhtml.h"
 
 void
 myhtml_header()
 {
-	printf("\
-<!doctype html>\n\
-<html>\n\
-<head><meta charset='utf-8'>\
-<meta name='viewport' content='width=device-width, initial-scale=1'>\
-<title>oldcode wiki</title>\
-<style type='text/css'>\
-body{margin:40px auto;max-width:80%%;line-height:1.6;font-size:18px;color:#444; padding:0 10px}\
-h1,h2,h3{line-height:1.2}\
-</style>\
-</head>\n\
-<body>\n\
-<header><h1>Oldcode Wiki</h1></header>\
-\n");
+	char		fn[] = "templates/header.m";
+	tmpl_render(fn, NULL);
 }
 
 void
 myhtml_footer()
 {
-	printf("\
-<script src='/static/jquery-3.3.1.min.js'></script>\n\
-</body>\
-</html>\
-\n");
+	char		fn[] = "templates/footer.m";
+	tmpl_render(fn, NULL);
 }
-
 
 void
 myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
@@ -222,21 +208,25 @@ myhtml_textarea_close(char *dir, char *page)
 void
 myhtml_new(char *dir)
 {
-	printf("\
-<form action='/wiki.cgi?newform' method='post' \
-  enctype='application/x-www-form-urlencoded'>\n");
+	char		fn[] = "templates/new.m";
+	struct mobject 	*namespace = NULL;
 
-	printf("\
-<input type='text' name='page' />\n");
+	if ((namespace = mdict_new()) == NULL) 
+		nlog("mdict_new error");
+	else
+		nlog("mdict_new OK");
+	
+	/* if (dir != NULL) 
+	mdict_insert_ss(namespace, "dir", dir);
+	mdict_insert_ss(namespace, "null", NULL);
+	*/
+	if (dir == NULL)
+		mdict_insert_ss(namespace, "dir", "");
+	else
+		mdict_insert_ss(namespace, "dir", dir);
 
-	printf("\
-<button type='submit'>submit</button>\n");
-
-	if (dir != NULL)
-		printf("\
-<input type='hidden' name='dir' value='%s'/>\n", dir);
-
-	printf("\
-</form>\n");
-
+	tmpl_render(fn, NULL);
 }
+
+
+

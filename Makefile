@@ -10,7 +10,7 @@ LDFLAGS+= -lmtemplate
 
 all: wiki sample
 
-SRCS= wiki.c main.c myhtml.c params.c forms.c util.c
+SRCS= wiki.c main.c myhtml.c params.c forms.c util.c tmpl.c
 HDRS= wiki.h myhtml.h params.h forms.h util.h
 
 wiki: $(SRCS) $(HDRS)
