@@ -8,7 +8,7 @@
 
 {{if dir}}
 <!-- dir exists -->
-<input type='hidden' name='dir' value='%s'/>
+<input type='hidden' name='dir' value='{{dir}}'/>
 {{else}}
 <!-- dir NOT exists -->
 {{endif}}

@@ -23,5 +23,6 @@ main()
 	ret = tmpl_render(fn, namespace);
 
 end:
+	mobject_free(namespace);
 	return 0;
 }

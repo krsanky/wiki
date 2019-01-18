@@ -175,57 +175,57 @@ make_url(char *pagetype, char *dir, char *page)
 	return a;
 }
 
-/*
- enctype='multipart/form-data'>\n\
-<form action='/wiki.cgi?editform' method='post' \
-*/
 void
 myhtml_textarea_open()
 {
-	printf("\
-<form action='/wikieditform.php' method='post' \
- enctype='application/x-www-form-urlencoded'>\n\
-<textarea name=\"wikiformtext\" rows='26' cols='80'>");
+	char		fn[] = "templates/textarea_open.m";
+	tmpl_render(fn, NULL);
 }
 
 void
 myhtml_textarea_close(char *dir, char *page)
 {
-	printf("\
-</textarea>\n\
-<br/>\n\
-<button type='submit'>submit</button>\n\
-<input type='hidden' name='page' value='%s' />\n", page);
+	char		fn[] = "templates/textarea_close.m";
+	struct mobject 	*namespace = NULL;
 
-	if (dir != NULL)
-		printf("\
-<input type='hidden' name='dir' value='%s'/>\n", dir);
+	if ((namespace = mdict_new()) == NULL) {
+		nlog("mdict_new error dir:%s", dir);
+		return;
+	} else
+		nlog("mdict_new OK dir:%s", dir);
+	
+	mdict_insert_ss(namespace, "page", page);
+	if (dir == NULL)
+		mdict_insert_ss(namespace, "dir", "");
+	else
+		mdict_insert_ss(namespace, "dir", dir);
 
-	printf("\
-</form>\n");
+	tmpl_render(fn, namespace);
+	mobject_free(namespace);
 }
 
+/* error when directory is 2 levels deep 
+ *
+ */
 void
 myhtml_new(char *dir)
 {
 	char		fn[] = "templates/new.m";
 	struct mobject 	*namespace = NULL;
 
-	if ((namespace = mdict_new()) == NULL) 
-		nlog("mdict_new error");
-	else
-		nlog("mdict_new OK");
+	if ((namespace = mdict_new()) == NULL) {
+		nlog("mdict_new error dir:%s", dir);
+		return;
+	} else
+		nlog("mdict_new OK dir:%s", dir);
 	
-	/* if (dir != NULL) 
-	mdict_insert_ss(namespace, "dir", dir);
-	mdict_insert_ss(namespace, "null", NULL);
-	*/
 	if (dir == NULL)
 		mdict_insert_ss(namespace, "dir", "");
 	else
 		mdict_insert_ss(namespace, "dir", dir);
 
-	tmpl_render(fn, NULL);
+	tmpl_render(fn, namespace);
+	mobject_free(namespace);
 }
 
 
