@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <dirent.h>
 
 #include "util.h"
 #include "myhtml.h"
 #include "params.h"
 #include "wiki.h"
-#include "settings.h"
+
+const int 	NUM_HTTP_PARAMS = 10;
 
 int
 main(void)

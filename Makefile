@@ -1,4 +1,4 @@
-CFLAGS+= -W -Wall -O2 -std=c99 -g
+CFLAGS+= -W -Wall -O2 -std=c99 -g -pedantic
 CFLAGS+= -I/usr/local/include
 CFLAGS+= -Imtemplate
 LDFLAGS+= -L/usr/local/lib

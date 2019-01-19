@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <db.h>
-#include <assert.h>
+#include <dirent.h>
 
 #include "params.h"
 #include "util.h"
@@ -19,7 +19,7 @@ params_create(int num, char *qs)
 	if (qs == NULL) {
 		return NULL;
 	}
-	if ((params = malloc(sizeof(PARAM))) == NULL)
+	if ((params = malloc(sizeof(PARAMS))) == NULL)
 		return NULL;
 	if ((params->params = malloc(sizeof(PARAM) * num)) == NULL)
 		return NULL;
@@ -36,18 +36,17 @@ params_create(int num, char *qs)
 	return params;
 }
 
-int
+void
 params_free(PARAMS * ps)
 {
 	if (ps == NULL)
-		return 0;
+		return;
 	for (int i = 0; i < ps->len; i++) {
 		free(ps->params[i].key);
 		free(ps->params[i].val);
 	}
 	free(ps->params);
 	free(ps);
-	return 0;
 }
 
 int
@@ -59,7 +58,8 @@ params_parse_query(char *query, PARAMS * ps)
 	int 		idx = 0;
 
 	fstring = string = strdup(query);
-	assert(string != NULL);
+	if (string == NULL) 
+		return -1;
 
 	while ((found = strsep(&string, "&")) != NULL) {
 		if (idx >= ps->len)
@@ -68,11 +68,13 @@ params_parse_query(char *query, PARAMS * ps)
 		key = strsep(&found, "=");
 
 		ps->params[idx].key = strdup(key);
-		assert(ps->params[idx].key != NULL);
+		if (ps->params[idx].key == NULL) 
+			return -1;
 
 		if (found != NULL) {
 			ps->params[idx].val = strdup(found);
-			assert(ps->params[idx].val != NULL);
+			if (ps->params[idx].val == NULL) 
+				return -1;
 		} else {
 			ps->params[idx].val = NULL;
 		}

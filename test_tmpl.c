@@ -54,7 +54,6 @@ _render(char *tmplfn, struct mobject * namespace)
 		printf("mtemplate_parse error\n");
 		goto end;
 	}
-
 	/* store template in var , and printf it */
 	if (mtemplate_run_mbuf(t, namespace, &tout, NULL, 0) == -1) {
 		printf("error mtemplate_run_mbuf");

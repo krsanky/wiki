@@ -332,6 +332,10 @@ wikinew(char *dir)
 	myhtml_new(dir);
 	myhtml_footer();
 }
+/*
+ * error when directory is 2 levels deep aslso cleanup up free stuff
+ * 
+ */
 void
 wikinewform()
 {
@@ -341,6 +345,8 @@ wikinewform()
 	int 		CL;
 	char           *buf;
 	int 		l;
+	int 		ret;
+	char           *decode;
 
 	PARAMS         *ps;
 	int 		NPARAMS = 5;
@@ -361,16 +367,26 @@ wikinewform()
 	if (buf != NULL) {
 		l = fread(buf, 1, CL, stdin);
 		nlog("buf:%s", buf);
-		/*
-		main.c main() QUERY_STRING:newform
-		wikinewform() RM[POST] CT[application/x-www-form-urlencoded] CL[22]
-		buf:page=123qwd&dir=dir123
-		*/
 		ps = params_create(NPARAMS, buf);
+		free(buf);
 
 		page = params_get(ps, "page");
 		dir = params_get(ps, "dir");
 		nlog("make new file dir:%s page:%s", dir, page);
+		/*
+		 * dir is http/html encode ? params_urldecode(char *s, char
+		 * *dec)
+		 */
+		decode = malloc(strlen(dir) + 1);
+		if (decode == NULL) {
+			errpage("malloc error");
+			return;
+		}
+		ret = params_urldecode(dir, decode);
+		nlog("params_urldecode: ret:%d decode:%s", ret, decode);
+		nlog("strlen dir:%d", strlen(dir));
+		strlcpy(dir, decode, strlen(dir));
+		free(decode);
 
 
 		/* this is 2nd use, maybe this could be a util method */
@@ -406,7 +422,6 @@ wikinewform()
 		msgpage("new file created");
 		return;
 	}
-	free(buf);
 	errpage("error creating new file");
 }
 

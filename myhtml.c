@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <mtemplate.h>
+#include <dirent.h>
 
 #include "util.h"
 #include "tmpl.h"
@@ -11,14 +12,14 @@
 void
 myhtml_header()
 {
-	char		fn[] = "templates/header.m";
+	char 		fn       [] = "templates/header.m";
 	tmpl_render(fn, NULL);
 }
 
 void
 myhtml_footer()
 {
-	char		fn[] = "templates/footer.m";
+	char 		fn       [] = "templates/footer.m";
 	tmpl_render(fn, NULL);
 }
 
@@ -178,22 +179,22 @@ make_url(char *pagetype, char *dir, char *page)
 void
 myhtml_textarea_open()
 {
-	char		fn[] = "templates/textarea_open.m";
+	char 		fn       [] = "templates/textarea_open.m";
 	tmpl_render(fn, NULL);
 }
 
 void
 myhtml_textarea_close(char *dir, char *page)
 {
-	char		fn[] = "templates/textarea_close.m";
-	struct mobject 	*namespace = NULL;
+	char 		fn       [] = "templates/textarea_close.m";
+	struct mobject *namespace = NULL;
 
 	if ((namespace = mdict_new()) == NULL) {
 		nlog("mdict_new error dir:%s", dir);
 		return;
 	} else
 		nlog("mdict_new OK dir:%s", dir);
-	
+
 	mdict_insert_ss(namespace, "page", page);
 	if (dir == NULL)
 		mdict_insert_ss(namespace, "dir", "");
@@ -204,21 +205,18 @@ myhtml_textarea_close(char *dir, char *page)
 	mobject_free(namespace);
 }
 
-/* error when directory is 2 levels deep 
- *
- */
 void
 myhtml_new(char *dir)
 {
-	char		fn[] = "templates/new.m";
-	struct mobject 	*namespace = NULL;
+	char 		fn       [] = "templates/new.m";
+	struct mobject *namespace = NULL;
 
 	if ((namespace = mdict_new()) == NULL) {
 		nlog("mdict_new error dir:%s", dir);
 		return;
 	} else
 		nlog("mdict_new OK dir:%s", dir);
-	
+
 	if (dir == NULL)
 		mdict_insert_ss(namespace, "dir", "");
 	else
@@ -227,6 +225,3 @@ myhtml_new(char *dir)
 	tmpl_render(fn, namespace);
 	mobject_free(namespace);
 }
-
-
-

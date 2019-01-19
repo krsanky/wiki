@@ -128,7 +128,7 @@ tmpl_readfile(char *filename, char **tbuf)
 }
 
 int
-tmpl_render(char *tmplfn, struct mobject *namespace)
+tmpl_render(char *tmplfn, struct mobject * namespace)
 {
 	int 		ret = -1;
 	char           *tbuf = NULL;
@@ -136,21 +136,18 @@ tmpl_render(char *tmplfn, struct mobject *namespace)
 
 	ret = tmpl_readfile(tmplfn, &tbuf);
 	if (ret != 0) {
-		/*printf("error ret:%d\n", ret);*/
+		/* printf("error ret:%d\n", ret); */
 		goto end;
 	}
-
-	/* parse-and-cache ? */  
+	/* parse-and-cache ? */
 	if ((t = mtemplate_parse(tbuf, NULL, 0)) == NULL) {
-		/*printf("mtemplate_parse error\n");*/
+		/* printf("mtemplate_parse error\n"); */
 		goto end;
 	}
-
 	if (mtemplate_run_stdio(t, namespace, stdout, NULL, 0) == -1) {
-		/*printf("error mtemplate_run_mbuf");*/
+		/* printf("error mtemplate_run_mbuf"); */
 		goto end;
 	}
-
 	ret = 0;
 
 end:

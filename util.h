@@ -1,6 +1,6 @@
-#include <dirent.h>
+/* include <dirent.h> before this file */
 
-void		http_headers();
+void 		http_headers();
 int 		is_md     (struct dirent *);
 int 		nlog      (const char *,...);
 void 		redirect (char *);
