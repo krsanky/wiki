@@ -13,3 +13,6 @@ a.out
 test_util
 test_tmpl
 sample
+writef
+tmp123.txt
+test_errno

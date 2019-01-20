@@ -2,7 +2,6 @@ void 		fatal    (const char *);
 void 		http_headers(void);
 void 		showenv  (void);
 
-void 		testpage (void);
 void 		errpage  (char *);
 void 		msgpage  (char *);
 

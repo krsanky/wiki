@@ -17,29 +17,11 @@
 extern char   **environ;
 
 void
-testpage(void)
-{
-	http_headers();
-
-	myhtml_header();
-	printf("\
-<li><a href='/wiki.cgi?index'>index</a></li>\
-</ul>\n");
-
-	showenv();
-
-	myhtml_footer();
-}
-
-void
 errpage(char *error)
 {
 	http_headers();
-
 	myhtml_header();
-	/* myhtml_topnav(NULL, NULL); */
-	printf("\
-<p style='color:red;'>%s</p>\n", error);
+	printf("<p style='color:red;'>%s</p>\n", error);
 	myhtml_footer();
 }
 
@@ -47,26 +29,24 @@ void
 msgpage(char *msg)
 {
 	http_headers();
-
 	myhtml_header();
 	myhtml_breadcrumbs(NULL, NULL, NULL);
-
-	printf("\
-<p style='color:green;'>%s</p>\n", msg);
+	printf("<p style='color:green;'>%s</p>\n", msg);
 	myhtml_footer();
 }
 
 void
 showenv()
 {
-	printf("<pre>\n");
 	char           *data = getenv("QUERY_STRING");
+
+	printf("<pre>\n");
 	if (data == NULL)
 		printf("Error! Error in passing data from form to script.\n");
 	else
 		printf("QUERY_STRING[%s]\n", data);
 
-	puts("---------------");
+	printf("---------------\n");
 
 	for (char **env = environ; *env; ++env)
 		printf("%s\n", *env);
@@ -83,7 +63,7 @@ wikiindex(char *dir_)
 	struct dirent  *de;
 	DIR            *dir;
 	int 		dirl = 0;
-	char           *fulldir;
+	char           *fulldir = NULL;
 
 	if (dir_ == NULL) {
 		fulldir = WIKI_ROOT;
@@ -106,9 +86,9 @@ wikiindex(char *dir_)
 	dir = opendir(fulldir);
 	if (dir == NULL) {
 		errpage("could not open dir:");
+		return;
 	}
-	if (dirl > 0)
-		free(fulldir);
+	
 
 	http_headers();
 	myhtml_header();
@@ -152,6 +132,7 @@ dir:%s\
 	myhtml_footer();
 
 	closedir(dir);
+	free(fulldir);
 }
 
 
@@ -164,8 +145,8 @@ wikiview(char *dir, char *page)
 	char           *fullpath;
 	int 		fpl;
 
-	nlog("here in wikiview(%s, %s)", dir, page);
-	fpl = sizeof(WIKI_ROOT) + 1 + strlen(page);
+	nlog("wikiview(%s, %s)", dir, page);
+	fpl = sizeof(WIKI_ROOT) + strlen(page) + 1;
 	if (dir != NULL)
 		fpl = fpl + strlen(dir) + 1;
 	fullpath = malloc(fpl);
@@ -179,9 +160,9 @@ wikiview(char *dir, char *page)
 	nlog("wikiview fullpath:%s", fullpath);
 
 	mdfile = fopen(fullpath, "r");
-	free(fullpath);
 	if (mdfile == NULL) {
 		errpage("cannot open input file:");
+		goto end;
 	}
 	mmiot = mkd_in(mdfile, 0);
 
@@ -191,8 +172,10 @@ wikiview(char *dir, char *page)
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS);
 	myhtml_footer();
 
+end:
 	if (mdfile != NULL)
 		fclose(mdfile);
+	free(fullpath);
 }
 
 void
@@ -227,15 +210,8 @@ wikiedit(char *dir, char *page)
 	myhtml_breadcrumbs(dir, page, "edit");
 	myhtml_textarea_open();
 
-	while ((c = fgetc(mdfile)) != EOF) {
+	while ((c = fgetc(mdfile)) != EOF) 
 		printf("%c", c);
-		/*
-				if (c == '\n')
-					nlog("wikedit form \\n");
-				if (c == '\r')
-					nlog("wikedit form \\r");
-		*/
-	}
 
 	if (mdfile != NULL)
 		fclose(mdfile);
@@ -246,8 +222,7 @@ wikiedit(char *dir, char *page)
 
 /*
  * This is being handled by wikieditform.php currently.
- *
- * This answers the POST from wikiedit. This is the first form handling code.
+ * BUT, form is now urlencoded so we can go back to this.
  */
 void
 wikieditform()
@@ -256,7 +231,6 @@ wikieditform()
 	char           *CL_;
 	char           *CT;
 	int 		CL;
-	/* char 		buf      [1024]; */
 	char           *buf;
 	int 		l = 0;
 	char           *boundary;
@@ -277,27 +251,11 @@ wikieditform()
 	boundary = parse_boundary(CT);
 	nlog("post parse_b...");
 
-
-	/*
-	In my code, you see a lot of constructs where it's buf, offset, and
-	length.  The buf variable points to the start of the buffer and is
-	never incremented.  The length variable is the max length of the
-	buffer and likewise never changes.  It's the offset variable that
-	is incremented throughout.
-	*/
-
 	ps = params_create(NPARAMS, NULL);
 
-
-	/* -- display -- */
 	http_headers();
 	myhtml_header();
 	myhtml_breadcrumbs(NULL, NULL, "edit");
-
-
-
-
-
 
 
 	buf = malloc(CL);
@@ -332,10 +290,6 @@ wikinew(char *dir)
 	myhtml_new(dir);
 	myhtml_footer();
 }
-/*
- * error when directory is 2 levels deep aslso cleanup up free stuff
- * 
- */
 void
 wikinewform()
 {
@@ -388,8 +342,6 @@ wikinewform()
 		strlcpy(dir, decode, strlen(dir));
 		free(decode);
 
-
-		/* this is 2nd use, maybe this could be a util method */
 		char           *fullpath;
 		FILE           *newfile;
 		int 		fpl;
