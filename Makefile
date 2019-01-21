@@ -8,7 +8,7 @@ LDFLAGS+= -lnanomsg
 LDFLAGS+= -ljson-c
 LDFLAGS+= -lmtemplate
 
-all: wiki sample
+all: wiki sample admin test_forms
 
 SRCS= wiki.c main.c myhtml.c params.c forms.c util.c tmpl.c
 HDRS= wiki.h myhtml.h params.h forms.h util.h
@@ -18,6 +18,13 @@ wiki: $(SRCS) $(HDRS)
 
 sample: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c tmpl.c $(LDFLAGS)
+
+long_page: $@.c util.c
+	$(CC) $(CFLAGS) -o $@ $@.c tmpl.c myhtml.c util.c $(LDFLAGS)
+
+admin: $@.c util.c myhtml.c
+	$(CC) $(CFLAGS) -o $@ $@.c \
+		tmpl.c util.c myhtml.c $(LDFLAGS)
 
 # TEST 
 test_util: $@.c util.c
@@ -33,11 +40,9 @@ must: $@.c params.c
 strstrp: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c
 
-test_forms: $@.c forms.c forms.h
+test_forms: $@.c forms.c util.c myhtml.c
 	$(CC) $(CFLAGS) -o $@ $@.c \
-		forms.c util.c \
-		-L/usr/local/lib -I/usr/local/include \
-		-lnanomsg
+		tmpl.c forms.c util.c myhtml.c $(LDFLAGS)
 
 params_test: $@.c params.c params.h util.h util.c 
 	$(CC) $(CFLAGS) -o $@ $@.c \
@@ -79,19 +84,23 @@ indent:
 
 deploy: wiki must 
 	cp wiki ../htdocs/wiki.cgi
+	cp admin ../htdocs/admin.cgi
 	cp wikieditform.php ../htdocs/
 	cp must ../htdocs/must.cgi
 	cp sample ../htdocs/sample.cgi
+	cp long_page ../htdocs/long_page.cgi
+	cp test_forms ../htdocs/test_forms.cgi
 	cp -r static ../htdocs/
 	cp -r templates ../htdocs/
 
 clean:
 	rm -rf wiki
+	rm -rf admin
 	rm -f writef nanoclient mdtest params_test
 	rm -rf a.out *.BAK *.core
 	rm -rf tmpl
 	rm -rf test_tmpl
-	rm -rf sample
+	rm -rf sample long_page
 
 .PHONY: test clean indent deploy
 

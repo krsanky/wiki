@@ -96,6 +96,8 @@ wikiindex(char *dir_)
 
 	printf("<ul>\n");
 	while ((de = readdir(dir)) != NULL) {
+//		nlog("d_name:%s", de->d_name);
+//		printf("<li>d_name:%s</li>", de->d_name);
 		if (is_md(de)) {
 			if (dir_ == NULL) {
 				printf("\
