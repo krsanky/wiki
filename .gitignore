@@ -16,3 +16,4 @@ sample
 writef
 tmp123.txt
 test_errno
+test_sort
