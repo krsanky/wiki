@@ -97,7 +97,7 @@ char           *
 make_anchor(char *pagetype, char *dir, char *page, char *display)
 {
 	int 		max_l;
-	char           *a;
+	char           *a = NULL;
 
 	max_l = strlen("<a href='/wiki.cgi?edit&amp;d=%s&amp;p=%s'>(edit)</a>");
 	if (pagetype != NULL)

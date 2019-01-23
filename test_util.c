@@ -12,8 +12,12 @@ main()
 
 	printf("hey!\n");
 	ret = cat_strings(&buf, 2, "asd..", "qwe..");
-	printf("buf:%s\n", buf);
-
+	printf("ret:%d num:2 buf:%s\n", ret, buf);
 	free(buf);
+
+	ret = cat_strings(&buf, 1, "asd..");
+	printf("ret:%d num:1 buf:%s\n", ret, buf);
+	free(buf);
+
 	return 0;
 }

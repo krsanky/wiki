@@ -171,6 +171,10 @@ printsep()
 	printf("-----------------------------------------------------------------------\n");
 }
 
+/*
+ * returns 0 on success.
+ * caller needs to free buf if successful.
+ */
 int
 cat_strings(char **buf, int nargs,...)
 {

@@ -6,6 +6,7 @@ void 		errpage  (char *);
 void 		msgpage  (char *);
 
 void 		wikiindex(char *);
+void 		wikiindex2(char *);
 void 		wikiview (char *, char *);
 
 void 		wikiedit (char *, char *);

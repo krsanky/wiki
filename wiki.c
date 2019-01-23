@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <mkdio.h>
 #include <fcntl.h>
+#include <mtemplate.h>
 
 #include "wiki.h"
 #include "myhtml.h"
@@ -54,6 +55,26 @@ showenv()
 	printf("</pre>\n");
 }
 
+char           *
+fulldir(char *dir)
+{
+	char           *fulldir = NULL;
+	int 		dirl;
+
+	if (dir == NULL) {
+		fulldir = strdup(WIKI_ROOT);
+	} else {
+		dirl = sizeof(WIKI_ROOT) + strlen(dir) + 1;
+		fulldir = malloc(dirl);
+		if (fulldir == NULL)
+			return NULL;
+		strlcpy(fulldir, WIKI_ROOT, dirl);
+		strlcat(fulldir, "/", dirl);
+		strlcat(fulldir, dir, dirl);
+	}
+	return fulldir;
+
+}
 /*
  * Howto sort this?
  */
@@ -88,16 +109,14 @@ wikiindex(char *dir_)
 		errpage("could not open dir:");
 		return;
 	}
-	
-
 	http_headers();
 	myhtml_header();
 	myhtml_breadcrumbs(dir_, NULL, NULL);
 
 	printf("<ul>\n");
 	while ((de = readdir(dir)) != NULL) {
-//		nlog("d_name:%s", de->d_name);
-//		printf("<li>d_name:%s</li>", de->d_name);
+		//nlog("d_name:%s", de->d_name);
+		//printf("<li>d_name:%s</li>", de->d_name);
 		if (is_md(de)) {
 			if (dir_ == NULL) {
 				printf("\
@@ -137,6 +156,86 @@ dir:%s\
 	free(fulldir);
 }
 
+int
+make_mobject_dirlist(char *dir, struct mobject ** list)
+{
+	DIR            *d;
+	char           *fd;
+	struct dirent  *de;
+	int 		ret = 0;
+	struct mobject *files, *dirs;
+	char           *anchor;
+	char           *tmpdir;
+
+	printf("<h2>dir:%s</h2>", dir);
+	fd = fulldir(dir);
+	d = opendir(fd);
+	if (d == NULL) {
+		printf("could not open dir:%s", fd);
+		ret = -1;
+		goto end;
+	}
+	if ((*list = mdict_new()) == NULL) {
+		printf("mdict_new error");
+		ret = -1;
+		goto end;
+	}
+	mdict_insert_sd(*list, "files");
+	mdict_insert_sd(*list, "dirs");
+	files = mdict_item_s(*list, "files");
+	dirs = mdict_item_s(*list, "dirs");
+	while ((de = readdir(d)) != NULL) {
+		if (de->d_name[0] != '.') {
+			/*
+			 * char * make_anchor(char *pagetype, char *dir, char
+			 * *page, char *display)
+			 */
+			if (de->d_type == DT_DIR) {
+				if (dir != NULL)
+					ret = cat_strings(&tmpdir, 3, dir, "/", de->d_name);
+				else
+					ret = cat_strings(&tmpdir, 1, de->d_name);
+
+				anchor = make_anchor("index", tmpdir, NULL, de->d_name);
+				mdict_insert_ss(dirs, de->d_name, anchor);
+				free(anchor);
+				free(tmpdir);
+			} else if (is_md(de)) {
+				anchor = make_anchor("view", dir, de->d_name, de->d_name);
+				mdict_insert_ss(files, de->d_name, anchor);
+				free(anchor);
+			}
+		}
+	}
+
+end:
+	free(fd);
+	if (d != NULL)
+		closedir(d);
+	return ret;
+}
+
+void
+wikiindex2(char *dir)
+{
+	struct mobject *ns = NULL;
+	char 		fn       [] = "templates/dirlist.m";
+
+	http_headers();
+	myhtml_header();
+	myhtml_breadcrumbs(dir, NULL, NULL);
+
+	if (make_mobject_dirlist(dir, &ns) == 0) {
+		if (dir != NULL)
+			mdict_insert_ss(ns, "dir", dir);
+		else
+			mdict_insert_ss(ns, "dir", "");
+		tmpl_render(fn, ns);
+	}
+	myhtml_footer();
+	if (ns != NULL)
+		mobject_free(ns);
+}
 
 void
 wikiview(char *dir, char *page)
@@ -212,7 +311,7 @@ wikiedit(char *dir, char *page)
 	myhtml_breadcrumbs(dir, page, "edit");
 	myhtml_textarea_open();
 
-	while ((c = fgetc(mdfile)) != EOF) 
+	while ((c = fgetc(mdfile)) != EOF)
 		printf("%c", c);
 
 	if (mdfile != NULL)
