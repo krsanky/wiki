@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <dirent.h>
-#include <mtemplate.h> 
+#include <mtemplate.h>
 
 #include "util.h"
 #include "myhtml.h"
@@ -10,7 +10,7 @@
 int
 main()
 {
-	char		t[] = "templates/admin.m";
+	char 		t        [] = "templates/admin.m";
 	http_headers();
 	myhtml_header();
 	myhtml_breadcrumbs(NULL, NULL, NULL);
@@ -18,6 +18,3 @@ main()
 	myhtml_footer();
 	return EXIT_SUCCESS;
 }
-
-
-

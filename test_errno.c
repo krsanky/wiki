@@ -3,7 +3,8 @@
 #include <errno.h>
 #include <string.h>
 
-int fn1()
+int 
+fn1()
 {
 	return 42;
 }
@@ -11,12 +12,11 @@ int fn1()
 int
 main()
 {
-	FILE		*fp;
+	FILE           *fp;
 
 	fp = fopen("NOT-A-FILE.txt", "r");
 	if (fp == NULL) {
 		printf("fp == NULL err:%s\n", strerror(errno));
 	}
-
 	return EXIT_SUCCESS;
 }

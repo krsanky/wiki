@@ -58,7 +58,7 @@ params_parse_query(char *query, PARAMS * ps)
 	int 		idx = 0;
 
 	fstring = string = strdup(query);
-	if (string == NULL) 
+	if (string == NULL)
 		return -1;
 
 	while ((found = strsep(&string, "&")) != NULL) {
@@ -68,12 +68,12 @@ params_parse_query(char *query, PARAMS * ps)
 		key = strsep(&found, "=");
 
 		ps->params[idx].key = strdup(key);
-		if (ps->params[idx].key == NULL) 
+		if (ps->params[idx].key == NULL)
 			return -1;
 
 		if (found != NULL) {
 			ps->params[idx].val = strdup(found);
-			if (ps->params[idx].val == NULL) 
+			if (ps->params[idx].val == NULL)
 				return -1;
 		} else {
 			ps->params[idx].val = NULL;
