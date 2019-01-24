@@ -163,11 +163,10 @@ make_mobject_dirlist(char *dir, struct mobject ** list)
 	char           *fd;
 	struct dirent  *de;
 	int 		ret = 0;
-	struct mobject *files, *dirs;
+	struct mobject *pages, *dirs;
 	char           *anchor;
 	char           *tmpdir;
 
-	printf("<h2>dir:%s</h2>", dir);
 	fd = fulldir(dir);
 	d = opendir(fd);
 	if (d == NULL) {
@@ -180,9 +179,9 @@ make_mobject_dirlist(char *dir, struct mobject ** list)
 		ret = -1;
 		goto end;
 	}
-	mdict_insert_sd(*list, "files");
+	mdict_insert_sd(*list, "pages");
 	mdict_insert_sd(*list, "dirs");
-	files = mdict_item_s(*list, "files");
+	pages = mdict_item_s(*list, "pages");
 	dirs = mdict_item_s(*list, "dirs");
 	while ((de = readdir(d)) != NULL) {
 		if (de->d_name[0] != '.') {
@@ -202,7 +201,7 @@ make_mobject_dirlist(char *dir, struct mobject ** list)
 				free(tmpdir);
 			} else if (is_md(de)) {
 				anchor = make_anchor("view", dir, de->d_name, de->d_name);
-				mdict_insert_ss(files, de->d_name, anchor);
+				mdict_insert_ss(pages, de->d_name, anchor);
 				free(anchor);
 			}
 		}
