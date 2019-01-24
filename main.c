@@ -30,9 +30,9 @@ main(void)
 		return EXIT_FAILURE;
 	}
 	if (strlen(qs) < 1) {
-		wikiindex2(NULL);
+		wikiindex(NULL);
 	} else if (strcmp(ps->params[0].key, "index") == 0) {
-		wikiindex2(params_get(ps, "d"));
+		wikiindex(params_get(ps, "d"));
 	} else if (strcmp(ps->params[0].key, "view") == 0) {
 		page = params_get(ps, "p");
 		if (page != NULL) {

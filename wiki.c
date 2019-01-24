@@ -73,87 +73,6 @@ fulldir(char *dir)
 		strlcat(fulldir, dir, dirl);
 	}
 	return fulldir;
-
-}
-/*
- * Howto sort this?
- */
-void
-wikiindex(char *dir_)
-{
-	struct dirent  *de;
-	DIR            *dir;
-	int 		dirl = 0;
-	char           *fulldir = NULL;
-
-	if (dir_ == NULL) {
-		fulldir = WIKI_ROOT;
-	} else {
-		dirl = sizeof(WIKI_ROOT) + strlen(dir_) + 1;
-		fulldir = malloc(dirl);
-		strlcpy(fulldir, WIKI_ROOT, dirl);
-		strlcat(fulldir, "/", dirl);
-		strlcat(fulldir, dir_, dirl);
-	}
-	nlog("dir_:%s fulldir:%s", dir_, fulldir);
-
-	int 		test = open(fulldir, O_DIRECTORY);
-	if (test < 0) {
-		errpage("could not open dir:");
-		return;
-	}
-	close(test);
-
-	dir = opendir(fulldir);
-	if (dir == NULL) {
-		errpage("could not open dir:");
-		return;
-	}
-	http_headers();
-	myhtml_header();
-	myhtml_breadcrumbs(dir_, NULL, NULL);
-
-	printf("<ul>\n");
-	while ((de = readdir(dir)) != NULL) {
-		//nlog("d_name:%s", de->d_name);
-		//printf("<li>d_name:%s</li>", de->d_name);
-		if (is_md(de)) {
-			if (dir_ == NULL) {
-				printf("\
-<li>\
-<a href='/wiki.cgi?view&p=%s'>\
-%s\
-</a></li>\n", de->d_name, de->d_name);
-			} else {
-				printf("\
-<li>\
-<a href='/wiki.cgi?view&d=%s&p=%s'>\
-%s\
-</a></li>\n", dir_, de->d_name, de->d_name);
-
-			}
-
-		} else if ((de->d_type == DT_DIR) && (de->d_name[0] != '.')) {
-			if (dir_ == NULL) {
-				printf("\
-<li>\
-<a href='/wiki.cgi?index&d=%s'>\
-dir:%s\
-</a></li>\n", de->d_name, de->d_name);
-			} else {
-				printf("\
-<li>\
-<a href='/wiki.cgi?index&d=%s/%s'>\
-dir:%s\
-</a></li>\n", dir_, de->d_name, de->d_name);
-			}
-		}
-	}
-	printf("</ul>\n");
-	myhtml_footer();
-
-	closedir(dir);
-	free(fulldir);
 }
 
 int
@@ -185,10 +104,6 @@ make_mobject_dirlist(char *dir, struct mobject ** list)
 	dirs = mdict_item_s(*list, "dirs");
 	while ((de = readdir(d)) != NULL) {
 		if (de->d_name[0] != '.') {
-			/*
-			 * char * make_anchor(char *pagetype, char *dir, char
-			 * *page, char *display)
-			 */
 			if (de->d_type == DT_DIR) {
 				if (dir != NULL)
 					ret = cat_strings(&tmpdir, 3, dir, "/", de->d_name);
@@ -215,7 +130,7 @@ end:
 }
 
 void
-wikiindex2(char *dir)
+wikiindex(char *dir)
 {
 	struct mobject *ns = NULL;
 	char 		fn       [] = "templates/dirlist.m";
