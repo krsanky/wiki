@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdarg.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <mkdio.h>
@@ -14,26 +15,53 @@
 #include "settings.h"
 #include "util.h"
 #include "forms.h"
+#include "tmpl.h"
 
 extern char   **environ;
 
 void
-errpage(char *error)
+errpage(char *fmt,...)
 {
+	char		*error;
+	va_list 	ap;
+	char		*errerr = "error in errpage :(";
+	int		ret;
+
+	if ((error = malloc(256)) == NULL)
+		error = errerr;
+
+	va_start(ap, fmt);
+	ret = vsnprintf(error, 256, fmt, ap);
+	va_end(ap);
+
 	http_headers();
 	myhtml_header();
 	printf("<p style='color:red;'>%s</p>\n", error);
 	myhtml_footer();
+
+	free(error);
 }
 
 void
-msgpage(char *msg)
+msgpage(char *fmt,...)
 {
+	char		*msg;
+	va_list 	ap;
+	char		*errerr = "error in msgpage :(";
+	int		ret;
+
+	if ((msg = malloc(256)) == NULL)
+		msg = errerr;
+
+	va_start(ap, fmt);
+	ret = vsnprintf(msg, 256, fmt, ap);
+	va_end(ap);
+
 	http_headers();
 	myhtml_header();
-	myhtml_breadcrumbs(NULL, NULL, NULL);
 	printf("<p style='color:green;'>%s</p>\n", msg);
 	myhtml_footer();
+	free(msg);
 }
 
 void

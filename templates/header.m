@@ -22,6 +22,6 @@ h1,h2,h3 {
 </head>
 
 <body>
-<header><h1>Oldcode Wiki</h1></header>
+<header><h1><a href="/wiki.cgi">Oldcode Wiki</a></h1></header>
 
 <!-- /mtemplate header.m -->

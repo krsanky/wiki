@@ -3,15 +3,14 @@
 
 <textarea name="test_forms_text" 
 	rows='26' 
-	cols='80'>{{test_forms_text}}</textarea>
+	cols='80'></textarea>
 
 <br/>
 <button type='submit'>submit</button>
 
-<input type='hidden' name='page' value='{{page}}' />
+<input type='hidden' name='page' value='' />
 
-<input type='hidden' name='dir' value='{{dir}}'/>
-
+<input type='hidden' name='dir' value=''/>
 </form>
 
 

@@ -3,17 +3,25 @@
 #include <dirent.h>
 #include <mtemplate.h>
 
+#include "forms.h"
 #include "util.h"
 #include "myhtml.h"
 #include "tmpl.h"
 
+void
+display()
+{
+	char 		t        [] = "templates/menu.m";
+	http_headers();
+	myhtml_header();
+	printf("<h1>menu</h1>\n");
+	tmpl_render(t, NULL);
+	myhtml_footer();
+}
+
 int
 main()
 {
-	char 		t        [] = "templates/admin.m";
-	http_headers();
-	myhtml_header();
-	tmpl_render(t, NULL);
-	myhtml_footer();
+	display();
 	return EXIT_SUCCESS;
 }

@@ -2,8 +2,8 @@ void 		fatal    (const char *);
 void 		http_headers(void);
 void 		showenv  (void);
 
-void 		errpage  (char *);
-void 		msgpage  (char *);
+void 		errpage  (char *,...);
+void 		msgpage  (char *,...);
 
 void 		wikiindex(char *);
 void 		wikiindex2(char *);

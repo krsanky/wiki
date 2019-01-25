@@ -8,13 +8,16 @@ LDFLAGS+= -lnanomsg
 LDFLAGS+= -ljson-c
 LDFLAGS+= -lmtemplate
 
-all: wiki sample admin test_forms
+all: wiki admin menu sample test_forms
 
-SRCS= wiki.c main.c myhtml.c params.c forms.c util.c tmpl.c
-HDRS= wiki.h myhtml.h params.h forms.h util.h
+SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c
+HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h
 
-wiki: $(SRCS) $(HDRS)
-	$(CC) $(CFLAGS) -o $@ ${SRCS} $(LDFLAGS)
+wiki: main.c $(SRCS) $@.h $(HDRS)
+	$(CC) $(CFLAGS) -o $@ main.c ${SRCS} $(LDFLAGS)
+
+menu: $@.c $(SRCS) $(HDRS)
+	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 sample: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c tmpl.c $(LDFLAGS)
@@ -40,9 +43,8 @@ must: $@.c params.c
 strstrp: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c
 
-test_forms: $@.c forms.c util.c myhtml.c
-	$(CC) $(CFLAGS) -o $@ $@.c \
-		tmpl.c forms.c util.c myhtml.c $(LDFLAGS)
+test_forms: $@.c $(HDRS) $(SRCS)
+	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 params_test: $@.c params.c params.h util.h util.c 
 	$(CC) $(CFLAGS) -o $@ $@.c \
@@ -82,19 +84,20 @@ indent:
 	@echo "indenting all code..."
 	./indent-all.sh
 
-deploy: wiki must 
-	cp wiki ../htdocs/wiki.cgi
-	cp admin ../htdocs/admin.cgi
-	cp wikieditform.php ../htdocs/
-	cp must ../htdocs/must.cgi
-	cp sample ../htdocs/sample.cgi
-	cp long_page ../htdocs/long_page.cgi
-	cp test_forms ../htdocs/test_forms.cgi
-	cp -r static ../htdocs/
-	cp -r templates ../htdocs/
+deploy: all
+	cp -f wiki ../htdocs/wiki.cgi
+	cp -f menu ../htdocs/menu.cgi
+	cp -f admin ../htdocs/admin.cgi
+	cp -f wikieditform.php ../htdocs/
+	cp -f sample ../htdocs/sample.cgi
+	cp -f test_forms ../htdocs/test_forms.cgi
+	cp -f long_page ../htdocs/long_page.cgi 2>/dev/null || :
+	cp -rf static ../htdocs/
+	cp -rf templates ../htdocs/
 
 clean:
 	rm -rf wiki
+	rm -rf menu
 	rm -rf admin
 	rm -f writef nanoclient mdtest params_test
 	rm -rf a.out *.BAK *.core

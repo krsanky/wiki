@@ -130,7 +130,7 @@ tmpl_readfile(char *filename, char **tbuf)
 int
 tmpl_render(char *tmplfn, struct mobject * namespace)
 {
-	int 		ret = -1;
+	int 		ret;
 	char           *tbuf = NULL;
 	struct mtemplate *t = NULL;
 
@@ -139,17 +139,21 @@ tmpl_render(char *tmplfn, struct mobject * namespace)
 		/* printf("error ret:%d\n", ret); */
 		goto end;
 	}
+
 	/* parse-and-cache ? */
 	if ((t = mtemplate_parse(tbuf, NULL, 0)) == NULL) {
-		/* printf("mtemplate_parse error\n"); */
+		/* mtemplate_parse error */
+		ret = -2;
 		goto end;
 	}
-	if (mtemplate_run_stdio(t, namespace, stdout, NULL, 0) == -1) {
-		/* printf("error mtemplate_run_mbuf"); */
-		goto end;
-	}
-	ret = 0;
 
+	ret = mtemplate_run_stdio(t, namespace, stdout, NULL, 0);
+	if (ret == -1) {
+		/* error mtemplate_run_stdio */
+		goto end;
+	}
+
+	ret = 0;
 end:
 	free(tbuf);
 	if (t == NULL)

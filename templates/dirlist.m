@@ -5,7 +5,7 @@
 
 <section class="indent-1">
   <section>
-    <h2>dirs</h2>
+    <h3>dirs</h3>
     <ul>
     {{for d in dirs}}
     	<li>{{d.value}}</li>
@@ -14,7 +14,7 @@
   </section>
     
   <section class="right-section">
-    <h2>pages</h2>
+    <h3>pages</h3>
     <ul>
     {{for p in pages}}
     	<li>{{p.value}}</li>
