@@ -30,6 +30,9 @@ admin: $@.c util.c myhtml.c
 		tmpl.c util.c myhtml.c $(LDFLAGS)
 
 # TEST 
+test_breadcrumbs: $@.c breadcrumbs.c breadcrumbs.h
+	$(CC) $(CFLAGS) -o $@ $@.c breadcrumbs.c $(LDFLAGS)
+
 test_util: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c $(LDFLAGS)
 

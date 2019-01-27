@@ -14,10 +14,15 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-int
-make_breadcrumbs_mobject(struct mo)
-{
-	return 0;
-}
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <unistd.h>
+#include "breadcrumbs.h"
 
+struct mobject *
+make_breadcrumbs_mobject(char * dir, char * page)
+{
+	return NULL;
+}
 

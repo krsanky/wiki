@@ -14,10 +14,4 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-int
-make_breadcrumbs_mobject(struct mo)
-{
-	return 0;
-}
-
-
+struct mobject * make_breadcrumbs_mobject(char *, char *);
