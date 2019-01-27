@@ -12,14 +12,14 @@
 void
 display()
 {
-	int		ret;
-	struct mobject	*ctx = NULL;
+	int 		ret;
+	struct mobject *ctx = NULL;
 	char 		t        [] = "templates/test_forms.m";
 
 
-	/*<textarea name="test_forms_text" */
+	/* <textarea name="test_forms_text" */
 	if ((ctx = mdict_new()) == NULL)
-		errpage("err mdict_new()"); 
+		errpage("err mdict_new()");
 	msgpage("msg ? %s", "string...");
 
 

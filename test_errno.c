@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <string.h>
 
-int 
+int
 fn1()
 {
 	return 42;
