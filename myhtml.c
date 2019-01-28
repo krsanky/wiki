@@ -23,6 +23,8 @@
 #include "util.h"
 #include "tmpl.h"
 
+#include "breadcrumbs.h"
+
 #include "myhtml.h"
 
 void
@@ -109,6 +111,7 @@ myhtml_breadcrumbs2(char *dir, char *page, char *pagetype)
 	char 		lightgreen123[] = "#3c9";
 	char           *a;
 	struct mobject *ctx = NULL;
+	struct mobject *bcs = NULL;
 
 	if ((ctx = mdict_new()) == NULL) {
 		nlog("mdict_new() error");
@@ -119,66 +122,9 @@ myhtml_breadcrumbs2(char *dir, char *page, char *pagetype)
 	a = make_anchor("index", NULL, NULL, "root");
 	nlog("a url:%s", a);
 	mdict_insert_ss(ctx, "var1", "var1 example ...");
+	mdict_insert_ss(ctx, "color1", "#3c9");
 
-
-
-
-	char           *str = NULL;
-	char           *dir_;
-	char           *dir2;
-	char           *href_dir;
-	int 		hdl;
-	int 		run1 = 1;
-	if (dir != NULL) {
-		hdl = strlen(dir) + 1 + 1;
-		href_dir = malloc(strlen(dir) + 1 + 1);
-		nlog("dir:%s", dir);
-		href_dir[0] = '\0';
-		dir_ = malloc(strlen(dir) + 1);
-		strlcpy(dir_, dir, strlen(dir) + 1);
-		dir2 = dir_;
-
-		do {
-			nlog("142 here"); 
-			str = strsep(&dir2, "/");
-			if (run1)
-				run1 = 0;
-			else
-				strlcat(href_dir, "/", hdl);
-			strlcat(href_dir, str, hdl);
-			nlog("href_dir:%s str:%s dir2:%s", href_dir, str, dir2);
-/*
-			a = make_anchor("index", href_dir, NULL, str);
-			nlog("151 %s / ", a);
-			free(a);
-			*/
-
-		} while (dir2 != NULL);
-
-		free(dir_);
-		free(href_dir);
-	}
-	/*
-	if ((page != NULL) && (pagetype != NULL)) {
-		printf("%s ", page);
-		if (strcmp(pagetype, "view") == 0) {
-			a = make_anchor("edit", dir, page, "(edit)");
-			printf("%s\n", a);
-			free(a);
-		} else if (strcmp(pagetype, "edit") == 0) {
-			a = make_anchor("view", dir, page, "(view)");
-			printf("%s\n", a);
-			free(a);
-			a = make_anchor("delete", dir, page, "(delete)");
-			printf("%s\n", a);
-			free(a);
-		}
-	}
-	*/
-	/* else {
-		printf("%s  ", make_anchor("new", dir, NULL, "[new]"));
-		printf("%s  ", make_anchor("delete", dir, NULL, "[delete]"));
-	}*/
+	bcs = make_breadcrumbs_mobject(dir, page);
 
 
 	tmpl_render(fn, ctx);

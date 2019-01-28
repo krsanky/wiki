@@ -10,8 +10,8 @@ LDFLAGS+= -lmtemplate
 
 all: wiki admin menu sample test_forms
 
-SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c
-HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h
+SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c breadcrumbs.c
+HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h breadcrumbs.h
 
 wiki: main.c $(SRCS) $@.h $(HDRS)
 	$(CC) $(CFLAGS) -o $@ main.c ${SRCS} $(LDFLAGS)
@@ -25,9 +25,9 @@ sample: $@.c util.c
 long_page: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c tmpl.c myhtml.c util.c $(LDFLAGS)
 
-admin: $@.c util.c myhtml.c
+admin: $@.c util.c myhtml.c breadcrumbs.c
 	$(CC) $(CFLAGS) -o $@ $@.c \
-		tmpl.c util.c myhtml.c $(LDFLAGS)
+		tmpl.c util.c myhtml.c breadcrumbs.c $(LDFLAGS)
 
 # TEST 
 test_breadcrumbs: $@.c breadcrumbs.c breadcrumbs.h
@@ -108,5 +108,5 @@ clean:
 	rm -rf test_tmpl
 	rm -rf sample long_page
 
-.PHONY: test clean indent deploy
+.PHONY: test clean indent deploy all
 
