@@ -25,13 +25,14 @@
 #include <fcntl.h>
 #include <mtemplate.h>
 
-#include "wiki.h"
 #include "myhtml.h"
 #include "params.h"
 #include "settings.h"
 #include "util.h"
 #include "forms.h"
 #include "tmpl.h"
+
+#include "wiki.h"
 
 extern char   **environ;
 
@@ -119,6 +120,10 @@ fulldir(char *dir)
 	return fulldir;
 }
 
+/*
+ * Doesn't mostly strings (char *) need the double pointer thing?
+ * IOW "list" can be just a single pointer?
+ */
 int
 make_mobject_dirlist(char *dir, struct mobject ** list)
 {
