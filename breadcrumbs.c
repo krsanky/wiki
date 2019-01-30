@@ -30,7 +30,7 @@
 struct mobject *
 breadcrumbs_make(char *dir, char *page)
 {
-	struct mobject * bcs = NULL;
+	struct mobject *bcs = NULL;
 	char           *str = NULL;
 	char           *dir_;
 	char           *dir2;
@@ -77,12 +77,12 @@ breadcrumbs_make(char *dir, char *page)
 struct mobject *
 breadcrumbs_make_actions(char *dir, char *page, char *pagetype)
 {
-	char		*a;
-	struct mobject * actions = NULL;
+	char           *a;
+	struct mobject *actions = NULL;
 
 	if ((actions = mdict_new()) == NULL)
 		return NULL;
- 
+
 	if ((page != NULL) && (pagetype != NULL)) {
 		if (strcmp(pagetype, "view") == 0) {
 			a = make_url("edit", dir, page);
@@ -100,7 +100,3 @@ breadcrumbs_make_actions(char *dir, char *page, char *pagetype)
 
 	return actions;
 }
-
-
-
-

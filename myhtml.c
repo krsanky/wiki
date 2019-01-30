@@ -44,7 +44,7 @@ myhtml_footer()
 void
 myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 {
-	char 		t       [] = "templates/breadcrumbs.m";
+	char 		t        [] = "templates/breadcrumbs.m";
 	struct mobject *ctx = NULL;
 	struct mobject *bcs = NULL;
 	struct mobject *actions = NULL;

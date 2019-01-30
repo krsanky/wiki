@@ -177,7 +177,7 @@ void
 wikiindex(char *dir)
 {
 	struct mobject *ns = NULL;
-	char 		t       [] = "templates/dirlist.m";
+	char 		t        [] = "templates/dirlist.m";
 
 	http_headers();
 	myhtml_header();

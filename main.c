@@ -33,19 +33,17 @@ main(void)
 	PARAMS         *ps;
 	char           *page;
 	char           *dir;
-	char		*pagetype;
+	char           *pagetype;
 
 	qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
 		errpage("error with QUERY_STRING");
 		return EXIT_FAILURE;
 	}
-
 	if ((ps = params_create(NUM_HTTP_PARAMS, qs)) == NULL) {
 		errpage("error with QUERY_STRING");
 		return EXIT_FAILURE;
 	}
-
 	pagetype = ps->params[0].key;
 	nlog("main.c main() QUERY_STRING:%s pagetype:%s", qs, pagetype);
 
