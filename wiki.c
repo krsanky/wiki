@@ -177,18 +177,18 @@ void
 wikiindex(char *dir)
 {
 	struct mobject *ns = NULL;
-	char 		fn       [] = "templates/dirlist.m";
+	char 		t       [] = "templates/dirlist.m";
 
 	http_headers();
 	myhtml_header();
-	myhtml_breadcrumbs2(dir, NULL, NULL);
+	myhtml_breadcrumbs(dir, NULL, NULL);
 
 	if (make_mobject_dirlist(dir, &ns) == 0) {
 		if (dir != NULL)
 			mdict_insert_ss(ns, "dir", dir);
 		else
 			mdict_insert_ss(ns, "dir", "");
-		tmpl_render(fn, ns);
+		tmpl_render(t, ns);
 	}
 	myhtml_footer();
 	if (ns != NULL)
@@ -227,7 +227,7 @@ wikiview(char *dir, char *page)
 
 	http_headers();
 	myhtml_header();
-	myhtml_breadcrumbs2(dir, page, "view");
+	myhtml_breadcrumbs(dir, page, "view");
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS);
 	myhtml_footer();
 
@@ -266,7 +266,7 @@ wikiedit(char *dir, char *page)
 	}
 	http_headers();
 	myhtml_header();
-	myhtml_breadcrumbs2(dir, page, "edit");
+	myhtml_breadcrumbs(dir, page, "edit");
 	myhtml_textarea_open();
 
 	while ((c = fgetc(mdfile)) != EOF)
@@ -314,7 +314,7 @@ wikieditform()
 
 	http_headers();
 	myhtml_header();
-	myhtml_breadcrumbs2(NULL, NULL, "edit");
+	myhtml_breadcrumbs(NULL, NULL, "edit");
 
 
 	buf = malloc(CL);
@@ -345,7 +345,7 @@ wikinew(char *dir)
 {
 	http_headers();
 	myhtml_header();
-	myhtml_breadcrumbs2(dir, NULL, "new");
+	myhtml_breadcrumbs(dir, NULL, "new");
 	myhtml_new(dir);
 	myhtml_footer();
 }

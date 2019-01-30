@@ -18,11 +18,89 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
+#include <mtemplate.h>
+#include <string.h>
+#include <dirent.h>
+
+#include "myhtml.h"
+#include "util.h"
+
 #include "breadcrumbs.h"
 
 struct mobject *
-make_breadcrumbs_mobject(char * dir, char * page)
+breadcrumbs_make(char *dir, char *page)
 {
-	return NULL;
+	struct mobject * bcs = NULL;
+	char           *str = NULL;
+	char           *dir_;
+	char           *dir2;
+	char           *href_dir;
+	int 		hdl;
+	int 		run1 = 1;
+	char           *a;
+
+	if ((bcs = mdict_new()) == NULL)
+		return NULL;
+
+	a = make_url("index", NULL, NULL);
+	mdict_insert_ss(bcs, "root", a);
+
+	if (dir != NULL) {
+		hdl = strlen(dir) + 1 + 1;
+		href_dir = malloc(strlen(dir) + 1 + 1);
+		nlog("dir:%s", dir);
+		href_dir[0] = '\0';
+		dir_ = malloc(strlen(dir) + 1);
+		strlcpy(dir_, dir, strlen(dir) + 1);
+		dir2 = dir_;
+		nlog("dir2:%s", dir2);
+
+		do {
+			str = strsep(&dir2, "/");
+			if (run1)
+				run1 = 0;
+			else
+				strlcat(href_dir, "/", hdl);
+			strlcat(href_dir, str, hdl);
+			nlog("href_dir:%s str:%s dir2:%s", href_dir, str, dir2);
+
+			a = make_url("index", href_dir, NULL);
+			mdict_insert_ss(bcs, str, a);
+		} while (dir2 != NULL);
+
+		free(dir_);
+		free(href_dir);
+	}
+	return bcs;
 }
+
+struct mobject *
+breadcrumbs_make_actions(char *dir, char *page, char *pagetype)
+{
+	char		*a;
+	struct mobject * actions = NULL;
+
+	if ((actions = mdict_new()) == NULL)
+		return NULL;
+ 
+	if ((page != NULL) && (pagetype != NULL)) {
+		if (strcmp(pagetype, "view") == 0) {
+			a = make_url("edit", dir, page);
+			mdict_insert_ss(actions, "(edit)", a);
+		} else if (strcmp(pagetype, "edit") == 0) {
+			a = make_url("view", dir, page);
+			mdict_insert_ss(actions, "(view)", a);
+			a = make_url("delete", dir, page);
+			mdict_insert_ss(actions, "(delete)", a);
+		}
+	} else {
+		mdict_insert_ss(actions, "[new]", make_url("new", dir, NULL));
+		mdict_insert_ss(actions, "[delete]", make_url("delete", dir, NULL));
+	}
+
+	return actions;
+}
+
+
+
 

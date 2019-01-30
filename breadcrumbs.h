@@ -14,4 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-struct mobject * make_breadcrumbs_mobject(char *, char *);
+struct mobject * breadcrumbs_make(char *, char *);
+struct mobject * breadcrumbs_make_actions(char *, char *, char *);
+
+

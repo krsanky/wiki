@@ -33,40 +33,44 @@ main(void)
 	PARAMS         *ps;
 	char           *page;
 	char           *dir;
+	char		*pagetype;
 
 	qs = getenv("QUERY_STRING");
 	if (qs == NULL) {
 		errpage("error with QUERY_STRING");
 		return EXIT_FAILURE;
 	}
-	nlog("main.c main() QUERY_STRING:%s", qs);
 
 	if ((ps = params_create(NUM_HTTP_PARAMS, qs)) == NULL) {
 		errpage("error with QUERY_STRING");
 		return EXIT_FAILURE;
 	}
+
+	pagetype = ps->params[0].key;
+	nlog("main.c main() QUERY_STRING:%s pagetype:%s", qs, pagetype);
+
 	if (strlen(qs) < 1) {
 		wikiindex(NULL);
-	} else if (strcmp(ps->params[0].key, "index") == 0) {
+	} else if (strcmp(pagetype, "index") == 0) {
 		wikiindex(params_get(ps, "d"));
-	} else if (strcmp(ps->params[0].key, "view") == 0) {
+	} else if (strcmp(pagetype, "view") == 0) {
 		page = params_get(ps, "p");
 		if (page != NULL) {
 			nlog("main view param:%s", page);
 			wikiview(params_get(ps, "d"), page);
 		} else
 			errpage("param p (page) not found");
-	} else if (strcmp(ps->params[0].key, "edit") == 0) {
+	} else if (strcmp(pagetype, "edit") == 0) {
 		page = params_get(ps, "p");
 		dir = params_get(ps, "d");
 		wikiedit(dir, page);
-	} else if (strcmp(ps->params[0].key, "editform") == 0) {
+	} else if (strcmp(pagetype, "editform") == 0) {
 		wikieditform();
-	} else if (strcmp(ps->params[0].key, "new") == 0) {
+	} else if (strcmp(pagetype, "new") == 0) {
 		wikinew(params_get(ps, "d"));
-	} else if (strcmp(ps->params[0].key, "newform") == 0) {
+	} else if (strcmp(pagetype, "newform") == 0) {
 		wikinewform();
-	} else if (strcmp(ps->params[0].key, "delete") == 0) {
+	} else if (strcmp(pagetype, "delete") == 0) {
 		page = params_get(ps, "p");
 		dir = params_get(ps, "d");
 		wikidelete(dir, page);

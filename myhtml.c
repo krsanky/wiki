@@ -44,94 +44,38 @@ myhtml_footer()
 void
 myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 {
-	char           *str = NULL;
-	char           *dir_;
-	char           *dir2;
-	char           *href_dir;
-	int 		hdl;
-	int 		run1 = 1;
-	char           *a;
-
-	a = make_anchor("index", NULL, NULL, "root");
-	printf("/ %s / ", a);
-	free(a);
-
-	if (dir != NULL) {
-		hdl = strlen(dir) + 1 + 1;
-		href_dir = malloc(strlen(dir) + 1 + 1);
-		nlog("dir:%s", dir);
-		href_dir[0] = '\0';
-		dir_ = malloc(strlen(dir) + 1);
-		strlcpy(dir_, dir, strlen(dir) + 1);
-		dir2 = dir_;
-
-		do {
-			str = strsep(&dir2, "/");
-			if (run1)
-				run1 = 0;
-			else
-				strlcat(href_dir, "/", hdl);
-			strlcat(href_dir, str, hdl);
-			nlog("href_dir:%s str:%s dir2:%s", href_dir, str, dir2);
-
-			a = make_anchor("index", href_dir, NULL, str);
-			printf(" %s / ", a);
-			free(a);
-
-		} while (dir2 != NULL);
-
-		free(dir_);
-		free(href_dir);
-
-	}
-	if ((page != NULL) && (pagetype != NULL)) {
-		printf("%s ", page);
-		if (strcmp(pagetype, "view") == 0) {
-			a = make_anchor("edit", dir, page, "(edit)");
-			printf("%s\n", a);
-			free(a);
-		} else if (strcmp(pagetype, "edit") == 0) {
-			a = make_anchor("view", dir, page, "(view)");
-			printf("%s\n", a);
-			free(a);
-			a = make_anchor("delete", dir, page, "(delete)");
-			printf("%s\n", a);
-			free(a);
-		}
-	} else {
-		printf("%s  ", make_anchor("new", dir, NULL, "[new]"));
-		printf("%s  ", make_anchor("delete", dir, NULL, "[delete]"));
-	}
-	printf("<hr/>\n");
-}
-void
-myhtml_breadcrumbs2(char *dir, char *page, char *pagetype)
-{
-	char 		fn       [] = "templates/breadcrumbs.m";
-	char 		lightgreen123[] = "#3c9";
-	char           *a;
+	char 		t       [] = "templates/breadcrumbs.m";
 	struct mobject *ctx = NULL;
 	struct mobject *bcs = NULL;
+	struct mobject *actions = NULL;
 
 	if ((ctx = mdict_new()) == NULL) {
 		nlog("mdict_new() error");
-		tmpl_render(fn, NULL);
-		return;
+		goto end;
 	}
+	if (page != NULL)
+		mdict_insert_ss(ctx, "page", page);
+	else
+		mdict_insert_ss(ctx, "page", "");
 
-	a = make_anchor("index", NULL, NULL, "root");
-	nlog("a url:%s", a);
-	mdict_insert_ss(ctx, "var1", "var1 example ...");
-	mdict_insert_ss(ctx, "color1", "#3c9");
+	bcs = breadcrumbs_make(dir, page);
+	if (bcs == NULL) {
+		nlog("breadcrumbs_make() error");
+		goto end;
+	}
+	mdict_insert_s(ctx, "breadcrumbs", bcs);
 
-	bcs = make_breadcrumbs_mobject(dir, page);
+	actions = breadcrumbs_make_actions(dir, page, pagetype);
+	if (actions == NULL) {
+		nlog("breadcrumbs_make_actions() error");
+		goto end;
+	}
+	mdict_insert_s(ctx, "actions", actions);
 
-
-	tmpl_render(fn, ctx);
-	free(a);
+	tmpl_render(t, ctx);
+end:
 	mobject_free(ctx);
 }
-
 
 /*
  * <a href='/wiki.cgi?edit&d=%s&p=%s'>(edit)</a> ", dir, page); Return value

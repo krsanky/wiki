@@ -5,9 +5,18 @@
 	}
 </style>
 
-<div style="breadcrumbs">
-/ <a style='color: #3c9;' href="/wiki.cgi?index">root</a> /
-/ <a style='color: #9c3;' href="/wiki.cgi?index">{{var1}}</a> /
+<div class="breadcrumbs">
+{{for b in breadcrumbs}}
+/ <a style="color: red;" href="{{b.value}}">{{b.key}}</a> 
+{{endfor}}
+{{if page}}/ {{page}}{{endif}}
+&nbsp;
+&nbsp;
+&nbsp;
+{{for a in actions}}
+<a style="color: red;" href="{{a.value}}">{{a.key}}</a>
+{{endfor}}
 </div>
+<hr/>
 
 <!-- /mtemplate breacrumbs.m -->
