@@ -120,7 +120,7 @@ self_redirect(char *main, char *dir, char *page)
 		redirl += strlen(dir) + strlen("d=&");
 	if (page != NULL)
 		redirl += strlen(page) + strlen("p=&");
-	nlog("main:%s dir:%s page:%s redirl:%d", main, dir, page, redirl);
+	nlog("self_redirect(): main:%s dir:%s page:%s redirl:%d", main, dir, page, redirl);
 	if ((redir = malloc(redirl)) != NULL) {
 		strlcpy(redir, "/wiki.cgi?index&", redirl);
 		if (dir != NULL) {

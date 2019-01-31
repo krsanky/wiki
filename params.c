@@ -23,8 +23,9 @@
 #include <db.h>
 #include <dirent.h>
 
-#include "params.h"
 #include "util.h"
+
+#include "params.h"
 
 PARAMS         *
 params_create(int num, char *qs)

@@ -390,6 +390,8 @@ wikinewform()
 
 		page = params_get(ps, "page");
 		dir = params_get(ps, "dir");
+		if (dir == NULL)
+			dir = "";
 		nlog("make new file dir:%s page:%s", dir, page);
 		/*
 		 * dir is http/html encode ? params_urldecode(char *s, char
@@ -402,8 +404,8 @@ wikinewform()
 		}
 		ret = params_urldecode(dir, decode);
 		nlog("params_urldecode: ret:%d decode:%s", ret, decode);
-		nlog("strlen dir:%d", strlen(dir));
-		strlcpy(dir, decode, strlen(dir));
+		nlog("dir:%s  strlen(dir):%d sizeof(dir):%d", dir, strlen(dir), sizeof(dir));
+		strlcpy(dir, decode, sizeof(dir));
 		free(decode);
 
 		char           *fullpath;
@@ -432,10 +434,10 @@ wikinewform()
 		if (newfile != NULL)
 			fclose(newfile);
 
-		params_free(ps);
 
-		/* redirect(); */
-		msgpage("new file created");
+		/* msgpage("new file created"); */
+		self_redirect("index", dir, NULL);
+		params_free(ps);
 		return;
 	}
 	errpage("error creating new file");

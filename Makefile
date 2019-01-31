@@ -49,6 +49,8 @@ strstrp: $@.c util.c
 test_forms: $@.c $(HDRS) $(SRCS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
+test_params: $@.c params.c params.h util.c
+	$(CC) $(CFLAGS) -o $@ $@.c params.c util.c $(LDFLAGS)
 params_test: $@.c params.c params.h util.h util.c 
 	$(CC) $(CFLAGS) -o $@ $@.c \
 		params.c util.c \
