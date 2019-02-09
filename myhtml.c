@@ -27,6 +27,19 @@
 
 #include "myhtml.h"
 
+static char		*_altstyle = NULL;
+void
+myhtml_set_altstyle(char *s)
+{
+	_altstyle = s;
+}
+
+void
+myhtml_test_altstyle()
+{
+	printf("<p>_altstyle:%s</p>\n", _altstyle);
+}
+
 void
 myhtml_header()
 {

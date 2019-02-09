@@ -14,6 +14,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+void		myhtml_set_altstyle(char *);
+void		myhtml_test_altstyle();
 void 		myhtml_header();
 void 		myhtml_footer();
 void 		myhtml_breadcrumbs(char *, char *, char *);

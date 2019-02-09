@@ -217,8 +217,10 @@ wikiview(char *dir, char *page)
 	strlcpy(fullpath, WIKI_ROOT, fpl);
 	strlcat(fullpath, "/", fpl);
 	if (dir != NULL) {
-		strlcat(fullpath, dir, fpl);
-		strlcat(fullpath, "/", fpl);
+		if (strlen(dir) != 0) {
+			strlcat(fullpath, dir, fpl);
+			strlcat(fullpath, "/", fpl);
+		}
 	}
 	strlcat(fullpath, page, fpl);
 	nlog("wikiview fullpath:%s", fullpath);
@@ -405,7 +407,8 @@ wikinewform()
 		ret = params_urldecode(dir, decode);
 		nlog("params_urldecode: ret:%d decode:%s", ret, decode);
 		nlog("dir:%s  strlen(dir):%d sizeof(dir):%d", dir, strlen(dir), sizeof(dir));
-		strlcpy(dir, decode, sizeof(dir));
+		strlcpy(dir, decode, strlen(dir)+1);
+		nlog("after strlcpy- dir:%s  strlen(dir):%d sizeof(dir):%d", dir, strlen(dir), sizeof(dir));
 		free(decode);
 
 		char           *fullpath;

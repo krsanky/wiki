@@ -45,7 +45,7 @@ breadcrumbs_make(char *dir, char *page)
 	a = make_url("index", NULL, NULL);
 	mdict_insert_ss(bcs, "root", a);
 
-	if (dir != NULL) {
+	if ((dir != NULL) && (strlen(dir) > 0)) {
 		hdl = strlen(dir) + 1 + 1;
 		href_dir = malloc(strlen(dir) + 1 + 1);
 		nlog("dir:%s", dir);
