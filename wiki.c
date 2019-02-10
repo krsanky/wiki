@@ -392,24 +392,21 @@ wikinewform()
 
 		page = params_get(ps, "page");
 		dir = params_get(ps, "dir");
-		if (dir == NULL)
-			dir = "";
 		nlog("make new file dir:%s page:%s", dir, page);
-		/*
-		 * dir is http/html encode ? params_urldecode(char *s, char
-		 * *dec)
-		 */
-		decode = malloc(strlen(dir) + 1);
-		if (decode == NULL) {
-			errpage("malloc error");
-			return;
+		 
+		if (dir != NULL) {
+			decode = malloc(strlen(dir) + 1);
+			if (decode == NULL) {
+				errpage("malloc error");
+				return;
+			}
+			ret = params_urldecode(dir, decode);
+			nlog("params_urldecode: ret:%d decode:%s", ret, decode);
+			nlog("dir:%s  strlen(dir):%d sizeof(dir):%d", dir, strlen(dir), sizeof(dir));
+			strlcpy(dir, decode, strlen(dir)+1);
+			nlog("after strlcpy- dir:%s  strlen(dir):%d sizeof(dir):%d", dir, strlen(dir), sizeof(dir));
+			free(decode);
 		}
-		ret = params_urldecode(dir, decode);
-		nlog("params_urldecode: ret:%d decode:%s", ret, decode);
-		nlog("dir:%s  strlen(dir):%d sizeof(dir):%d", dir, strlen(dir), sizeof(dir));
-		strlcpy(dir, decode, strlen(dir)+1);
-		nlog("after strlcpy- dir:%s  strlen(dir):%d sizeof(dir):%d", dir, strlen(dir), sizeof(dir));
-		free(decode);
 
 		char           *fullpath;
 		FILE           *newfile;
