@@ -22,3 +22,5 @@ long_page
 menu
 test_breadcrumbs
 test_params
+test_strings
+test_altstyle
