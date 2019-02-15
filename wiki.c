@@ -235,7 +235,7 @@ wikiview(char *dir, char *page)
 	http_headers();
 	myhtml_header();
 	myhtml_breadcrumbs(dir, page, "view");
-	val = markdown(mmiot, stdout, MKD_GITHUBTAGS);
+	val = markdown(mmiot, stdout, MKD_GITHUBTAGS|MKD_FENCEDCODE);
 	myhtml_footer();
 
 end:
