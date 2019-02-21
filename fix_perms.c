@@ -12,7 +12,6 @@
 void
 display()
 {
-	int 		ret;
 	struct mobject *ctx = NULL;
 	char 		t        [] = "templates/fix_perms.m";
 
