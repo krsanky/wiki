@@ -24,6 +24,8 @@
 
 #include "params.h"
 #include "mtemplate.h"
+#include "myhtml.h"
+#include "settings.h"
 
 #include "tmpl.h"
 
@@ -105,18 +107,15 @@ tmpl_readfile(char *filename, char **tbuf)
 	size_t 		tlen = 0;
 	int 		len = 0;
 	char 		buf      [8192];
-	/* char           *template = NULL; */
 
 	if ((tfd = open(filename, O_RDONLY)) == -1) {
-		/* printf("err opening template file:%s", t__); */
 		return -1;
 	}
-	/* read file into char * template */
+
 	for (;;) {
 		if ((len = read(tfd, buf, sizeof(buf))) == -1) {
 			if (errno == EINTR || errno == EAGAIN)
 				continue;
-			/* err(1, "read"); */
 			return -1;
 		}
 		if (len == 0) {
@@ -127,10 +126,6 @@ tmpl_readfile(char *filename, char **tbuf)
 			return -1;
 		}
 		if ((*tbuf = realloc(*tbuf, tlen + len + 1)) == NULL) {
-			/*
-			errx(1, "realloc(*tbuf, %zu) failed",
-			     tlen + len + 1);
-			*/
 			return -1;
 		}
 		memcpy(*tbuf + tlen, buf, len);
@@ -173,3 +168,35 @@ end:
 		mtemplate_free(t);
 	return ret;
 }
+
+char *
+tmpl_path(char * t)
+{
+	int		l = 0;
+	char		*alt = myhtml_get_altstyle();
+	char		*tp;
+
+	l += strlen(WIKI_ROOT);
+	l += strlen("/");
+	if (alt != NULL) {
+		l += strlen(alt);
+		l += strlen("/");
+	}
+	l += strlen(t);
+	l += 1;
+	
+	if ((tp = malloc(l)) == NULL)
+		return NULL;
+
+	strlcpy(tp, WIKI_ROOT, l);
+	strlcat(tp, "/", l);
+	if (alt != NULL) {
+		strlcat(tp, alt, l);
+		strlcat(tp, "/", l);
+	}
+	strlcat(tp, t, l);
+
+	return tp;
+}
+
+

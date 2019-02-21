@@ -15,6 +15,7 @@
  */
 
 void		myhtml_set_altstyle(char *);
+char		*myhtml_get_altstyle();
 void		myhtml_test_altstyle();
 void 		myhtml_header();
 void 		myhtml_footer();
