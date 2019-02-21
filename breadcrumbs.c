@@ -28,7 +28,7 @@
 #include "breadcrumbs.h"
 
 struct mobject *
-breadcrumbs_make(char *dir, char *page)
+breadcrumbs_make(char *dir)
 {
 	struct mobject *bcs = NULL;
 	char           *str = NULL;
@@ -95,7 +95,8 @@ breadcrumbs_make_actions(char *dir, char *page, char *pagetype)
 		}
 	} else {
 		mdict_insert_ss(actions, "[new]", make_url("new", dir, NULL));
-		mdict_insert_ss(actions, "[delete]", make_url("delete", dir, NULL));
+		mdict_insert_ss(actions, "[new-d]", make_url("newdir", dir, NULL));
+		mdict_insert_ss(actions, "[del-d]", make_url("deldir", dir, NULL));
 	}
 
 	return actions;

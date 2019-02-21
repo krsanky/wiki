@@ -72,6 +72,10 @@ main(void)
 		page = params_get(ps, "p");
 		dir = params_get(ps, "d");
 		wikidelete(dir, page);
+	} else if (strcmp(pagetype, "deldir") == 0) {
+		msgpage("deldir");
+	} else if (strcmp(pagetype, "newdir") == 0) {
+		msgpage("newdir");
 	}
 	params_free(ps);
 	return EXIT_SUCCESS;

@@ -20,7 +20,7 @@ menu: $@.c $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 sample: $@.c util.c
-	$(CC) $(CFLAGS) -o $@ $@.c util.c tmpl.c $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 long_page: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c tmpl.c myhtml.c util.c $(LDFLAGS)
@@ -29,11 +29,14 @@ admin: $@.c util.c myhtml.c breadcrumbs.c
 	$(CC) $(CFLAGS) -o $@ $@.c \
 		tmpl.c util.c myhtml.c breadcrumbs.c $(LDFLAGS)
 
+fix_perms: $(SRCS) $@.c $(HDRS)
+	$(CC) $(CFLAGS) -o $@ $@.c ${SRCS} $(LDFLAGS)
+
 # TEST 
 test_breadcrumbs: $@.c breadcrumbs.c breadcrumbs.h
 	$(CC) $(CFLAGS) -o $@ $@.c breadcrumbs.c $(LDFLAGS)
 
-test_altstyle: $@.c 
+test_altstyle: $@.c $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 test_util: $@.c util.c
@@ -99,10 +102,11 @@ deploy: all
 	cp -f wikieditform.php ../htdocs/
 	cp -f sample ../htdocs/sample.cgi
 	cp -f test_forms ../htdocs/test_forms.cgi
-	cp -f test_altstyle ../htdocs/test_altstyle.cgi
+	cp -f test_altstyle ../htdocs/test_altstyle.cgi 2>/dev/null || :
 	cp -f long_page ../htdocs/long_page.cgi 2>/dev/null || :
 	cp -rf static ../htdocs/
 	cp -rf templates ../htdocs/
+	cp -f fix_perms ../htdocs/fix_perms.cgi 2>/dev/null 
 
 clean:
 	rm -rf wiki
@@ -112,7 +116,7 @@ clean:
 	rm -rf a.out *.BAK *.core
 	rm -rf tmpl
 	rm -rf test_tmpl
-	rm -rf sample long_page
+	rm -rf sample long_page test_altstyle
 
 .PHONY: test clean indent deploy all
 

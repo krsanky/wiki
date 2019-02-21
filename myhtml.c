@@ -28,10 +28,18 @@
 #include "myhtml.h"
 
 static char		*_altstyle = NULL;
+
 void
 myhtml_set_altstyle(char *s)
 {
+	free(_altstyle);
 	_altstyle = s;
+}
+
+char *
+myhtml_get_altstyle()
+{
+	return _altstyle;
 }
 
 void
@@ -71,7 +79,7 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 	else
 		mdict_insert_ss(ctx, "page", "");
 
-	bcs = breadcrumbs_make(dir, page);
+	bcs = breadcrumbs_make(dir);
 	if (bcs == NULL) {
 		nlog("breadcrumbs_make() error");
 		goto end;
