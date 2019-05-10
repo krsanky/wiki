@@ -478,28 +478,3 @@ wikidelete(char *dir, char *page)
 	errpage("error deleting");
 }
 
-/*
-typedef struct wikipage {
-	char 		url      [256];
-	char 		name     [128];
-} 		Page;
-*/
-int
-GetPages(FILE * dir, Page ** ps)
-{
-	/*
-		int 		ratesBufSize = 9;
-		*rates = malloc(sizeof(Rate) * ratesBufSize);
-	*/
-	/* just read the file(no need to open) */
-
-	return 0;
-	//line_count / 2;
-}
-
-int
-AlphaPages(Page ** ps)
-{
-	/* iterate thru and keep moving A to front */
-	return 0;
-}

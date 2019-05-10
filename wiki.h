@@ -33,9 +33,3 @@ void 		wikinewform();
 
 void 		wikidelete(char *, char *);
 
-typedef struct wikipage {
-	char 		url      [256];
-	char 		name     [128];
-} 		Page;
-int 		GetPages  (FILE *, Page **);
-int 		AlphaPages(Page **);
