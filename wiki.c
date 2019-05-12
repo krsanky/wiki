@@ -297,11 +297,19 @@ wikieditform()
 	char           *CL_;
 	char           *CT;
 	int 		CL;
-	char           *buf;
-	int 		l = 0;
-	char           *boundary;
+	char		*buf;
+	int		l;
+	char		*txt;
 	PARAMS         *ps;
-	int 		NPARAMS = 4;
+	int 		NPARAMS = 5;
+	char		*decode;
+	int		ret;
+
+	char           *fullpath;
+	char		*page;
+	char		*dir;
+	FILE           *editfile;
+	int 		fpl;
 
 	RM = getenv("REQUEST_METHOD");
 	CL_ = getenv("CONTENT_LENGTH");
@@ -313,38 +321,67 @@ wikieditform()
 
 	nlog("editform() RM[%s] CT[%s] CL[%d]", RM, CT, CL);
 
-	nlog("pre parse_b...");
-	boundary = parse_boundary(CT);
-	nlog("post parse_b...");
-
-	ps = params_create(NPARAMS, NULL);
-
 	http_headers();
 	myhtml_header();
 	myhtml_breadcrumbs(NULL, NULL, "edit");
 
 
+	printf("<p>editform() RM[%s] CT[%s] CL[%d]</p>\n", RM, CT, CL);
+
 	buf = malloc(CL);
-	/* try using CONTENT_LENGTH */
 	if (buf != NULL) {
 		l = fread(buf, 1, CL, stdin);
-		/*
-		params_parse_multipart_POST(buf, boundary, params, NPARAMS);
-		*/
+		nlog("buf:%s", buf);
+		ps = params_create(NPARAMS, buf);
+		free(buf);
+		txt = params_get(ps, "wikiformtext");
+		decode = malloc(strlen(txt)+1);  
+		
+		if (decode == NULL) {
+			errpage("malloc error");
+			return;
+		}
+		ret = params_urldecode(txt, decode);
+		nlog("txt decoded:%s", decode);
+
+		page = params_get(ps, "page");
+		dir = params_get(ps, "dir");
+		nlog("update file dir:%s page:%s", dir, page);
+
+
+		fpl = sizeof(WIKI_ROOT) + 1 + strlen(page);
+		if (dir != NULL)
+			fpl = fpl + strlen(dir) + 1;
+		fullpath = malloc(fpl);
+		strlcpy(fullpath, WIKI_ROOT, fpl);
+		strlcat(fullpath, "/", fpl);
+		if (dir != NULL) {
+			strlcat(fullpath, dir, fpl);
+			strlcat(fullpath, "/", fpl);
+		}
+		strlcat(fullpath, page, fpl);
+		nlog("wikieditform:: fullpath:%s", fullpath);
+
+		// ----- wiki_writefile(fullpath_str
+		editfile = fopen(fullpath, "a");
+		free(fullpath);
+		if (editfile == NULL) {
+			errpage("cannot edit file:");
+			return;
+		}
+		fputs(decode, editfile);
+		if (editfile != NULL)
+			fclose(editfile);
+
+
+		/* msgpage("new file created"); */
+		self_redirect("index", dir, NULL);
 	}
-	printf("<pre>\n");
-	printf("boundary[%s]\n", boundary);
-	printf("buf:\n%s\n", buf);
-	printf("</pre>\n");
 
-	printf("<hr/>\n");
-	showenv();
+
+
+	//showenv();
 	myhtml_footer();
-
-	params_free(ps);
-	free(boundary);
-	free(buf);
-	free(NULL);
 }
 
 void
@@ -438,6 +475,7 @@ wikinewform()
 		/* msgpage("new file created"); */
 		self_redirect("index", dir, NULL);
 		params_free(ps);
+		free(dir); /* ??? */
 		return;
 	}
 	errpage("error creating new file");

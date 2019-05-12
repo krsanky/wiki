@@ -183,22 +183,3 @@ params_urldecode(char *s, char *dec)
 	return o - dec;
 }
 
-/*
-int
-params_parse_multipart_POST(char *text, char *boundary, PARAM * params, int max_params)
-{
-	printf("<pre>\n");
-	printf("params_parse_multipart_POST(---------\n");
-	printf("BODY:\n");
-	printf("%s\n===\n", text);
-	char           *start;
-	char           *end;
-	start = strstr(text, boundary);
-	printf("match1[[[%.120s]]]\n", start);
-	end = strstr(start, boundary);
-
-
-	printf("</pre>\n");
-	return 0;
-}
-*/

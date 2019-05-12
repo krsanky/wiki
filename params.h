@@ -34,4 +34,3 @@ char           *params_get(PARAMS *, char *);
 
 int 		params_testdb();
 int 		isone_formdata_header(char *);
-/* int 		params_parse_multipart_POST(char *, char *, PARAM *, int); */
