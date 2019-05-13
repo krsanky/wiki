@@ -49,7 +49,7 @@ myhtml_test_altstyle()
 }
 
 void
-myhtml_header()
+myhtml_header(struct mobject *ctx)
 {
 	char 		fn       [] = "templates/header.m";
 	tmpl_render(fn, NULL);

@@ -28,7 +28,7 @@ main()
 {
 	char 		t        [] = "templates/admin.m";
 	http_headers();
-	myhtml_header();
+	myhtml_header(NULL);
 	tmpl_render(t, NULL);
 	myhtml_footer();
 	return EXIT_SUCCESS;

@@ -52,7 +52,7 @@ errpage(char *fmt,...)
 	va_end(ap);
 
 	http_headers();
-	myhtml_header();
+	myhtml_header(NULL);
 	printf("<p style='color:red;'>%s</p>\n", error);
 	myhtml_footer();
 
@@ -75,7 +75,7 @@ msgpage(char *fmt,...)
 	va_end(ap);
 
 	http_headers();
-	myhtml_header();
+	myhtml_header(NULL);
 	printf("<p style='color:green;'>%s</p>\n", msg);
 	myhtml_footer();
 	free(msg);
@@ -185,7 +185,7 @@ wikiindex(char *dir)
 	char 		t        [] = "templates/dirlist.m";
 
 	http_headers();
-	myhtml_header();
+	myhtml_header(NULL);
 	myhtml_breadcrumbs(dir, NULL, NULL);
 
 	if (make_mobject_dirlist(dir, &ns) == 0) {
@@ -233,7 +233,7 @@ wikiview(char *dir, char *page)
 	mmiot = mkd_in(mdfile, 0);
 
 	http_headers();
-	myhtml_header();
+	myhtml_header(NULL);
 	myhtml_breadcrumbs(dir, page, "view");
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS|MKD_FENCEDCODE);
 	myhtml_footer();
@@ -272,7 +272,7 @@ wikiedit(char *dir, char *page)
 		return;
 	}
 	http_headers();
-	myhtml_header();
+	myhtml_header(NULL);
 	myhtml_breadcrumbs(dir, page, "edit");
 	myhtml_textarea_open();
 
@@ -321,12 +321,8 @@ wikieditform()
 
 	nlog("editform() RM[%s] CT[%s] CL[%d]", RM, CT, CL);
 
-	http_headers();
-	myhtml_header();
-	myhtml_breadcrumbs(NULL, NULL, "edit");
 
 
-	printf("<p>editform() RM[%s] CT[%s] CL[%d]</p>\n", RM, CT, CL);
 
 	buf = malloc(CL);
 	if (buf != NULL) {
@@ -363,7 +359,7 @@ wikieditform()
 		nlog("wikieditform:: fullpath:%s", fullpath);
 
 		// ----- wiki_writefile(fullpath_str
-		editfile = fopen(fullpath, "a");
+		editfile = fopen(fullpath, "w");
 		free(fullpath);
 		if (editfile == NULL) {
 			errpage("cannot edit file:");
@@ -374,13 +370,20 @@ wikieditform()
 			fclose(editfile);
 
 
-		/* msgpage("new file created"); */
-		self_redirect("index", dir, NULL);
+/*
+https://wiki.oldcode.org/wiki.cgi?view&d=computer&p=go.md
+*/
+		self_redirect("view", dir, page);
+		return;
 	}
 
 
+	http_headers();
+	myhtml_header(NULL);
+	myhtml_breadcrumbs(NULL, NULL, "edit");
 
-	//showenv();
+	printf("<p>editform() RM[%s] CT[%s] CL[%d]</p>\n", RM, CT, CL);
+	
 	myhtml_footer();
 }
 
@@ -388,7 +391,7 @@ void
 wikinew(char *dir)
 {
 	http_headers();
-	myhtml_header();
+	myhtml_header(NULL);
 	myhtml_breadcrumbs(dir, NULL, "new");
 	myhtml_new(dir);
 	myhtml_footer();

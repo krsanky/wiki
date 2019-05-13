@@ -25,4 +25,5 @@ test_breadcrumbs
 test_params
 test_strings
 test_altstyle
+test_codemirror
 fix_perms

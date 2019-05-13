@@ -13,7 +13,7 @@ display()
 {
 	char 		t        [] = "templates/menu.m";
 	http_headers();
-	myhtml_header();
+	myhtml_header(NULL);
 	printf("<h1>menu</h1>\n");
 	tmpl_render(t, NULL);
 	myhtml_footer();

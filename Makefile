@@ -55,6 +55,9 @@ strstrp: $@.c util.c
 test_forms: $@.c $(HDRS) $(SRCS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
+test_codemirror: $@.c $(HDRS) $(SRCS)
+	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
+
 test_params: $@.c params.c params.h util.c
 	$(CC) $(CFLAGS) -o $@ $@.c params.c util.c $(LDFLAGS)
 params_test: $@.c params.c params.h util.h util.c 
@@ -102,6 +105,7 @@ deploy: all
 	cp -f wikieditform.php ../htdocs/
 	cp -f sample ../htdocs/sample.cgi
 	cp -f test_forms ../htdocs/test_forms.cgi
+	cp -f test_codemirror ../htdocs/test_codemirror.cgi 2>/dev/null || :
 	cp -f test_altstyle ../htdocs/test_altstyle.cgi 2>/dev/null || :
 	cp -f long_page ../htdocs/long_page.cgi 2>/dev/null || :
 	cp -rf static ../htdocs/
@@ -116,6 +120,7 @@ clean:
 	rm -rf a.out *.BAK *.core
 	rm -rf tmpl
 	rm -rf test_tmpl
+	rm -rf test_forms test_codemirror  
 	rm -rf sample long_page test_altstyle
 
 .PHONY: test clean indent deploy all

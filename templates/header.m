@@ -18,6 +18,9 @@ h1,h2,h3 {
   line-height:1.2
 }
 </style>
+
+<!-- allow for extra style/script includes passed in thru mobject dict ctx? -->
+
 <script src="/static/jquery-3.3.1.min.js"></script>
 </head>
 

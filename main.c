@@ -18,6 +18,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include <mtemplate.h>
 
 #include "util.h"
 #include "myhtml.h"

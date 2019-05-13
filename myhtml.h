@@ -17,7 +17,7 @@
 void		myhtml_set_altstyle(char *);
 char		*myhtml_get_altstyle();
 void		myhtml_test_altstyle();
-void 		myhtml_header();
+void 		myhtml_header(struct mobject *);
 void 		myhtml_footer();
 void 		myhtml_breadcrumbs(char *, char *, char *);
 char           *make_anchor(char *, char *, char *, char *);
