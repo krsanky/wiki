@@ -108,7 +108,7 @@ deploy: all
 	cp -f test_codemirror ../htdocs/test_codemirror.cgi 2>/dev/null || :
 	cp -f test_altstyle ../htdocs/test_altstyle.cgi 2>/dev/null || :
 	cp -f long_page ../htdocs/long_page.cgi 2>/dev/null || :
-	cp -rf static ../htdocs/
+	#cp -rf static ../htdocs/
 	cp -rf templates ../htdocs/
 	cp -f fix_perms ../htdocs/fix_perms.cgi 2>/dev/null 
 

@@ -52,7 +52,14 @@ void
 myhtml_header(struct mobject *ctx)
 {
 	char 		fn       [] = "templates/header.m";
-	tmpl_render(fn, NULL);
+	struct mobject *data;  
+	if (ctx == NULL) {
+		data = tmpl_data_new();
+		tmpl_render(fn, data);
+		mobject_free(data);
+		return;
+	}
+	tmpl_render(fn, ctx);
 }
 
 void

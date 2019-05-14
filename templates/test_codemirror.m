@@ -1,6 +1,4 @@
-
-
-<form action='/test_codemirror.cgi?post' method='post' 
+<form action='/test_codemirror.cgi' method='post' 
       enctype='application/x-www-form-urlencoded'>
 
 <textarea name="test_forms_text" 
@@ -16,10 +14,9 @@
 <input type='hidden' name='dir' value=''/>
 </form>
 
-
-
 <script>
+console.log("seeme123");
 var cm_elem = document.getElementById("test_forms_text");  
-var cm = CodeMirror.fromTextArea(myTextArea);
+var cm = CodeMirror.fromTextArea(cm_elem);
 </script>
 

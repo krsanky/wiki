@@ -29,72 +29,43 @@
 
 #include "tmpl.h"
 
-void
-showtemplate(char *t_)
+#define EXTRA_JS "tmpl_extra_js"
+#define EXTRA_CSS "tmpl_extra_css"
+
+/*
+ * free this with mobject_free or mdict_free
+ */
+struct mobject *
+tmpl_data_new()
 {
-	char           *t__;
-	int 		t__l;
-	char           *template = NULL;
-	struct mobject *namespace = NULL;
-	struct mobject *tmp;
-	struct mtemplate *t;
+	struct mobject *ns;
 
-	t__l = strlen("templates") + 1 + strlen(t_) + 1;
-	t__ = malloc(t__l);
-	if (t__ == NULL) {
-		printf("malloc err");
-		return;
+	ns = mdict_new();
+	if (ns != NULL) {
+		mdict_insert_sa(ns, EXTRA_JS);
+		mdict_insert_sa(ns, EXTRA_CSS);
+		/*
+		 * example:struct mobject *tmp = mdict_item_s(ns, EXTRA_JS);
+		 * marray_append_s(tmp, "/bad/js/include.js");
+		 */
 	}
-	strlcpy(t__, "templates", t__l);
-	strlcat(t__, "/", t__l);
-	strlcat(t__, t_, t__l);
+	return ns;
+}
 
-	if (tmpl_readfile(t__, &template) != 0)
-		printf("read_template_file() error\n");
-	printf("\nraw templ.\n:<pre>\n%s\n</pre>\n", template);
+void
+tmpl_data_add_js(struct mobject * ns, char *js)
+{
+	struct mobject *tmp;
+	tmp = mdict_item_s(ns, EXTRA_JS);
+	marray_append_s(tmp, js);
+}
 
-
-	/* instantiate mtemplate object */
-	char 		errbuf   [1024];
-	if ((t = mtemplate_parse(template, errbuf, sizeof(errbuf))) == NULL)
-		printf("mtemplate_parse error\n");
-
-	/* initialize template namespace object */
-	if ((namespace = mdict_new()) == NULL)
-		printf("mdict_new error");
-
-	/* Add some values to the namespace (ignoring errors) */
-	mdict_insert_ss(namespace, "program_name", "example");	/* String */
-	mdict_insert_si(namespace, "program_version", 2008);	/* Integer */
-	mdict_insert_sa(namespace, "features");	/* Empty array */
-	mdict_insert_sd(namespace, "credits");	/* Empty dictionary */
-
-	/* Fill in the array and dictionary */
-	tmp = mdict_item_s(namespace, "features");
-	marray_append_s(tmp, "hydrocoptic marzelvanes");
-	marray_append_s(tmp, "baseplate of prefamulated ammulite");
-	tmp = mdict_item_s(namespace, "credits");
-	mdict_insert_ss(tmp, "author", "Unknown");
-	mdict_insert_si(tmp, "Copyright", 2007);
-
-
-
-	/*
-	 * Run the template with this namespace, and send the output to
-	 * stdout
-	if (mtemplate_run_stdio(t, namespace, stdout, errbuf, sizeof(errbuf)) == -1)
-		errx(1, "mtemplate_run_stdio: %s", errbuf);
-	 */
-	char           *tout;
-	if (mtemplate_run_mbuf(t, namespace, &tout, errbuf, sizeof(errbuf)) == -1)
-		errx(1, "mtemplate_run_mbuf: %s", errbuf);
-	printf("<div style='color:yellow;background-color:red;'>%s</div>\n<h1>poop</h1>\n", tout);
-
-	free(template);
-	free(tout);
-	mobject_free(namespace);
-	mtemplate_free(t);
-	free(t__);
+void
+tmpl_data_add_css(struct mobject * ns, char *css)
+{
+	struct mobject *tmp;
+	tmp = mdict_item_s(ns, EXTRA_CSS);
+	marray_append_s(tmp, css);
 }
 
 /*
@@ -111,7 +82,6 @@ tmpl_readfile(char *filename, char **tbuf)
 	if ((tfd = open(filename, O_RDONLY)) == -1) {
 		return -1;
 	}
-
 	for (;;) {
 		if ((len = read(tfd, buf, sizeof(buf))) == -1) {
 			if (errno == EINTR || errno == EAGAIN)
@@ -169,12 +139,12 @@ end:
 	return ret;
 }
 
-char *
-tmpl_path(char * t)
+char           *
+tmpl_path(char *t)
 {
-	int		l = 0;
-	char		*alt = myhtml_get_altstyle();
-	char		*tp;
+	int 		l = 0;
+	char           *alt = myhtml_get_altstyle();
+	char           *tp;
 
 	l += strlen(WIKI_ROOT);
 	l += strlen("/");
@@ -184,7 +154,7 @@ tmpl_path(char * t)
 	}
 	l += strlen(t);
 	l += 1;
-	
+
 	if ((tp = malloc(l)) == NULL)
 		return NULL;
 
@@ -198,5 +168,3 @@ tmpl_path(char * t)
 
 	return tp;
 }
-
-

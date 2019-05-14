@@ -286,10 +286,6 @@ wikiedit(char *dir, char *page)
 	myhtml_footer();
 }
 
-/*
- * This is being handled by wikieditform.php currently.
- * BUT, form is now urlencoded so we can go back to this.
- */
 void
 wikieditform()
 {
