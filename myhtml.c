@@ -27,7 +27,7 @@
 
 #include "myhtml.h"
 
-static char		*_altstyle = NULL;
+static char    *_altstyle = NULL;
 
 void
 myhtml_set_altstyle(char *s)
@@ -36,7 +36,7 @@ myhtml_set_altstyle(char *s)
 	_altstyle = s;
 }
 
-char *
+char           *
 myhtml_get_altstyle()
 {
 	return _altstyle;
@@ -49,10 +49,10 @@ myhtml_test_altstyle()
 }
 
 void
-myhtml_header(struct mobject *ctx)
+myhtml_header(struct mobject * ctx)
 {
 	char 		fn       [] = "templates/header.m";
-	struct mobject *data;  
+	struct mobject *data;
 	if (ctx == NULL) {
 		data = tmpl_data_new();
 		tmpl_render(fn, data);
