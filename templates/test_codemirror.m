@@ -19,22 +19,36 @@
 
 <input type='hidden' name='dir' value=''/>
 </form>
+<div style="font-size: 13px; width: 300px; height: 30px;">Key buffer: <span id="command-display"></span></div>
 
 <script>
 $(function(){
 console.log("start codemirror");
+
+CodeMirror.commands.save = function(){ alert("Saving"); };
+
 var cm_elem = document.getElementById("test_forms_text");  
 var cm_defaults = CodeMirror.defaults;
 //console.log(cm_defaults);
 
-var cm_cfg = {};
-cm_cfg.lineNumbers = true;
+var cm_cfg = {
+	lineNumbers: true,
+	matchBrackets: true,
+	styleActiveLine: true,
+};
 cm_cfg.keyMap = "vim";
-var editor = CodeMirror.fromTextArea(cm_elem, cm_cfg);
- //   lineNumbers: true,
- //   styleActiveLine: true,
-  //  matchBrackets: true
 
+var editor = CodeMirror.fromTextArea(cm_elem, cm_cfg);
+var commandDisplay = document.getElementById('command-display');
+var keys = '';
+CodeMirror.on(editor, 'vim-keypress', function(key) {
+	keys = keys + key;
+	commandDisplay.innerHTML = keys;
+});
+CodeMirror.on(editor, 'vim-command-done', function(e) {
+	keys = '';
+	commandDisplay.innerHTML = keys;
+});
 
 });
 </script>
