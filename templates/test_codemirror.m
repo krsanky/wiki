@@ -22,6 +22,7 @@
 <div style="font-size: 13px; width: 300px; height: 30px;">Key buffer: <span id="command-display"></span></div>
 
 <script>
+//do editor.refresh(); after some config changes on running editor?
 $(function(){
 console.log("start codemirror");
 

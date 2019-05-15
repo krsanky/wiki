@@ -37,13 +37,6 @@ main()
 	tmpl_data_add_js(data, "/static/codemirror-5.46.0/keymap/vim.js");
 
 	tmpl_data_add_js(data, "/static/codemirror-5.46.0/keymap/emacs.js");
-/*
-"/static/codemirror-5.46.0/mode/clike/clike.js"
-"/static/codemirror-5.46.0/addon/edit/matchbrackets.js"
-"/static/codemirror-5.46.0/addon/comment/comment.js"
-"/static/codemirror-5.46.0/addon/search/searchcursor.js"
-"/static/codemirror-5.46.0/addon/search/search.js"
-*/
 
 
 	myhtml_header(data);
