@@ -35,6 +35,7 @@ var cm_cfg = {
 	lineNumbers: true,
 	matchBrackets: true,
 	styleActiveLine: true,
+	showCursorWhenSelecting: true,
 };
 cm_cfg.keyMap = "vim";
 
