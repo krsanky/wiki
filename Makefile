@@ -118,10 +118,11 @@ clean:
 	rm -rf admin
 	rm -f writef nanoclient mdtest params_test test_params
 	rm -rf a.out *.BAK *.core
-	rm -rf tmpl
+	rm -rf tmpl must fix_perms
 	rm -rf test_tmpl
 	rm -rf test_forms test_codemirror  
 	rm -rf sample long_page test_altstyle
+	rm -rf test_breadcrumbs test_errno test_sort test_strings test_util
 
 .PHONY: test clean indent deploy all
 
