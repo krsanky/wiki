@@ -8,7 +8,7 @@ LDFLAGS+= -lnanomsg
 LDFLAGS+= -ljson-c
 LDFLAGS+= -lmtemplate
 
-all: wiki admin menu sample test_forms
+all: wiki admin menu sample test_forms 
 
 SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c breadcrumbs.c
 HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h breadcrumbs.h
@@ -28,9 +28,6 @@ long_page: $@.c util.c
 admin: $@.c util.c myhtml.c breadcrumbs.c
 	$(CC) $(CFLAGS) -o $@ $@.c \
 		tmpl.c util.c myhtml.c breadcrumbs.c $(LDFLAGS)
-
-fix_perms: $(SRCS) $@.c $(HDRS)
-	$(CC) $(CFLAGS) -o $@ $@.c ${SRCS} $(LDFLAGS)
 
 # TEST 
 test_breadcrumbs: $@.c breadcrumbs.c breadcrumbs.h
@@ -110,7 +107,6 @@ deploy: all
 	cp -f long_page ../htdocs/long_page.cgi 2>/dev/null || :
 	cp -rf static ../htdocs/
 	cp -rf templates ../htdocs/
-	cp -f fix_perms ../htdocs/fix_perms.cgi 2>/dev/null 
 
 clean:
 	rm -rf wiki

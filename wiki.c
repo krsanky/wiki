@@ -358,7 +358,7 @@ wikieditform()
 		editfile = fopen(fullpath, "w");
 		free(fullpath);
 		if (editfile == NULL) {
-			errpage("cannot edit file (try again in code?):");
+			errpage("cannot edit file (try again in code?):%s", fullpath);
 			return;
 		}
 		fputs(decode, editfile);
