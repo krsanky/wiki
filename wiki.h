@@ -32,4 +32,3 @@ void 		wikinew  (char *);
 void 		wikinewform();
 
 void 		wikidelete(char *, char *);
-

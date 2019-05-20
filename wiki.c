@@ -354,9 +354,8 @@ wikieditform()
 		strlcat(fullpath, page, fpl);
 		nlog("wikieditform:: fullpath:%s", fullpath);
 
-		//-----wiki_writefile(fullpath_str
-/**INDENT** Error@358: Unbalanced parens */
-				      editfile = fopen(fullpath, "w");
+		/* -----wiki_writefile(fullpath_str) */
+		editfile = fopen(fullpath, "w");
 		free(fullpath);
 		if (editfile == NULL) {
 			errpage("cannot edit file (try again in code?):");

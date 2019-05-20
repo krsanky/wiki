@@ -18,13 +18,13 @@ main()
 	printf("<p style='color:green;'>test_altstyle</p>\n");
 
 
-	char		t[] = "test_altstyle";
-	char		*tp;
+	char 		t        [] = "test_altstyle";
+	char           *tp;
 	tp = tmpl_path(t);
 	printf("<p>tp:%s</p>\n", tp);
 	free(tp);
 
-	myhtml_set_altstyle("s1");	
+	myhtml_set_altstyle("s1");
 	tp = tmpl_path(t);
 	printf("<p>tp:%s</p>\n", tp);
 	free(tp);
@@ -33,6 +33,3 @@ main()
 
 	return EXIT_SUCCESS;
 }
-
-
-
