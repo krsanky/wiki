@@ -235,7 +235,7 @@ wikiview(char *dir, char *page)
 	http_headers();
 	myhtml_header(NULL);
 	myhtml_breadcrumbs(dir, page, "view");
-	val = markdown(mmiot, stdout, MKD_GITHUBTAGS|MKD_FENCEDCODE);
+	val = markdown(mmiot, stdout, MKD_GITHUBTAGS | MKD_FENCEDCODE);
 	myhtml_footer();
 
 end:
@@ -293,17 +293,17 @@ wikieditform()
 	char           *CL_;
 	char           *CT;
 	int 		CL;
-	char		*buf;
-	int		l;
-	char		*txt;
+	char           *buf;
+	int 		l;
+	char           *txt;
 	PARAMS         *ps;
 	int 		NPARAMS = 5;
-	char		*decode;
-	int		ret;
+	char           *decode;
+	int 		ret;
 
 	char           *fullpath;
-	char		*page;
-	char		*dir;
+	char           *page;
+	char           *dir;
 	FILE           *editfile;
 	int 		fpl;
 
@@ -327,8 +327,8 @@ wikieditform()
 		ps = params_create(NPARAMS, buf);
 		free(buf);
 		txt = params_get(ps, "wikiformtext");
-		decode = malloc(strlen(txt)+1);  
-		
+		decode = malloc(strlen(txt) + 1);
+
 		if (decode == NULL) {
 			errpage("malloc error");
 			return;
@@ -354,11 +354,12 @@ wikieditform()
 		strlcat(fullpath, page, fpl);
 		nlog("wikieditform:: fullpath:%s", fullpath);
 
-		// ----- wiki_writefile(fullpath_str
-		editfile = fopen(fullpath, "w");
+		//-----wiki_writefile(fullpath_str
+/**INDENT** Error@358: Unbalanced parens */
+				      editfile = fopen(fullpath, "w");
 		free(fullpath);
 		if (editfile == NULL) {
-			errpage("cannot edit file:");
+			errpage("cannot edit file (try again in code?):");
 			return;
 		}
 		fputs(decode, editfile);
@@ -366,20 +367,18 @@ wikieditform()
 			fclose(editfile);
 
 
-/*
-https://wiki.oldcode.org/wiki.cgi?view&d=computer&p=go.md
-*/
+		/*
+		https://wiki.oldcode.org/wiki.cgi?view&d=computer&p=go.md
+		*/
 		self_redirect("view", dir, page);
 		return;
 	}
-
-
 	http_headers();
 	myhtml_header(NULL);
 	myhtml_breadcrumbs(NULL, NULL, "edit");
 
 	printf("<p>editform() RM[%s] CT[%s] CL[%d]</p>\n", RM, CT, CL);
-	
+
 	myhtml_footer();
 }
 
@@ -429,7 +428,7 @@ wikinewform()
 		page = params_get(ps, "page");
 		dir = params_get(ps, "dir");
 		nlog("make new file dir:%s page:%s", dir, page);
-		 
+
 		if (dir != NULL) {
 			decode = malloc(strlen(dir) + 1);
 			if (decode == NULL) {
@@ -439,11 +438,10 @@ wikinewform()
 			ret = params_urldecode(dir, decode);
 			nlog("params_urldecode: ret:%d decode:%s", ret, decode);
 			nlog("dir:%s  strlen(dir):%d sizeof(dir):%d", dir, strlen(dir), sizeof(dir));
-			strlcpy(dir, decode, strlen(dir)+1);
+			strlcpy(dir, decode, strlen(dir) + 1);
 			nlog("after strlcpy- dir:%s  strlen(dir):%d sizeof(dir):%d", dir, strlen(dir), sizeof(dir));
 			free(decode);
 		}
-
 		char           *fullpath;
 		FILE           *newfile;
 		int 		fpl;
@@ -474,7 +472,7 @@ wikinewform()
 		/* msgpage("new file created"); */
 		self_redirect("index", dir, NULL);
 		params_free(ps);
-		free(dir); /* ??? */
+		free(dir);	/* ??? */
 		return;
 	}
 	errpage("error creating new file");
@@ -514,4 +512,3 @@ wikidelete(char *dir, char *page)
 	}
 	errpage("error deleting");
 }
-

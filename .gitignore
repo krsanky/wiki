@@ -27,3 +27,4 @@ test_strings
 test_altstyle
 test_codemirror
 fix_perms
+static/codemirror-5.46.0/
