@@ -298,7 +298,7 @@ wikieditform()
 	char           *txt;
 	PARAMS         *ps;
 	int 		NPARAMS = 5;
-	char           *decode;
+	char           *decode, *tmpstr;
 	int 		ret;
 
 	char           *fullpath;
@@ -338,8 +338,18 @@ wikieditform()
 
 		page = params_get(ps, "page");
 		dir = params_get(ps, "dir");
-		nlog("update file dir:%s page:%s", dir, page);
 
+		if (dir != NULL) {
+			tmpstr = malloc(strlen(dir) + 1);
+			if (tmpstr == NULL) {
+				errpage("malloc error");
+				return;
+			}
+			ret = params_urldecode(dir, tmpstr);
+			nlog("update file dir:%s page:%s tmpstr:%s", dir, page, tmpstr);
+			dir = tmpstr;
+		}
+		nlog("update file dir*:%s page:%s", dir, page);
 
 		fpl = sizeof(WIKI_ROOT) + 1 + strlen(page);
 		if (dir != NULL)
@@ -364,12 +374,11 @@ wikieditform()
 		fputs(decode, editfile);
 		if (editfile != NULL)
 			fclose(editfile);
+		free(decode);
 
-
-		/*
-		https://wiki.oldcode.org/wiki.cgi?view&d=computer&p=go.md
-		*/
 		self_redirect("view", dir, page);
+		params_free(ps);
+		free(dir);
 		return;
 	}
 	http_headers();
