@@ -42,6 +42,9 @@ test_util: $@.c util.c
 test_tmpl: $@.c params.c tmpl.c
 	$(CC) $(CFLAGS) -o $@ $@.c params.c tmpl.c $(LDFLAGS)
 
+test_sort_mdict: $@.c
+	$(CC) $(CFLAGS) -o $@ $@.c $(LDFLAGS)
+
 #json 
 must: $@.c params.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ must.c params.c
@@ -109,16 +112,17 @@ deploy: all
 	cp -rf templates ../htdocs/
 
 clean:
-	rm -rf wiki
-	rm -rf menu
-	rm -rf admin
+	rm -f wiki
+	rm -f menu
+	rm -f admin
 	rm -f writef nanoclient mdtest params_test test_params
-	rm -rf a.out *.BAK *.core
-	rm -rf tmpl must fix_perms
-	rm -rf test_tmpl
-	rm -rf test_forms test_codemirror  
-	rm -rf sample long_page test_altstyle
-	rm -rf test_breadcrumbs test_errno test_sort test_strings test_util
+	rm -f a.out *.BAK *.core
+	rm -f tmpl must fix_perms
+	rm -f test_tmpl
+	rm -f test_forms test_codemirror  
+	rm -f sample long_page test_altstyle
+	rm -f test_breadcrumbs test_errno test_sort test_strings test_util
+	rm -f test_sort_mdict
 
 .PHONY: test clean indent deploy all
 

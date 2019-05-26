@@ -121,11 +121,14 @@ fulldir(char *dir)
 }
 
 /*
+ * NONONO.  Im leaving this for a moment, now that I see...
+ * since I want to modify list in the caller i have to "pass by ref" so 
+ * the first * is just that.  Ignore that the type is itself a "ref".
  * Doesn't mostly strings (char *) need the double pointer thing?
  * IOW "list" can be just a single pointer?
  */
 int
-make_mobject_dirlist(char *dir, struct mobject ** list)
+make_mobject_dirlist(char *dir, struct mobject **list)
 {
 	DIR            *d;
 	char           *fd;
@@ -179,6 +182,12 @@ end:
 }
 
 void
+sort_mobject_dirlist(struct mobject **list)
+{
+
+}
+
+void
 wikiindex(char *dir)
 {
 	struct mobject *ns = NULL;
@@ -189,6 +198,7 @@ wikiindex(char *dir)
 	myhtml_breadcrumbs(dir, NULL, NULL);
 
 	if (make_mobject_dirlist(dir, &ns) == 0) {
+		sort_mobject_dirlist(&ns) == 0) {
 		if (dir != NULL)
 			mdict_insert_ss(ns, "dir", dir);
 		else
