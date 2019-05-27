@@ -182,12 +182,6 @@ end:
 }
 
 void
-sort_mobject_dirlist(struct mobject **list)
-{
-
-}
-
-void
 wikiindex(char *dir)
 {
 	struct mobject *ns = NULL;
@@ -198,7 +192,6 @@ wikiindex(char *dir)
 	myhtml_breadcrumbs(dir, NULL, NULL);
 
 	if (make_mobject_dirlist(dir, &ns) == 0) {
-		sort_mobject_dirlist(&ns) == 0) {
 		if (dir != NULL)
 			mdict_insert_ss(ns, "dir", dir);
 		else
