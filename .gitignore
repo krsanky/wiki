@@ -29,3 +29,6 @@ test_codemirror
 fix_perms
 static/codemirror-5.46.0/
 test_sort_mdict
+tailq-example/
+tmp.1
+zztest_myrb

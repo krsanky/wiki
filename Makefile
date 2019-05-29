@@ -42,8 +42,8 @@ test_util: $@.c util.c
 test_tmpl: $@.c params.c tmpl.c
 	$(CC) $(CFLAGS) -o $@ $@.c params.c tmpl.c $(LDFLAGS)
 
-test_sort_mdict: $@.c
-	$(CC) $(CFLAGS) -o $@ $@.c $(LDFLAGS)
+test_sort_mdict: $@.c $(SRCS) $(HDRS)
+	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 #json 
 must: $@.c params.c
