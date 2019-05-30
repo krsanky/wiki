@@ -68,7 +68,8 @@ main(void)
 		printf("%d\n", n->i);
 	}
 
-
+	print_tree(RB_ROOT(&head));
+	printf("\n");
 
 	return EXIT_SUCCESS;
 }
