@@ -124,6 +124,11 @@ fulldir(char *dir)
  * NONONO.  Im leaving this for a moment, now that I see...
  * since I want to modify list in the caller i have to "pass by ref" so 
  * the first * is just that.  Ignore that the type is itself a "ref".
+ * (it doesn't have to do with when * is used for arrays)
+ *
+ * ((can the "pass by ref" notion of a pointer and the its just a struct pointer type be
+ * shared?))
+ *
  * Doesn't mostly strings (char *) need the double pointer thing?
  * IOW "list" can be just a single pointer?
  */

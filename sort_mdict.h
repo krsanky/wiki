@@ -14,22 +14,5 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-void 		fatal    (const char *);
-void 		http_headers(void);
-void 		showenv  (void);
+int	sort_mdict(struct mobject *);
 
-void 		errpage  (char *,...);
-void 		msgpage  (char *,...);
-
-int		make_mobject_dirlist(char *, struct mobject **);
-void 		wikiindex(char *);
-void 		wikiindex2(char *);
-void 		wikiview (char *, char *);
-
-void 		wikiedit (char *, char *);
-void 		wikieditform();
-
-void 		wikinew  (char *);
-void 		wikinewform();
-
-void 		wikidelete(char *, char *);

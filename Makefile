@@ -10,8 +10,8 @@ LDFLAGS+= -lmtemplate
 
 all: wiki admin menu sample test_forms 
 
-SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c breadcrumbs.c
-HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h breadcrumbs.h
+SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c breadcrumbs.c sort_mdict.c
+HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h breadcrumbs.h sort_mdict.h
 
 wiki: main.c $(SRCS) $@.h $(HDRS)
 	$(CC) $(CFLAGS) -o $@ main.c ${SRCS} $(LDFLAGS)

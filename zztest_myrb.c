@@ -27,28 +27,6 @@ int testdata[] = {
 	7, 11, 14
 };
 
-void
-print_tree(struct mynode *n)
-{
-	struct mynode *left, *right;
-
-	if (n == NULL) {
-		printf("nil");
-		return;
-	}
-	left = RB_LEFT(n, entry);
-	right = RB_RIGHT(n, entry);
-	if (left == NULL && right == NULL)
-		printf("%d", n->i);
-	else {
-		printf("%d(", n->i);
-		print_tree(left);
-		printf(",");
-		print_tree(right);
-		printf(")");
-	}
-}
-
 int
 main(void)
 {
@@ -74,7 +52,27 @@ main(void)
 	return EXIT_SUCCESS;
 }
 
+void
+print_tree(struct mynode *n)
+{
+	struct mynode *left, *right;
 
+	if (n == NULL) {
+		printf("nil");
+		return;
+	}
+	left = RB_LEFT(n, entry);
+	right = RB_RIGHT(n, entry);
+	if (left == NULL && right == NULL)
+		printf("%d", n->i);
+	else {
+		printf("%d(", n->i);
+		print_tree(left);
+		printf(",");
+		print_tree(right);
+		printf(")");
+	}
+}
 
 
 
