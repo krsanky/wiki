@@ -19,8 +19,8 @@ int_cmp(struct mynode *e1, struct mynode *e2)
 }
 
 RB_HEAD(inttree, mynode) head = RB_INITIALIZER(&head);
-RB_PROTOTYPE(inttree, mynode, entry, int_cmp)
-RB_GENERATE(inttree, mynode, entry, int_cmp)
+RB_PROTOTYPE(inttree, mynode, entry, int_cmp);
+RB_GENERATE(inttree, mynode, entry, int_cmp);
 
 int testdata[] = {
 	20, 16, 17, 13, 3, 6, 1, 8, 2, 4, 10, 19, 5, 9, 12, 15, 18,

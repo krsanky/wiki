@@ -42,7 +42,7 @@ test_util: $@.c util.c
 test_tmpl: $@.c params.c tmpl.c
 	$(CC) $(CFLAGS) -o $@ $@.c params.c tmpl.c $(LDFLAGS)
 
-test_sort_mdict: $@.c $(SRCS) $(HDRS)
+zztest_sort_mdict: $@.c $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 #json 
@@ -122,7 +122,7 @@ clean:
 	rm -f test_forms test_codemirror  
 	rm -f sample long_page test_altstyle
 	rm -f test_breadcrumbs test_errno test_sort test_strings test_util
-	rm -f test_sort_mdict
+	rm -f zztest_sort_mdict
 
 .PHONY: test clean indent deploy all
 
