@@ -179,7 +179,7 @@ make_mobject_dirlist(char *dir, struct mobject **list)
 			}
 		}
 	}
-	//sort_mdict(pages);
+	//pages = sort_mdict(pages);
 
 end:
 	free(fd);

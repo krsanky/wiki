@@ -33,3 +33,4 @@ tailq-example/
 tmp.1
 zztest_myrb
 zztest_sort_mdict
+zztest_myfileio

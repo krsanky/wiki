@@ -43,8 +43,10 @@ print_mdict(struct mobject *d)
 	char 		buf      [256];
 	char 		buf2     [256];
 
-	printf("---dict->type:%d\n", mobject_type(d));
-	assert(mobject_type(d) == TYPE_MDICT);
+	if (mobject_type(d) != TYPE_MDICT)
+		printf("NOT MDICT mobject->type:%d\n", mobject_type(d));
+	else
+		printf("YES MDICT mobject->type:%d\n", mobject_type(d));
 	assert((iter = mobject_getiter(d)) != NULL);
 	while ((item = miterator_next(iter)) != NULL) {
 		mobject_to_string(item->key, buf, 256-1);
@@ -64,8 +66,8 @@ main()
 	mdict_insert_ss(d, "qweqwe", "123asd");
 	mdict_insert_ss(d, "vdessqwq", "asdas qweqw");
 	mdict_insert_ss(d, "ANC", "asdas qweqw");
-	print_mdict(d);
 
+	print_mdict(d);
 	d = sort_mdict(d);
 	printf("------------\n");
 	print_mdict(d);
