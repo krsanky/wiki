@@ -35,6 +35,24 @@ test1()
 	printf("a:%d b:%d\n", m1->a, m1->b);	
 }
 
+void
+print_mdict(struct mobject *d)
+{
+	struct miterator *iter;
+	struct miteritem *item;
+	char 		buf      [256];
+	char 		buf2     [256];
+
+	printf("---dict->type:%d\n", mobject_type(d));
+	assert(mobject_type(d) == TYPE_MDICT);
+	assert((iter = mobject_getiter(d)) != NULL);
+	while ((item = miterator_next(iter)) != NULL) {
+		mobject_to_string(item->key, buf, 256-1);
+		mobject_to_string(item->value, buf2, 256-1);
+		printf("k:%s v:%s\n", buf, buf2);	
+	}
+}
+
 int
 main()
 {
@@ -46,8 +64,11 @@ main()
 	mdict_insert_ss(d, "qweqwe", "123asd");
 	mdict_insert_ss(d, "vdessqwq", "asdas qweqw");
 	mdict_insert_ss(d, "ANC", "asdas qweqw");
+	print_mdict(d);
 
-	sort_mdict(d);
+	d = sort_mdict(d);
+	printf("------------\n");
+	print_mdict(d);
 
 	return EXIT_SUCCESS;
 }

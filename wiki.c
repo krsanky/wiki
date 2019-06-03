@@ -31,6 +31,7 @@
 #include "util.h"
 #include "forms.h"
 #include "tmpl.h"
+#include "sort_mdict.h"
 
 #include "wiki.h"
 
@@ -178,6 +179,7 @@ make_mobject_dirlist(char *dir, struct mobject **list)
 			}
 		}
 	}
+	//sort_mdict(pages);
 
 end:
 	free(fd);

@@ -14,5 +14,5 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-void	sort_mdict(struct mobject *);
+struct mobject *	sort_mdict(struct mobject *);
 

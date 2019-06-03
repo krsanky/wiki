@@ -26,7 +26,7 @@ RB_PROTOTYPE(myitem_tree, myitem, entry, myitem_cmp)
 RB_GENERATE(myitem_tree, myitem, entry, myitem_cmp)
 /* ------------- -RB ----------- */
 
-void
+struct mobject *
 sort_mdict(struct mobject * dict)
 {
 	struct miterator *iter;
@@ -35,14 +35,14 @@ sort_mdict(struct mobject * dict)
 	char 		buf2     [256];
 	struct myitem  *n, *var, *nxt;
 	size_t 		ks    , vs;
-	int		ret; 
+
+	printf("dict->type:%d\n", mobject_type(dict));
+	assert(mobject_type(dict) == TYPE_MDICT);
 
 	assert((iter = mobject_getiter(dict)) != NULL);
 	while ((item = miterator_next(iter)) != NULL) {
 		mobject_to_string(item->key, buf, 100 - 1);
 		mobject_to_string(item->value, buf2, 100 - 1);
-		printf("key:%s\n", buf);
-
 
 		n = calloc(1, sizeof(struct myitem));
 		assert(n != NULL);
@@ -65,23 +65,21 @@ sort_mdict(struct mobject * dict)
 	assert((dict = mdict_new()) != NULL);
 	n = NULL;
 	RB_FOREACH(n, myitem_tree, &head) {
-		//printf("k:%s v:%s\n", n->key, n->val);
 		mdict_insert_ss(dict, n->key, n->val);
 	}
+	printf("dict->type(after):%d\n", mobject_type(dict));
 
-	/* clean up the RB */
-	ret = RB_EMPTY(&head);
-	printf("%d = RB_EMPTY()\n", ret); /* should be 0 */
+	/* clean up the RB tree */
+	assert(RB_EMPTY(&head) != 1);
 	nxt = NULL;
 	for (var = RB_MIN(myitem_tree, &head); var != NULL; var = nxt) {
 		nxt = RB_NEXT(myitem_tree, &head, var);
 		RB_REMOVE(myitem_tree, &head, var);
 		free(var);
 	}
-	ret = RB_EMPTY(&head);
-	printf("%d = RB_EMPTY()\n", ret); /* should be 1 */
+	assert(RB_EMPTY(&head) == 1);
 
-	//return 0;
+	return dict;
 }
 
 
