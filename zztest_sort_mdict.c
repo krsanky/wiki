@@ -39,7 +39,6 @@ int
 main()
 {
 	struct mobject	*d;
-	int	ret;
 
 	assert((d = mdict_new()) != NULL);
 	mdict_insert_ss(d, "de->d_name", "anchor");
@@ -48,7 +47,7 @@ main()
 	mdict_insert_ss(d, "vdessqwq", "asdas qweqw");
 	mdict_insert_ss(d, "ANC", "asdas qweqw");
 
-	ret = sort_mdict(d);
+	sort_mdict(d);
 
 	return EXIT_SUCCESS;
 }
