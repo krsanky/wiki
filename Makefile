@@ -45,8 +45,8 @@ test_tmpl: $@.c params.c tmpl.c
 zztest_sort_mdict: $@.c $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
-zztest_myfileio:  $@.c $(SRCS) $(HDRS) myfileio.h myfileio.c
-	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) myfileio.c $(LDFLAGS)
+zztest_wiki_file_io:  $@.c $(SRCS) $(HDRS) wiki_file_io.h wiki_file_io.c
+	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) wiki_file_io.c $(LDFLAGS)
 
 #json 
 must: $@.c params.c
@@ -126,7 +126,7 @@ clean:
 	rm -f sample long_page test_altstyle
 	rm -f test_breadcrumbs test_errno test_sort test_strings test_util
 	rm -f zztest_sort_mdict
-	rm -f zztest_myfileio
+	rm -f zztest_wiki_file_io
 
 .PHONY: test clean indent deploy all
 

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "myfileio.h"
+#include "wiki_file_io.h"
 
 int
 main()
@@ -13,7 +13,7 @@ main()
 	char	**list;
 	list = NULL;
 
-	ret = make_dir_arr(d, list);
+	ret = make_sorted_dir_arr(d, list);
 	return EXIT_SUCCESS;
 }
 
