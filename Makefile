@@ -10,8 +10,8 @@ LDFLAGS+= -lmtemplate
 
 all: wiki admin menu sample test_forms 
 
-SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c breadcrumbs.c sort_mdict.c
-HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h breadcrumbs.h sort_mdict.h
+SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c breadcrumbs.c 
+HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h breadcrumbs.h 
 
 wiki: main.c $(SRCS) $@.h $(HDRS)
 	$(CC) $(CFLAGS) -o $@ main.c ${SRCS} $(LDFLAGS)
@@ -44,6 +44,9 @@ test_tmpl: $@.c params.c tmpl.c
 
 zztest_sort_mdict: $@.c $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
+
+zztest_myfileio:  $@.c $(SRCS) $(HDRS) myfileio.h myfileio.c
+	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) myfileio.c $(LDFLAGS)
 
 #json 
 must: $@.c params.c
@@ -123,6 +126,7 @@ clean:
 	rm -f sample long_page test_altstyle
 	rm -f test_breadcrumbs test_errno test_sort test_strings test_util
 	rm -f zztest_sort_mdict
+	rm -f zztest_myfileio
 
 .PHONY: test clean indent deploy all
 
