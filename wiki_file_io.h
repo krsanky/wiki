@@ -1,3 +1,3 @@
 
-int make_sorted_dir_arr(char *, char **);
+char ** make_sorted_dir_arr(char *, int *);
 

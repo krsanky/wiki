@@ -22,19 +22,21 @@ RB_HEAD(sorttree, sortitem) head = RB_INITIALIZER(&head);
 RB_PROTOTYPE(sorttree, sortitem, entry, sortitem_cmp)
 RB_GENERATE(sorttree, sortitem, entry, sortitem_cmp)
 
-int
-make_sorted_dir_arr(char *dir, char **list)
+char **
+make_sorted_dir_arr(char *dir, int *length)
 {
 	DIR            *d;
 	struct dirent  *de;
 	struct sortitem *si, *nxt;
 	int		len, i;
 	char		*tmpstr;
+	char		**list;
+	
 
 	d = opendir(dir);
 	if (d == NULL) {
 		printf("could not open dir:%s", dir);
-		return -1;
+		return NULL;
 	}
 	while ((de = readdir(d)) != NULL) {
 		if (de->d_name[0] != '.') {
@@ -56,7 +58,7 @@ make_sorted_dir_arr(char *dir, char **list)
 		//printf("%s\n", si->name);
 		len++;
 	}
-	printf("len:%d malloc-size:%lu\n", len, len*sizeof(char*));
+/* 	printf("len:%d malloc-size:%lu\n", len, len*sizeof(char*)); */
 
 	list = malloc(len * sizeof(char *));
 	assert(list != NULL);
@@ -78,9 +80,11 @@ make_sorted_dir_arr(char *dir, char **list)
 		free(si);
 	}
 	assert(RB_EMPTY(&head) == 1);
-
+/*
 	for (i=0; i<len; i++)
 		printf("%s\n", list[i]);
+*/
 
-	return 0;
+	*length = len;
+	return list;
 }

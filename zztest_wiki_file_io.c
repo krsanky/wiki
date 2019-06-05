@@ -5,15 +5,26 @@
 
 #include "wiki_file_io.h"
 
-int
-main()
+void
+test_make_sorted_dir_arr()
 {
-	int	ret;
+	int	len, i;
 	char	d[] = "/home/wise";
 	char	**list;
 	list = NULL;
 
-	ret = make_sorted_dir_arr(d, list);
+	len = 999;	
+	list = make_sorted_dir_arr(d, &len);
+	printf("len:%d\n", len);
+
+	for (i=0; i<len; i++)
+		printf("%s\n", list[i]);
+}
+
+int
+main()
+{
+	test_make_sorted_dir_arr();
 	return EXIT_SUCCESS;
 }
 
