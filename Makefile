@@ -10,8 +10,8 @@ LDFLAGS+= -lmtemplate
 
 all: wiki admin menu sample test_forms 
 
-SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c breadcrumbs.c 
-HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h breadcrumbs.h 
+SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c breadcrumbs.c wiki_file_io.c
+HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h breadcrumbs.h wiki_file_io.h
 
 wiki: main.c $(SRCS) $@.h $(HDRS)
 	$(CC) $(CFLAGS) -o $@ main.c ${SRCS} $(LDFLAGS)
@@ -45,8 +45,8 @@ test_tmpl: $@.c params.c tmpl.c
 zztest_sort_mdict: $@.c $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
-zztest_wiki_file_io:  $@.c $(SRCS) $(HDRS) wiki_file_io.h wiki_file_io.c
-	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) wiki_file_io.c $(LDFLAGS)
+zztest_wiki_file_io:  $@.c $(SRCS) $(HDRS) 
+	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 #json 
 must: $@.c params.c
@@ -111,7 +111,7 @@ deploy: all
 	cp -f test_codemirror ../htdocs/test_codemirror.cgi 2>/dev/null || :
 	cp -f test_altstyle ../htdocs/test_altstyle.cgi 2>/dev/null || :
 	cp -f long_page ../htdocs/long_page.cgi 2>/dev/null || :
-	cp -rf static ../htdocs/
+	#cp -rf static ../htdocs/
 	cp -rf templates ../htdocs/
 
 clean:

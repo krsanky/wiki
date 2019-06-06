@@ -19,6 +19,8 @@ test_make_sorted_dir_arr()
 
 	for (i=0; i<len; i++)
 		printf("%s\n", list[i]);
+
+	free_sorted_dir_arr(list, len);
 }
 
 int

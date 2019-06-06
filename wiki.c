@@ -24,6 +24,7 @@
 #include <mkdio.h>
 #include <fcntl.h>
 #include <mtemplate.h>
+#include <assert.h>
 
 #include "myhtml.h"
 #include "params.h"
@@ -32,6 +33,8 @@
 #include "forms.h"
 #include "tmpl.h"
 #include "sort_mdict.h"
+
+#include "wiki_file_io.h"
 
 #include "wiki.h"
 
@@ -121,93 +124,98 @@ fulldir(char *dir)
 	return fulldir;
 }
 
-/*
- * NONONO.  Im leaving this for a moment, now that I see...
- * since I want to modify list in the caller i have to "pass by ref" so 
- * the first * is just that.  Ignore that the type is itself a "ref".
- * (it doesn't have to do with when * is used for arrays)
- *
- * ((can the "pass by ref" notion of a pointer and the its just a struct pointer type be
- * shared?))
- *
- * Doesn't mostly strings (char *) need the double pointer thing?
- * IOW "list" can be just a single pointer?
- */
-int
-make_mobject_dirlist(char *dir, struct mobject **list)
+void
+populate_dirs(struct mobject *dirs, char *basedir, char **darr, int darrl)
 {
-	DIR            *d;
-	char           *fd;
-	struct dirent  *de;
-	int 		ret = 0;
-	struct mobject *pages, *dirs;
-	char           *anchor;
-	char           *tmpdir;
-
-	fd = fulldir(dir);
-	d = opendir(fd);
-	if (d == NULL) {
-		printf("could not open dir:%s", fd);
-		ret = -1;
-		goto end;
+	int	i;
+	char	*tmpd, *anchor, *s1;
+	
+	if (mobject_type(dirs) != TYPE_MDICT) {
+		nlog("error dirs is not an mdict");
+		return;
 	}
-	if ((*list = mdict_new()) == NULL) {
-		printf("mdict_new error");
-		ret = -1;
-		goto end;
-	}
-	mdict_insert_sd(*list, "pages");
-	mdict_insert_sd(*list, "dirs");
-	pages = mdict_item_s(*list, "pages");
-	dirs = mdict_item_s(*list, "dirs");
-	while ((de = readdir(d)) != NULL) {
-		if (de->d_name[0] != '.') {
-			if (de->d_type == DT_DIR) {
-				if (dir != NULL)
-					ret = cat_strings(&tmpdir, 3, dir, "/", de->d_name);
-				else
-					ret = cat_strings(&tmpdir, 1, de->d_name);
 
-				anchor = make_anchor("index", tmpdir, NULL, de->d_name);
-				mdict_insert_ss(dirs, de->d_name, anchor);
-				free(anchor);
-				free(tmpdir);
-			} else if (is_md(de)) {
-				anchor = make_anchor("view", dir, de->d_name, de->d_name);
-				mdict_insert_ss(pages, de->d_name, anchor);
-				free(anchor);
-			}
-		}
-	}
-	//pages = sort_mdict(pages);
+	for (i=0; i<darrl; i++) {
+		if (basedir != NULL)
+			cat_strings(&tmpd, 3, basedir, "/", darr[i]);
+		else
+			cat_strings(&tmpd, 1, darr[i]);
 
-end:
-	free(fd);
-	if (d != NULL)
-		closedir(d);
-	return ret;
+		anchor = make_anchor("index", tmpd, NULL, darr[i]);
+		s1 = strdup(darr[i]);
+		mdict_insert_ss(dirs, s1, anchor);
+		free(anchor);
+		free(tmpd);
+	}
+}
+
+void
+populate_pages(struct mobject *pages, char *basedir, char **parr, int parrl)
+{
+	int	i;
+	char	*tmpd, *anchor, *s1;
+	
+	if (mobject_type(pages) != TYPE_MDICT) {
+		nlog("error pages is not an mdict");
+		return;
+	}
+
+	for (i=0; i<parrl; i++) {
+		if (basedir != NULL)
+			cat_strings(&tmpd, 3, basedir, "/", parr[i]);
+		else
+			cat_strings(&tmpd, 1, parr[i]);
+
+
+		anchor = make_anchor("view", basedir, parr[i], parr[i]);
+
+
+		s1 = strdup(parr[i]);
+		mdict_insert_ss(pages, s1, anchor);
+		free(anchor);
+		free(tmpd);
+	}
 }
 
 void
 wikiindex(char *dir)
 {
 	struct mobject *ns = NULL;
+	struct mobject *pages, *dirs;
 	char 		t        [] = "templates/dirlist.m";
+	char		*fd;
 
+	fd = fulldir(dir);
+
+	assert((ns = mdict_new()) != NULL);
+	if (dir != NULL)
+		mdict_insert_ss(ns, "dir", dir);
+	else
+		mdict_insert_ss(ns, "dir", "");
+
+	mdict_insert_sd(ns, "pages");
+	mdict_insert_sd(ns, "dirs");
+	pages = mdict_item_s(ns, "pages");
+	dirs = mdict_item_s(ns, "dirs");
+
+	int	psl, dsl;
+	char	**ps, **ds;
+	ds = make_sorted_dir_arr(fd, &dsl);
+	ps = make_sorted_page_arr(fd, &psl);
+	populate_dirs(dirs, dir, ds, dsl);
+	populate_pages(pages, dir, ps, psl);
+	
 	http_headers();
 	myhtml_header(NULL);
 	myhtml_breadcrumbs(dir, NULL, NULL);
 
-	if (make_mobject_dirlist(dir, &ns) == 0) {
-		if (dir != NULL)
-			mdict_insert_ss(ns, "dir", dir);
-		else
-			mdict_insert_ss(ns, "dir", "");
-		tmpl_render(t, ns);
-	}
+	tmpl_render(t, ns);
+ 
 	myhtml_footer();
-	if (ns != NULL)
-		mobject_free(ns);
+	mobject_free(ns);
+	free(fd);
+	free_sorted_arr(ps, psl);
+	free_sorted_arr(ds, dsl);
 }
 
 void
