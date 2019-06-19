@@ -73,7 +73,7 @@ anchortest: test1.c myhtml.c
 		util.c test1.c myhtml.c \
 		$(LDFLAGS)
 
-test:
+test: test_codemirror 
 	@echo CURDIR:${.CURDIR}
 	@echo TARGET:$@ [should be 'test']
 	@echo CFLAGS: $(CFLAGS)
@@ -111,7 +111,10 @@ deploy: all
 	cp -f test_codemirror ../htdocs/test_codemirror.cgi 2>/dev/null || :
 	cp -f test_altstyle ../htdocs/test_altstyle.cgi 2>/dev/null || :
 	cp -f long_page ../htdocs/long_page.cgi 2>/dev/null || :
+
 	#cp -rf static ../htdocs/
+	cp -rf static/edit.js ../htdocs/static/
+
 	cp -rf templates ../htdocs/
 
 clean:

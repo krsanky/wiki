@@ -27,7 +27,30 @@
 
 #include "myhtml.h"
 
+#define EXTRA_JS "myhtml_extra_js"
+#define EXTRA_CSS "myhtml_extra_css"
+
 static char    *_altstyle = NULL;
+
+/*
+ * free this with mobject_free or mdict_free
+ */
+struct mobject *
+myhtml_data_new()
+{
+	struct mobject *ns;
+
+	ns = mdict_new();
+	if (ns != NULL) {
+		mdict_insert_sa(ns, EXTRA_JS);
+		mdict_insert_sa(ns, EXTRA_CSS);
+		/*
+		 * example:struct mobject *tmp = mdict_item_s(ns, EXTRA_JS);
+		 * marray_append_s(tmp, "/bad/js/include.js");
+		 */
+	}
+	return ns;
+}
 
 void
 myhtml_set_altstyle(char *s)
@@ -49,12 +72,28 @@ myhtml_test_altstyle()
 }
 
 void
+myhtml_header_add_js(struct mobject * ns, char *js)
+{
+	struct mobject *tmp;
+	tmp = mdict_item_s(ns, EXTRA_JS);
+	marray_append_s(tmp, js);
+}
+
+void
+myhtml_header_add_css(struct mobject * ns, char *css)
+{
+	struct mobject *tmp;
+	tmp = mdict_item_s(ns, EXTRA_CSS);
+	marray_append_s(tmp, css);
+}
+
+void
 myhtml_header(struct mobject * ctx)
 {
 	char 		fn       [] = "templates/header.m";
 	struct mobject *data;
 	if (ctx == NULL) {
-		data = tmpl_data_new();
+		data = myhtml_data_new();
 		tmpl_render(fn, data);
 		mobject_free(data);
 		return;

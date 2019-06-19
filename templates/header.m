@@ -9,20 +9,20 @@
 <link rel='stylesheet' href='/static/style.css' type='text/css' media='screen' />
 
 <!-- start extra css -->
-{{# these var names are in tmpl.[ch]}}
-{{for css in tmpl_extra_css}}
+{{# these var names are in myhtml.[ch]}}
+{{for css in myhtml_extra_css}}
 <link rel="stylesheet" type="text/css" href="{{css.value}}">
 {{endfor}}
 <!-- end extra css -->
 
 <script src="/static/jquery-3.3.1.min.js"></script>
 <!-- begin extra js -->
-{{for js in tmpl_extra_js}}
+{{for js in myhtml_extra_js}}
 <script src="{{js.value}}"></script>
 {{endfor}}
 <!-- end extra js -->
 </head>
 
 <body>
-<header><h1><a href="/wiki.cgi">Oldcode Wiki</a></h1></header>
+<header><h2><a href="/wiki.cgi">Oldcode Wiki</a></h2></header>
 

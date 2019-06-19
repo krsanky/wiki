@@ -10,6 +10,9 @@
 #include "myhtml.h"
 #include "tmpl.h"
 
+/*
+ * This is where the myhtml_header_add* stuff started 
+ */
 int
 main()
 {
@@ -19,26 +22,21 @@ main()
 	if (strcmp(getenv("REQUEST_METHOD"), "POST") == 0) {
 		nlog("test_codemirror POST");
 	}
-	if ((data = tmpl_data_new()) == NULL) {
+	if ((data = myhtml_data_new()) == NULL) {
 		errpage("err mdict_new()");
 		return EXIT_FAILURE;
 	}
 	http_headers();
 
-	tmpl_data_add_css(data, "/static/codemirror-5.46.0/lib/codemirror.css");
-	tmpl_data_add_css(data, "/static/codemirror-5.46.0/addon/dialog/dialog.css");
-	tmpl_data_add_css(data, "/static/codemirror-5.46.0/theme/midnight.css");
-
-	tmpl_data_add_js(data, "/static/codemirror-5.46.0/lib/codemirror.js");
-
-	tmpl_data_add_js(data, "/static/codemirror-5.46.0/addon/dialog/dialog.js");
-	tmpl_data_add_js(data, "/static/codemirror-5.46.0/addon/search/searchcursor.js");
-	tmpl_data_add_js(data, "/static/codemirror-5.46.0/addon/edit/matchbrackets.js");
-	tmpl_data_add_js(data, "/static/codemirror-5.46.0/keymap/vim.js");
-
-	tmpl_data_add_js(data, "/static/codemirror-5.46.0/keymap/emacs.js");
-
-
+	myhtml_header_add_css(data, "/static/codemirror-5.46.0/lib/codemirror.css");
+	myhtml_header_add_css(data, "/static/codemirror-5.46.0/addon/dialog/dialog.css");
+	myhtml_header_add_css(data, "/static/codemirror-5.46.0/theme/midnight.css");
+	myhtml_header_add_js(data, "/static/codemirror-5.46.0/lib/codemirror.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.46.0/addon/dialog/dialog.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.46.0/addon/search/searchcursor.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.46.0/addon/edit/matchbrackets.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.46.0/keymap/vim.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.46.0/keymap/emacs.js");
 	myhtml_header(data);
 
 	ret = tmpl_render("templates/test_codemirror.m", data);

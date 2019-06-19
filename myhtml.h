@@ -14,10 +14,16 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+struct mobject *myhtml_data_new();
+
 void 		myhtml_set_altstyle(char *);
 char           *myhtml_get_altstyle();
 void 		myhtml_test_altstyle();
+
+void 		myhtml_header_add_js(struct mobject *, char *);
+void 		myhtml_header_add_css(struct mobject *, char *);
 void 		myhtml_header(struct mobject *);
+
 void 		myhtml_footer();
 void 		myhtml_breadcrumbs(char *, char *, char *);
 char           *make_anchor(char *, char *, char *, char *);

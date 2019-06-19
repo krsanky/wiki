@@ -1,6 +1,6 @@
 </textarea>
 <br/>
-<button type='submit'>submit</button>
+<button type='submit'>Save</button>
 
 <input type='hidden' name='page' value='{{page}}' />
 

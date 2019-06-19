@@ -16,10 +16,6 @@
 
 /* include "mtemplate.h" before this file */
 
-struct mobject *tmpl_data_new();
-void 		tmpl_data_add_js(struct mobject *, char *);
-void 		tmpl_data_add_css(struct mobject *, char *);
-
 int 		tmpl_readfile(char *, char **);
 int 		tmpl_render(char *, struct mobject *);
 char           *tmpl_path(char *);

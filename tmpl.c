@@ -29,45 +29,6 @@
 
 #include "tmpl.h"
 
-#define EXTRA_JS "tmpl_extra_js"
-#define EXTRA_CSS "tmpl_extra_css"
-
-/*
- * free this with mobject_free or mdict_free
- */
-struct mobject *
-tmpl_data_new()
-{
-	struct mobject *ns;
-
-	ns = mdict_new();
-	if (ns != NULL) {
-		mdict_insert_sa(ns, EXTRA_JS);
-		mdict_insert_sa(ns, EXTRA_CSS);
-		/*
-		 * example:struct mobject *tmp = mdict_item_s(ns, EXTRA_JS);
-		 * marray_append_s(tmp, "/bad/js/include.js");
-		 */
-	}
-	return ns;
-}
-
-void
-tmpl_data_add_js(struct mobject * ns, char *js)
-{
-	struct mobject *tmp;
-	tmp = mdict_item_s(ns, EXTRA_JS);
-	marray_append_s(tmp, js);
-}
-
-void
-tmpl_data_add_css(struct mobject * ns, char *css)
-{
-	struct mobject *tmp;
-	tmp = mdict_item_s(ns, EXTRA_CSS);
-	marray_append_s(tmp, css);
-}
-
 /*
  * tbuf should be freed by caller.
  */
