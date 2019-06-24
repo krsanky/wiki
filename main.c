@@ -77,6 +77,8 @@ main(void)
 		msgpage("deldir");
 	} else if (strcmp(pagetype, "newdir") == 0) {
 		msgpage("newdir");
+	} else if (strcmp(pagetype, "options") == 0) {
+		wikioptions();
 	}
 	params_free(ps);
 	return EXIT_SUCCESS;

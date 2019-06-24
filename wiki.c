@@ -125,17 +125,16 @@ fulldir(char *dir)
 }
 
 void
-populate_dirs(struct mobject *dirs, char *basedir, char **darr, int darrl)
+populate_dirs(struct mobject * dirs, char *basedir, char **darr, int darrl)
 {
-	int	i;
-	char	*tmpd, *anchor, *s1;
-	
+	int 		i;
+	char           *tmpd, *anchor, *s1;
+
 	if (mobject_type(dirs) != TYPE_MDICT) {
 		nlog("error dirs is not an mdict");
 		return;
 	}
-
-	for (i=0; i<darrl; i++) {
+	for (i = 0; i < darrl; i++) {
 		if (basedir != NULL)
 			cat_strings(&tmpd, 3, basedir, "/", darr[i]);
 		else
@@ -150,17 +149,16 @@ populate_dirs(struct mobject *dirs, char *basedir, char **darr, int darrl)
 }
 
 void
-populate_pages(struct mobject *pages, char *basedir, char **parr, int parrl)
+populate_pages(struct mobject * pages, char *basedir, char **parr, int parrl)
 {
-	int	i;
-	char	*tmpd, *anchor, *s1;
-	
+	int 		i;
+	char           *tmpd, *anchor, *s1;
+
 	if (mobject_type(pages) != TYPE_MDICT) {
 		nlog("error pages is not an mdict");
 		return;
 	}
-
-	for (i=0; i<parrl; i++) {
+	for (i = 0; i < parrl; i++) {
 		if (basedir != NULL)
 			cat_strings(&tmpd, 3, basedir, "/", parr[i]);
 		else
@@ -183,7 +181,7 @@ wikiindex(char *dir)
 	struct mobject *ns = NULL;
 	struct mobject *pages, *dirs;
 	char 		t        [] = "templates/dirlist.m";
-	char		*fd;
+	char           *fd;
 
 	fd = fulldir(dir);
 
@@ -198,19 +196,19 @@ wikiindex(char *dir)
 	pages = mdict_item_s(ns, "pages");
 	dirs = mdict_item_s(ns, "dirs");
 
-	int	psl, dsl;
-	char	**ps, **ds;
+	int 		psl      , dsl;
+	char          **ps, **ds;
 	ds = make_sorted_dir_arr(fd, &dsl);
 	ps = make_sorted_page_arr(fd, &psl);
 	populate_dirs(dirs, dir, ds, dsl);
 	populate_pages(pages, dir, ps, psl);
-	
+
 	http_headers();
 	myhtml_header(NULL);
 	myhtml_breadcrumbs(dir, NULL, NULL);
 
 	tmpl_render(t, ns);
- 
+
 	myhtml_footer();
 	mobject_free(ns);
 	free(fd);
@@ -289,14 +287,10 @@ wikiedit(char *dir, char *page)
 		errpage("cannot open input file:");
 		return;
 	}
-
 	http_headers();
 
 	struct mobject *data;
-	if ((data = myhtml_data_new()) == NULL) {
-		errpage("err mdict_new()");
-		return;
-	}
+	assert((data = myhtml_data_new()) != NULL);
 	myhtml_header_add_css(data, "/static/codemirror-5.46.0/lib/codemirror.css");
 	myhtml_header_add_css(data, "/static/codemirror-5.46.0/addon/dialog/dialog.css");
 	myhtml_header_add_css(data, "/static/codemirror-5.46.0/theme/midnight.css");
@@ -309,16 +303,19 @@ wikiedit(char *dir, char *page)
 	myhtml_header(data);
 
 	myhtml_breadcrumbs(dir, page, "edit");
-	myhtml_textarea_open();
 
+	myhtml_textarea_open();
 	while ((c = fgetc(mdfile)) != EOF)
 		printf("%c", c);
-
 	if (mdfile != NULL)
 		fclose(mdfile);
-
 	myhtml_textarea_close(dir, page);
-	printf("<div style='font-size: 13px; width: 300px; height: 30px;'>Key buffer: <span id='command-display'></span></div>\n");
+
+	/*
+	 * printf("<div style='font-size: 13px; width: 300px; height:
+	 * 30px;'>Key buffer: <span id='command-display'></span></div>\n");
+	 */
+
 	printf("<script src='/static/edit.js'></script>\n");
 	myhtml_footer();
 }
@@ -430,11 +427,31 @@ wikieditform()
 void
 wikinew(char *dir)
 {
+	char 		t        [] = "templates/new.m";
 	http_headers();
 	myhtml_header(NULL);
 	myhtml_breadcrumbs(dir, NULL, "new");
-	myhtml_new(dir);
+
+
+	/* myhtml_new(dir); */
+	struct mobject *namespace = NULL;
+
+	if ((namespace = mdict_new()) == NULL) {
+		nlog("mdict_new error dir:%s", dir);
+		return;
+	} else
+		nlog("mdict_new OK dir:%s", dir);
+
+	if (dir == NULL)
+		mdict_insert_ss(namespace, "dir", "");
+	else
+		mdict_insert_ss(namespace, "dir", dir);
+
+	tmpl_render(t, namespace);
+
+
 	myhtml_footer();
+	mobject_free(namespace);
 }
 void
 wikinewform()
@@ -557,3 +574,55 @@ wikidelete(char *dir, char *page)
 	}
 	errpage("error deleting");
 }
+
+void
+wikioptions()
+{
+	char 		t        [] = "templates/options.m";
+	struct mobject *data;
+	PARAMS         *ps = NULL;
+
+	assert((data = mdict_new()) != NULL);
+
+
+/*
+	char		*qs;
+	if (strcasecmp(getenv("REQUEST_METHOD"), "POST") == 0) {
+		printf("Set-Cookie:asdqwe = Qwert;\r\n");
+		qs = getenv("QUERY_STRING");
+		CL_ = getenv("CONTENT_LENGTH");
+		buf = malloc(CL);
+		assert(buf != NULL);
+
+		l = fread(buf, 1, CL, stdin);
+		nlog("buf:%s", buf);
+		ps = params_create(NPARAMS, buf);
+		free(buf);
+		txt = params_get(ps, "wikiformtext");
+	
+		if (qs == NULL) {
+			errpage("error with QUERY_STRING");
+		}
+		if ((ps = params_create(num_params, qs)) == NULL) {
+			errpage("error with QUERY_STRING");
+		}
+		var2 = params_get(ps, "var2");
+		nlog("var2:%s", var2);
+	}	
+*/
+
+
+	http_headers();
+	myhtml_header(NULL);
+
+	showenv();
+
+	tmpl_render(t, data);
+	myhtml_footer();
+
+	mobject_free(data);
+	params_free(ps);
+}
+
+
+

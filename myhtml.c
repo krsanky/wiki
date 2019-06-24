@@ -90,15 +90,15 @@ myhtml_header_add_css(struct mobject * ns, char *css)
 void
 myhtml_header(struct mobject * ctx)
 {
-	char 		fn       [] = "templates/header.m";
+	char 		t       [] = "templates/header.m";
 	struct mobject *data;
 	if (ctx == NULL) {
 		data = myhtml_data_new();
-		tmpl_render(fn, data);
+		tmpl_render(t, data);
 		mobject_free(data);
 		return;
 	}
-	tmpl_render(fn, ctx);
+	tmpl_render(t, ctx);
 }
 
 void
@@ -261,23 +261,3 @@ myhtml_textarea_close(char *dir, char *page)
 	mobject_free(namespace);
 }
 
-void
-myhtml_new(char *dir)
-{
-	char 		fn       [] = "templates/new.m";
-	struct mobject *namespace = NULL;
-
-	if ((namespace = mdict_new()) == NULL) {
-		nlog("mdict_new error dir:%s", dir);
-		return;
-	} else
-		nlog("mdict_new OK dir:%s", dir);
-
-	if (dir == NULL)
-		mdict_insert_ss(namespace, "dir", "");
-	else
-		mdict_insert_ss(namespace, "dir", dir);
-
-	tmpl_render(fn, namespace);
-	mobject_free(namespace);
-}

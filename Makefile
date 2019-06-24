@@ -8,13 +8,16 @@ LDFLAGS+= -lnanomsg
 LDFLAGS+= -ljson-c
 LDFLAGS+= -lmtemplate
 
-all: wiki admin menu sample test_forms 
+all: wiki admin menu sample 
 
 SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c breadcrumbs.c wiki_file_io.c
 HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h breadcrumbs.h wiki_file_io.h
 
 wiki: main.c $(SRCS) $@.h $(HDRS)
 	$(CC) $(CFLAGS) -o $@ main.c ${SRCS} $(LDFLAGS)
+
+options: $@.c $(SRCS) $(HDRS)
+	$(CC) $(CFLAGS) -o $@ $@.c ${SRCS} $(LDFLAGS)
 
 menu: $@.c $(SRCS) $(HDRS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
@@ -54,9 +57,6 @@ must: $@.c params.c
 
 strstrp: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c
-
-test_forms: $@.c $(HDRS) $(SRCS)
-	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 test_codemirror: $@.c $(HDRS) $(SRCS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
@@ -103,11 +103,11 @@ indent:
 
 deploy: all
 	cp -f wiki ../htdocs/wiki.cgi
+	cp -f options ../htdocs/options.cgi
 	cp -f menu ../htdocs/menu.cgi
 	cp -f admin ../htdocs/admin.cgi
 	cp -f wikieditform.php ../htdocs/
 	cp -f sample ../htdocs/sample.cgi
-	cp -f test_forms ../htdocs/test_forms.cgi
 	cp -f test_codemirror ../htdocs/test_codemirror.cgi 2>/dev/null || :
 	cp -f test_altstyle ../htdocs/test_altstyle.cgi 2>/dev/null || :
 	cp -f long_page ../htdocs/long_page.cgi 2>/dev/null || :
@@ -119,13 +119,14 @@ deploy: all
 
 clean:
 	rm -f wiki
+	rm -f options
 	rm -f menu
 	rm -f admin
 	rm -f writef nanoclient mdtest params_test test_params
 	rm -f a.out *.BAK *.core
 	rm -f tmpl must fix_perms
 	rm -f test_tmpl
-	rm -f test_forms test_codemirror  
+	rm -f test_codemirror  
 	rm -f sample long_page test_altstyle
 	rm -f test_breadcrumbs test_errno test_sort test_strings test_util
 	rm -f zztest_sort_mdict
