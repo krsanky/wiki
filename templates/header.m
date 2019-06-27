@@ -24,5 +24,4 @@
 </head>
 
 <body>
-<header><h2><a href="/wiki.cgi">Oldcode Wiki</a></h2></header>
 

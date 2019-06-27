@@ -26,22 +26,55 @@
 #include "myhtml.h"
 #include "params.h"
 #include "wiki.h"
+#include "forms.h"
 
-int 
+void
+set_cookie(char *n, char *v)
+{
+	printf("Set-Cookie:%s = %s;\r\n", n, v);
+}
+
+void
+setup_data(struct mobject * data)
+{
+	mdict_insert_ss(data, "editor", UNDEFINED);
+	mdict_insert_ss(data, "bogus_var1", UNDEFINED);
+	mdict_insert_ss(data, "cookie", UNDEFINED);
+}
+
+void
+add_cookie(char *name, char *val)
+{
+	if ((name == NULL) || (val == NULL))
+		return;
+	set_cookie(name, val);
+}
+
+int
 main()
 {
 	char 		t        [] = "templates/options.m";
 	struct mobject *data;
 	PARAMS         *ps = NULL;
 	char           *qs, *CL_, *buf;
-	char           *var2;
+	char           *cookie;
+	char           *editor, *bogus_var1;
 	int 		CL;
 	int 		bufl;
 
 	assert((data = mdict_new()) != NULL);
+	setup_data(data);
+
+	/*
+	 * Read cookies
+	 * set_cookie("asdasd", "qweqwe");
+	 * set_cookie("123_-123", "sdf wert  thter");
+         * set_cookie("kkk-ppp", "asd 123 5345");
+	 */
+	if ((cookie = getenv("HTTP_COOKIE")) != NULL)
+		mdict_replace_ss(data, "cookie", cookie);
 
 	if (strcasecmp(getenv("REQUEST_METHOD"), "POST") == 0) {
-		printf("Set-Cookie:ThisIsCookie123 = HeyTHisThingx;\r\n");
 		qs = getenv("QUERY_STRING");
 		assert(qs != NULL);
 		CL_ = getenv("CONTENT_LENGTH");
@@ -56,13 +89,20 @@ main()
 		assert((ps = params_create(5, buf)) != NULL);
 		free(buf);
 
-		var2 = params_get(ps, "var2");
-		nlog("var2:%s", var2);
+		add_cookie(params_get(ps, "cookie_name"), params_get(ps, "cookie_value"));
+
+		editor = params_get(ps, "editor");
+		bogus_var1 = params_get(ps, "bogus_var1");
+		nlog("editor:%s", editor);
+		mdict_replace_ss(data, "editor", editor);
+		mdict_replace_ss(data, "bogus_var1", bogus_var1);
+		set_cookie("bogus_var1", bogus_var1);
 	}
 	http_headers();
 	myhtml_header(NULL);
+	/* myhtml_banner(); */
 
-/* 	showenv(); */
+	/* showenv(); */
 
 	tmpl_render(t, data);
 	myhtml_footer();

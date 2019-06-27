@@ -261,3 +261,9 @@ myhtml_textarea_close(char *dir, char *page)
 	mobject_free(namespace);
 }
 
+void
+myhtml_banner() 
+{
+	printf("<header><h2><a href='/wiki.cgi'>Oldcode Wiki</a></h2></header>\n");
+}
+

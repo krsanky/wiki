@@ -28,6 +28,27 @@
 #include "params.h"
 
 PARAMS         *
+params_new(int num)
+{
+	PARAMS         *params;
+	int 		ret;
+
+	if ((params = malloc(sizeof(PARAMS))) == NULL)
+		return NULL;
+	if ((params->params = malloc(sizeof(PARAM) * num)) == NULL)
+		return NULL;
+
+	for (int i = 0; i < num; i++) {
+		params->params[i].key = NULL;
+		params->params[i].val = NULL;
+	}
+
+	params->len = num;
+
+	return params;
+}
+
+PARAMS         *
 params_create(int num, char *qs)
 {
 	PARAMS         *params;
@@ -100,6 +121,13 @@ params_parse_query(char *query, PARAMS * ps)
 	}
 
 	free(fstring);
+	return 0;
+}
+
+int
+params_parse_http_cookie(char *http_cookie, PARAMS * ps)
+{
+	nlog("parse cookie...");
 	return 0;
 }
 

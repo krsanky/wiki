@@ -114,6 +114,7 @@ deploy: all
 
 	#cp -rf static ../htdocs/
 	cp -rf static/edit.js ../htdocs/static/
+	cp -rf static/style.css ../htdocs/static/
 
 	cp -rf templates ../htdocs/
 

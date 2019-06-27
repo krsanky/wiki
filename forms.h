@@ -14,4 +14,6 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#define UNDEFINED "-undefined-"
+
 char           *parse_boundary(char *);
