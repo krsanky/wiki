@@ -56,11 +56,14 @@ main()
 	char 		t        [] = "templates/options.m";
 	struct mobject *data;
 	PARAMS         *ps = NULL;
+	PARAMS         *cps = NULL;
 	char           *qs, *CL_, *buf;
 	char           *cookie;
 	char           *editor, *bogus_var1;
 	int 		CL;
 	int 		bufl;
+	int		ret;
+	int		i;
 
 	assert((data = mdict_new()) != NULL);
 	setup_data(data);
@@ -71,8 +74,18 @@ main()
 	 * set_cookie("123_-123", "sdf wert  thter");
          * set_cookie("kkk-ppp", "asd 123 5345");
 	 */
-	if ((cookie = getenv("HTTP_COOKIE")) != NULL)
+	if ((cookie = getenv("HTTP_COOKIE")) != NULL) {
 		mdict_replace_ss(data, "cookie", cookie);
+		assert((cps = params_new(5)) != NULL);
+		ret = params_parse_http_cookie(cookie, cps);
+		nlog("ret:%d", ret);
+	}
+	if (cps != NULL) {
+		nlog("cps != NULL");
+		for (i=0; i<cps->len; i++) {
+			nlog("key:%s", cps->params[i].key);
+		}
+	}
 
 	if (strcasecmp(getenv("REQUEST_METHOD"), "POST") == 0) {
 		qs = getenv("QUERY_STRING");

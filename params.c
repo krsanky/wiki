@@ -31,7 +31,6 @@ PARAMS         *
 params_new(int num)
 {
 	PARAMS         *params;
-	int 		ret;
 
 	if ((params = malloc(sizeof(PARAMS))) == NULL)
 		return NULL;
@@ -125,9 +124,48 @@ params_parse_query(char *query, PARAMS * ps)
 }
 
 int
-params_parse_http_cookie(char *http_cookie, PARAMS * ps)
+params_parse_http_cookie(char *http_cookie, PARAMS *ps)
 {
-	nlog("parse cookie...");
+	char           *string, *fstring;
+	char		*found;
+	char           *key;
+	int 		idx = 0;
+	int		first = 1;
+
+	nlog("params_parse_http_cookie() cookie...:%s", http_cookie);
+	if (http_cookie == NULL)
+		return -1;
+	fstring = string = strdup(http_cookie);
+
+	nlog("ps->len:%d", ps->len);
+	while ((found = strsep(&string, ";"))  != NULL) {
+		if (idx >= ps->len)
+			break;
+		key = strsep(&found, "=");
+		nlog("idx:%d key:%s", idx, key);
+
+		if (first)
+			ps->params[idx].key = strdup(key);
+		else
+			ps->params[idx].key = strdup(key+1);
+
+		if (ps->params[idx].key == NULL)
+			return -1;
+
+		if (found != NULL) {
+			nlog("found:%s", found);
+			ps->params[idx].val = strdup(found);
+			if (ps->params[idx].val == NULL)
+				return -1;
+		} else {
+			ps->params[idx].val = NULL;
+		}
+
+		first = 0;
+		idx++;
+	}
+
+	free(fstring);
 	return 0;
 }
 
