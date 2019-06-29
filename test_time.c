@@ -5,17 +5,31 @@
 int
 main()
 {
-	printf("time\n");
-
-	time_t 		timer;
+	time_t 		timer, future;
 	char 		buf      [256];
 	struct tm      *tm_info;
+	unsigned long	year;
+
+
+	year = 60 * 60 * 24 * 356;
+	printf("a year is %lu secs\n", year);
 
 	time(&timer);
-	tm_info = localtime(&timer);
+	printf("time_t time:%lld\n", timer);
 
+	future = year + timer;
+
+
+
+	
+
+	tm_info = localtime(&timer);
 	strftime(buf, 26, "%Y-%m-%d %H:%M:%S", tm_info);
-	printf("%s\n", buf);
+	printf("now:         %s\n", buf);
+
+	tm_info = localtime(&future);
+	strftime(buf, 26, "%Y-%m-%d %H:%M:%S", tm_info);
+	printf("1-year-away: %s\n", buf);
 
 	return EXIT_SUCCESS;
 }
