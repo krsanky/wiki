@@ -10,8 +10,8 @@ LDFLAGS+= -lmtemplate
 
 all: wiki admin menu sample 
 
-SRCS= wiki.c myhtml.c params.c forms.c util.c tmpl.c breadcrumbs.c wiki_file_io.c
-HDRS= wiki.h myhtml.h params.h forms.h util.h tmpl.h breadcrumbs.h wiki_file_io.h
+SRCS= wiki.c myhtml.c params.c util.c tmpl.c breadcrumbs.c wiki_file_io.c
+HDRS= wiki.h myhtml.h params.h util.h tmpl.h breadcrumbs.h wiki_file_io.h
 
 wiki: main.c $(SRCS) $@.h $(HDRS)
 	$(CC) $(CFLAGS) -o $@ main.c ${SRCS} $(LDFLAGS)
@@ -132,6 +132,7 @@ clean:
 	rm -f test_breadcrumbs test_errno test_sort test_strings test_util
 	rm -f zztest_sort_mdict
 	rm -f zztest_wiki_file_io
+	rm -f test_time
 
 .PHONY: test clean indent deploy all
 

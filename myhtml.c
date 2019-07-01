@@ -267,3 +267,11 @@ myhtml_banner()
 	printf("<header><h2><a href='/wiki.cgi'>Oldcode Wiki</a></h2></header>\n");
 }
 
+void
+myhtml_bannerA()
+{
+	printf("<a href='/'>[root]</a>\n");
+	printf("<a href='#'>[reload]</a>\n");
+	printf("<br/>\n");
+}
+

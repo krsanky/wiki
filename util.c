@@ -21,6 +21,7 @@
 #include <nanomsg/nn.h>
 #include <nanomsg/reqrep.h>
 #include <dirent.h>
+#include <time.h>
 
 #include "settings.h"
 
@@ -30,6 +31,35 @@ void
 http_headers()
 {
 	printf("Content-type: text/html\n\n");
+}
+
+void
+set_cookie(char *n, char *v)
+{
+	time_t 		now   , future;
+	struct tm      *tm_info;
+	char 		buf      [256];
+	const unsigned long year = 60 * 60 * 24 * 356;
+
+	time(&now);
+	future = year + now;
+	tm_info = localtime(&future);
+	strftime(buf, 256, "%a, %d %b %Y %H:%M:%S GMT", tm_info);
+
+	nlog("Set-Cookie: %s=%s; Secure; HttpOnly; Expires=%s\r\n", n, v, buf);
+	printf("Set-Cookie: %s=%s; Secure; HttpOnly; Expires=%s\r\n", n, v, buf);
+
+	/*
+	Expires=Wed, 21 Oct 2015 07:28:00 GMT
+	
+	Date: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
+	
+	One of "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", or "Sun" (case-sensitive).
+	<day>
+	    2 digit day number, e.g. "04" or "23".
+	
+	Date: Wed, 21 Oct 2015 07:28:00 GMT
+	*/
 }
 
 int

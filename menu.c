@@ -3,7 +3,6 @@
 #include <dirent.h>
 #include <mtemplate.h>
 
-#include "forms.h"
 #include "util.h"
 #include "myhtml.h"
 #include "tmpl.h"

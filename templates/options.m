@@ -1,6 +1,3 @@
-<hr/>
-{{cookie}}
-<hr/>
 <form method="post">
 
 
@@ -16,6 +13,7 @@
 	<tr>
 		<td>
 			<input type="radio" name="modify_var_name" value="editor"/> 
+			{{editor}}
 		</td>
 		<td>editor</td>
 		<td>
@@ -38,13 +36,6 @@
 	</tr>
 </table>
 
-<p>
-<ul>
-<li>set cookie:</li>
-<li><input type="text" name="cookie_name" placeholder="name"></li>
-<li><input type="text" name="cookie_value" placeholder="value"></li>
-</ul>
-</p>
 
 <button type='submit'>submit</button>
 </form>

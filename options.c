@@ -26,28 +26,25 @@
 #include "myhtml.h"
 #include "params.h"
 #include "wiki.h"
-#include "forms.h"
 
 void
-set_cookie(char *n, char *v)
+setup_cookie_page_var(char *name, PARAMS * cks, struct mobject * page_data)
 {
-	printf("Set-Cookie:%s = %s;\r\n", n, v);
+	char           *val;
+	val = params_get(cks, name);
+	if (val == NULL)
+		mdict_insert_ss(page_data, name, UNDEFINED);
+	else
+		mdict_insert_ss(page_data, name, val);
 }
 
 void
-setup_data(struct mobject * data)
+setup_data(char **names, int namesl, PARAMS * cks, struct mobject * page_data)
 {
-	mdict_insert_ss(data, "editor", UNDEFINED);
-	mdict_insert_ss(data, "bogus_var1", UNDEFINED);
-	mdict_insert_ss(data, "cookie", UNDEFINED);
-}
-
-void
-add_cookie(char *name, char *val)
-{
-	if ((name == NULL) || (val == NULL))
-		return;
-	set_cookie(name, val);
+	for (int i=0; i<namesl; i++) {
+		nlog("name:%s", names[i]);
+		setup_cookie_page_var(names[i], cks, page_data);
+	}
 }
 
 int
@@ -59,21 +56,22 @@ main()
 	PARAMS         *cps = NULL;
 	char           *qs, *CL_, *buf;
 	char           *cookie;
-	char           *editor, *bogus_var1;
 	int 		CL;
 	int 		bufl;
-	int		ret;
-	int		i;
+	int 		ret;
+	int 		i;
+	char           *modify_var_name;
+	char           *modify_var;
+
+	char           *page_vars[] = {
+		"editor",
+		"bogus_var1",
+		"cookie",
+		"c1"
+	};
 
 	assert((data = mdict_new()) != NULL);
-	setup_data(data);
 
-	/*
-	 * Read cookies
-	 * set_cookie("asdasd", "qweqwe");
-	 * set_cookie("123_-123", "sdf wert  thter");
-         * set_cookie("kkk-ppp", "asd 123 5345");
-	 */
 	if ((cookie = getenv("HTTP_COOKIE")) != NULL) {
 		mdict_replace_ss(data, "cookie", cookie);
 		assert((cps = params_new(5)) != NULL);
@@ -81,48 +79,51 @@ main()
 		nlog("ret:%d", ret);
 	}
 	if (cps != NULL) {
-		nlog("cps != NULL");
-		for (i=0; i<cps->len; i++) {
+		nlog("(cookie params) cps != NULL");
+		for (i = 0; i < cps->len; i++) {
 			nlog("key:%s", cps->params[i].key);
 		}
 	}
+	
+	setup_data(page_vars, 4, cps, data);
 
 	if (strcasecmp(getenv("REQUEST_METHOD"), "POST") == 0) {
 		qs = getenv("QUERY_STRING");
 		assert(qs != NULL);
 		CL_ = getenv("CONTENT_LENGTH");
 		CL = (CL_ != NULL) ? atoi(CL_) : -1;
+		
+		nlog("CL:%d", CL);
+		if (CL != -1) 
+		{
+			buf = malloc(CL);
+			assert(buf != NULL);
 
+			bufl = fread(buf, 1, CL, stdin);
+			nlog("buf:%s", buf);
+			assert((ps = params_create(5, buf)) != NULL);
+			free(buf);
 
-		buf = malloc(CL);
-		assert(buf != NULL);
+			modify_var_name = params_get(ps, "modify_var_name");
+			modify_var = params_get(ps, params_get(ps, "modify_var_name"));
+			if ((modify_var_name != NULL) && (modify_var != NULL)) {
+				nlog("set_cookie(%s, %s)", modify_var_name, modify_var);
+				set_cookie(modify_var_name, modify_var);
+			}
 
-		bufl = fread(buf, 1, CL, stdin);
-		nlog("buf:%s", buf);
-		assert((ps = params_create(5, buf)) != NULL);
-		free(buf);
-
-		add_cookie(params_get(ps, "cookie_name"), params_get(ps, "cookie_value"));
-
-		editor = params_get(ps, "editor");
-		bogus_var1 = params_get(ps, "bogus_var1");
-		nlog("editor:%s", editor);
-		mdict_replace_ss(data, "editor", editor);
-		mdict_replace_ss(data, "bogus_var1", bogus_var1);
-		set_cookie("bogus_var1", bogus_var1);
+			/* redir after POST */
+			redirect("/options.cgi");
+		}
 	}
+
 	http_headers();
 	myhtml_header(NULL);
-	/* myhtml_banner(); */
-
-	/* showenv(); */
-
+	myhtml_bannerA();
 	tmpl_render(t, data);
 	myhtml_footer();
 
 	mobject_free(data);
 	params_free(ps);
-
 
 	return EXIT_SUCCESS;
 }

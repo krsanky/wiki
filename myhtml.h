@@ -14,6 +14,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#define UNDEFINED "+-+-+-+-"
+
 struct mobject *myhtml_data_new();
 
 void 		myhtml_set_altstyle(char *);
@@ -31,4 +33,5 @@ char           *make_url(char *, char *, char *);
 void 		myhtml_textarea_open();
 void 		myhtml_textarea_close(char *, char *);
 void		myhtml_banner();
+void 		myhtml_bannerA();
 

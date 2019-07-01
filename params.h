@@ -28,11 +28,12 @@ typedef struct params {
 PARAMS         *params_new(int);
 PARAMS         *params_create(int, char *);
 void 		params_free(PARAMS *);
+
 int 		params_parse_query(char *, PARAMS *);
 int 		params_parse_http_cookie(char *, PARAMS *);
+
 int 		params_ishex(int);
 int 		params_urldecode(char *, char *);
 char           *params_get(PARAMS *, char *);
 
 int 		params_testdb();
-int 		isone_formdata_header(char *);
