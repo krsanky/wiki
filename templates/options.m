@@ -45,7 +45,4 @@ $('#clear_modify').click(function(){
 	$('input[name=modify_var_name]').prop('checked', false);
 	return false;
 });
-
-//localStorage.setItem('colorSetting', '#a4509b');
-
 </script>
