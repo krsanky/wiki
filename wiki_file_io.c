@@ -122,7 +122,7 @@ make_sorted_page_arr(char *dir, int *length)
 		return NULL;
 	}
 	while ((de = readdir(d)) != NULL) {
-		if (is_md(de)) {
+		if (is_wiki_file(de)) {
 			si = malloc(sizeof(*si));
 			assert(si != NULL);
 			si->name = strdup(de->d_name);

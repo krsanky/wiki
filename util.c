@@ -76,6 +76,20 @@ is_md(struct dirent * de)
 	return 0;
 }
 
+/*
+ * This is just gonna check if the file has an allowable suffix.
+ */
+int
+is_wiki_file(struct dirent * de)
+{
+	int	is_md_;
+	is_md_ = is_md(de);
+	char           *sfxs[] = {
+		"md", "jpg", "txt"
+	};
+	return is_md_;
+}
+
 void
 nn_fatal(const char *func)
 {

@@ -17,8 +17,9 @@
 /* include <dirent.h> before this file */
 
 void 		http_headers();
-void		set_cookie(char *, char *);
+void 		set_cookie(char *, char *);
 int 		is_md     (struct dirent *);
+int 		is_wiki_file(struct dirent *);
 int 		nlog      (const char *,...);
 void 		redirect (char *);
 int 		self_redirect(char *, char *, char *);

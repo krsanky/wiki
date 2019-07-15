@@ -270,8 +270,8 @@ myhtml_banner()
 void
 myhtml_bannerA()
 {
-	printf("<a href='/'>[root]</a>\n");
-	printf("<a href='#'>[reload]</a>\n");
-	printf("<br/>\n");
+	printf("<a href='/'>wiki.oldcode.org</a>\n");
+/*	printf("<a href='#'>[reload]</a>\n");*/
+	printf("<hr/>\n");
 }
 

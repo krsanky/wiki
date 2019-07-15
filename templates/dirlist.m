@@ -1,7 +1,7 @@
 <div class="grid-1">
 
   <div>
-    <h3>pages</h3>
+    <h3>files</h3>
     <ul>
     {{for p in pages}}
     	<li>{{p.value}}</li>
