@@ -21,7 +21,7 @@ void 		showenv  (void);
 void 		errpage  (char *,...);
 void 		msgpage  (char *,...);
 
-int		make_mobject_dirlist(char *, struct mobject **);
+int 		make_mobject_dirlist(char *, struct mobject **);
 void 		wikiindex(char *);
 void 		wikiindex2(char *);
 void 		wikiview (char *, char *);
@@ -31,6 +31,8 @@ void 		wikieditform();
 
 void 		wikinew  (char *);
 void 		wikinewform();
+void 		wikinewdir(char *);
+void 		wikinewdirform();
 
 void 		wikidelete(char *, char *);
-void		wikioptions();
+void 		wikioptions();

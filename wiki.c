@@ -25,6 +25,7 @@
 #include <fcntl.h>
 #include <mtemplate.h>
 #include <assert.h>
+ #include <sys/stat.h>
 
 #include "myhtml.h"
 #include "params.h"
@@ -545,6 +546,87 @@ wikinewform()
 }
 
 void
+wikinewdir(char *dir)
+{
+	char 		t        [] = "templates/newdir.m";
+	struct mobject *data = NULL;
+
+	assert((data = mdict_new()) != NULL);
+	if (dir == NULL)
+		mdict_insert_ss(data, "dir", "");
+	else
+		mdict_insert_ss(data, "dir", dir);
+
+	http_headers();
+	myhtml_header(NULL);
+	myhtml_bannerA();
+	myhtml_breadcrumbs(dir, NULL, "newdir");
+
+	tmpl_render(t, data);
+
+	myhtml_footer();
+	mobject_free(data);
+}
+void
+wikinewdirform()
+{
+	char           *RM;
+	char           *CL_;
+	char           *CT;
+	int 		CL;
+	char           *buf;
+	int 		l;
+	PARAMS         *ps;
+	char           *newdir, *dir, *dir_;
+	int		ret;
+	char		*path;
+	char		*curdir;
+
+	RM = getenv("REQUEST_METHOD");
+	CL_ = getenv("CONTENT_LENGTH");
+	CT = getenv("CONTENT_TYPE");
+	if (CL_ != NULL)
+		CL = atoi(CL_);
+	else
+		CL = -1;
+
+	nlog("newdirform() RM[%s] CT[%s] CL[%d]", RM, CT, CL);
+	assert((buf = malloc(CL)) != NULL);
+
+	l = fread(buf, 1, CL, stdin);
+	nlog("buf:%s", buf);
+	ps = params_create(5, buf);
+	free(buf);
+
+	newdir = params_get(ps, "newdir");
+	dir_ = params_get(ps, "dir");
+	assert((dir = malloc(strlen(dir_)+1)) != NULL);
+	ret = params_urldecode(dir_, dir);
+
+	curdir = NULL;
+	curdir = getcwd(curdir, 0);
+	l = strlen(WIKI_ROOT) + strlen(dir) + strlen(newdir) + 3 + 1;
+	assert((path = malloc(l)) != NULL);
+	strlcpy(path, WIKI_ROOT, l);
+	strlcat(path, "/", l);
+	if (dir != NULL) {
+		strlcat(path, dir, l);
+		strlcat(path, "/", l);
+	}
+	strlcat(path, newdir, l);
+	ret = mkdir(path, 0770);
+/*
+0770
+     int
+     mkdir(const char *path, mode_t mode);
+*/
+	msgpage("ret:%d newdirform:%s curdir:%s ", ret, path, curdir);
+	free(path);
+	free(curdir);
+	params_free(ps);
+}
+
+void
 wikidelete(char *dir, char *page)
 {
 	char           *delpath;
@@ -589,31 +671,31 @@ wikioptions()
 	assert((data = mdict_new()) != NULL);
 
 
-/*
-	char		*qs;
-	if (strcasecmp(getenv("REQUEST_METHOD"), "POST") == 0) {
-		printf("Set-Cookie:asdqwe = Qwert;\r\n");
-		qs = getenv("QUERY_STRING");
-		CL_ = getenv("CONTENT_LENGTH");
-		buf = malloc(CL);
-		assert(buf != NULL);
-
-		l = fread(buf, 1, CL, stdin);
-		nlog("buf:%s", buf);
-		ps = params_create(NPARAMS, buf);
-		free(buf);
-		txt = params_get(ps, "wikiformtext");
+	/*
+		char		*qs;
+		if (strcasecmp(getenv("REQUEST_METHOD"), "POST") == 0) {
+			printf("Set-Cookie:asdqwe = Qwert;\r\n");
+			qs = getenv("QUERY_STRING");
+			CL_ = getenv("CONTENT_LENGTH");
+			buf = malloc(CL);
+			assert(buf != NULL);
 	
-		if (qs == NULL) {
-			errpage("error with QUERY_STRING");
+			l = fread(buf, 1, CL, stdin);
+			nlog("buf:%s", buf);
+			ps = params_create(NPARAMS, buf);
+			free(buf);
+			txt = params_get(ps, "wikiformtext");
+		
+			if (qs == NULL) {
+				errpage("error with QUERY_STRING");
+			}
+			if ((ps = params_create(num_params, qs)) == NULL) {
+				errpage("error with QUERY_STRING");
+			}
+			var2 = params_get(ps, "var2");
+			nlog("var2:%s", var2);
 		}
-		if ((ps = params_create(num_params, qs)) == NULL) {
-			errpage("error with QUERY_STRING");
-		}
-		var2 = params_get(ps, "var2");
-		nlog("var2:%s", var2);
-	}	
-*/
+	*/
 
 
 	http_headers();
@@ -627,6 +709,3 @@ wikioptions()
 	mobject_free(data);
 	params_free(ps);
 }
-
-
-

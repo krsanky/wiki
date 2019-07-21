@@ -76,7 +76,9 @@ main(void)
 	} else if (strcmp(pagetype, "deldir") == 0) {
 		msgpage("deldir");
 	} else if (strcmp(pagetype, "newdir") == 0) {
-		msgpage("newdir");
+		wikinewdir(params_get(ps, "d"));
+	} else if (strcmp(pagetype, "newdirform") == 0) {
+		wikinewdirform();
 	} else if (strcmp(pagetype, "options") == 0) {
 		wikioptions();
 	}
