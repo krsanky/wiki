@@ -205,7 +205,7 @@ wikiindex(char *dir)
 
 	http_headers();
 	myhtml_header(NULL);
-	myhtml_bannerA();
+	
 	myhtml_breadcrumbs(dir, NULL, NULL);
 
 	tmpl_render(t, ns);
@@ -251,7 +251,7 @@ wikiview(char *dir, char *page)
 
 	http_headers();
 	myhtml_header(NULL);
-	myhtml_bannerA();
+	
 	myhtml_breadcrumbs(dir, page, "view");
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS | MKD_FENCEDCODE);
 	myhtml_footer();
@@ -303,7 +303,7 @@ wikiedit(char *dir, char *page)
 	myhtml_header_add_js(data, "/static/codemirror-5.46.0/keymap/vim.js");
 	myhtml_header_add_js(data, "/static/codemirror-5.46.0/keymap/emacs.js");
 	myhtml_header(data);
-	myhtml_bannerA();
+	
 
 	myhtml_breadcrumbs(dir, page, "edit");
 
@@ -420,7 +420,7 @@ wikieditform()
 	}
 	http_headers();
 	myhtml_header(NULL);
-	myhtml_bannerA();
+	
 	myhtml_breadcrumbs(NULL, NULL, "edit");
 
 	printf("<p>editform() RM[%s] CT[%s] CL[%d]</p>\n", RM, CT, CL);
@@ -434,7 +434,7 @@ wikinew(char *dir)
 	char 		t        [] = "templates/new.m";
 	http_headers();
 	myhtml_header(NULL);
-	myhtml_bannerA();
+	
 	myhtml_breadcrumbs(dir, NULL, "new");
 
 
@@ -559,7 +559,7 @@ wikinewdir(char *dir)
 
 	http_headers();
 	myhtml_header(NULL);
-	myhtml_bannerA();
+	
 	myhtml_breadcrumbs(dir, NULL, "newdir");
 
 	tmpl_render(t, data);
@@ -615,15 +615,14 @@ wikinewdirform()
 	}
 	strlcat(path, newdir, l);
 	ret = mkdir(path, 0770);
-/*
-0770
-     int
-     mkdir(const char *path, mode_t mode);
-*/
+
 	msgpage("ret:%d newdirform:%s curdir:%s ", ret, path, curdir);
+
 	free(path);
 	free(curdir);
 	params_free(ps);
+
+	self_redirect("index", newdir, NULL);
 }
 
 void

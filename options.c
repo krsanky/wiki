@@ -28,10 +28,13 @@
 #include "wiki.h"
 
 void
-setup_cookie_page_var(char *name, PARAMS * cks, struct mobject * page_data)
+setup_cookie_page_var(char *name, PARAMS *cks, struct mobject *page_data)
 {
 	char           *val;
+
+	nlog("setup_cookie_page_var");
 	val = params_get(cks, name);
+	nlog("setup_cookie_page_var 37");
 	if (val == NULL)
 		mdict_insert_ss(page_data, name, UNDEFINED);
 	else
@@ -42,9 +45,10 @@ void
 setup_data(char **names, int namesl, PARAMS * cks, struct mobject * page_data)
 {
 	for (int i=0; i<namesl; i++) {
-		nlog("name:%s", names[i]);
+		nlog("setup_data: name:%s", names[i]);
 		setup_cookie_page_var(names[i], cks, page_data);
 	}
+	nlog("leave setup_data");
 }
 
 int
@@ -71,10 +75,10 @@ main()
 	};
 
 	assert((data = mdict_new()) != NULL);
+	assert((cps = params_new(5)) != NULL);
 
 	if ((cookie = getenv("HTTP_COOKIE")) != NULL) {
 		mdict_replace_ss(data, "cookie", cookie);
-		assert((cps = params_new(5)) != NULL);
 		ret = params_parse_http_cookie(cookie, cps);
 		nlog("ret:%d", ret);
 	}
@@ -124,6 +128,7 @@ main()
 
 	mobject_free(data);
 	params_free(ps);
+	params_free(cps);
 
 	return EXIT_SUCCESS;
 }

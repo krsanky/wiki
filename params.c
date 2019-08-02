@@ -172,10 +172,12 @@ params_parse_http_cookie(char *http_cookie, PARAMS *ps)
 char           *
 params_get(PARAMS * ps, char *key)
 {
+	int	i;
+
 	if (key == NULL)
 		return NULL;
 
-	for (int i = 0; i < ps->len; i++) {
+	for (i = 0; i < ps->len; i++) {
 		if (ps->params[i].key != NULL)
 			if (strcmp(key, ps->params[i].key) == 0)
 				return ps->params[i].val;

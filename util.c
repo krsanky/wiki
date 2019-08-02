@@ -84,9 +84,9 @@ is_wiki_file(struct dirent * de)
 {
 	int	is_md_;
 	is_md_ = is_md(de);
-	char           *sfxs[] = {
-		"md", "jpg", "txt"
-	};
+/*	char           *sfxs[] = {*/
+/*		"md", "jpg", "txt"*/
+/*	};*/
 	return is_md_;
 }
 
