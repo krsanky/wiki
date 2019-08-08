@@ -25,7 +25,7 @@
 #include <fcntl.h>
 #include <mtemplate.h>
 #include <assert.h>
- #include <sys/stat.h>
+#include <sys/stat.h>
 
 #include "myhtml.h"
 #include "params.h"
@@ -198,14 +198,17 @@ wikiindex(char *dir)
 
 	int 		psl      , dsl;
 	char          **ps, **ds;
+
 	ds = make_sorted_dir_arr(fd, &dsl);
-	ps = make_sorted_page_arr(fd, &psl);
 	populate_dirs(dirs, dir, ds, dsl);
-	populate_pages(pages, dir, ps, psl);
+
+	ps = make_sorted_page_arr(fd, &psl);
+	if (ps != NULL)
+		populate_pages(pages, dir, ps, psl);
 
 	http_headers();
 	myhtml_header(NULL);
-	
+
 	myhtml_breadcrumbs(dir, NULL, NULL);
 
 	tmpl_render(t, ns);
@@ -251,7 +254,7 @@ wikiview(char *dir, char *page)
 
 	http_headers();
 	myhtml_header(NULL);
-	
+
 	myhtml_breadcrumbs(dir, page, "view");
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS | MKD_FENCEDCODE);
 	myhtml_footer();
@@ -303,7 +306,7 @@ wikiedit(char *dir, char *page)
 	myhtml_header_add_js(data, "/static/codemirror-5.46.0/keymap/vim.js");
 	myhtml_header_add_js(data, "/static/codemirror-5.46.0/keymap/emacs.js");
 	myhtml_header(data);
-	
+
 
 	myhtml_breadcrumbs(dir, page, "edit");
 
@@ -420,7 +423,7 @@ wikieditform()
 	}
 	http_headers();
 	myhtml_header(NULL);
-	
+
 	myhtml_breadcrumbs(NULL, NULL, "edit");
 
 	printf("<p>editform() RM[%s] CT[%s] CL[%d]</p>\n", RM, CT, CL);
@@ -434,7 +437,7 @@ wikinew(char *dir)
 	char 		t        [] = "templates/new.m";
 	http_headers();
 	myhtml_header(NULL);
-	
+
 	myhtml_breadcrumbs(dir, NULL, "new");
 
 
@@ -559,7 +562,7 @@ wikinewdir(char *dir)
 
 	http_headers();
 	myhtml_header(NULL);
-	
+
 	myhtml_breadcrumbs(dir, NULL, "newdir");
 
 	tmpl_render(t, data);
@@ -578,9 +581,9 @@ wikinewdirform()
 	int 		l;
 	PARAMS         *ps;
 	char           *newdir, *dir, *dir_;
-	int		ret;
-	char		*path;
-	char		*curdir;
+	int 		ret;
+	char           *path;
+	char           *curdir;
 
 	RM = getenv("REQUEST_METHOD");
 	CL_ = getenv("CONTENT_LENGTH");
@@ -600,7 +603,7 @@ wikinewdirform()
 
 	newdir = params_get(ps, "newdir");
 	dir_ = params_get(ps, "dir");
-	assert((dir = malloc(strlen(dir_)+1)) != NULL);
+	assert((dir = malloc(strlen(dir_) + 1)) != NULL);
 	ret = params_urldecode(dir_, dir);
 
 	curdir = NULL;

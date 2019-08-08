@@ -39,17 +39,16 @@ sortitem_cmp(struct sortitem * x, struct sortitem * y)
 RB_HEAD(sorttree, sortitem) head = RB_INITIALIZER(&head);
 RB_PROTOTYPE(sorttree, sortitem, entry, sortitem_cmp)
 RB_GENERATE(sorttree, sortitem, entry, sortitem_cmp)
-
-char **
-make_sorted_dir_arr(char *dir, int *length)
+	char          **
+			make_sorted_dir_arr(char *dir, int *length)
 {
 	DIR            *d;
 	struct dirent  *de;
 	struct sortitem *si, *nxt;
-	int		len, i;
-	char		*tmpstr;
-	char		**list;
-	
+	int 		len      , i;
+	char           *tmpstr;
+	char          **list;
+
 
 	d = opendir(dir);
 	if (d == NULL) {
@@ -76,7 +75,7 @@ make_sorted_dir_arr(char *dir, int *length)
 		//printf("%s\n", si->name);
 		len++;
 	}
-/* 	printf("len:%d malloc-size:%lu\n", len, len*sizeof(char*)); */
+	/* printf("len:%d malloc-size:%lu\n", len, len*sizeof(char*)); */
 
 	list = malloc(len * sizeof(char *));
 	assert(list != NULL);
@@ -97,24 +96,24 @@ make_sorted_dir_arr(char *dir, int *length)
 		free(si);
 	}
 	assert(RB_EMPTY(&head) == 1);
-/*
-	for (i=0; i<len; i++)
-		printf("%s\n", list[i]);
-*/
+	/*
+		for (i=0; i<len; i++)
+			printf("%s\n", list[i]);
+	*/
 
 	*length = len;
 	return list;
 }
 
-char **
+char          **
 make_sorted_page_arr(char *dir, int *length)
 {
 	DIR            *d;
 	struct dirent  *de;
 	struct sortitem *si, *nxt;
-	int		len, i;
-	char		*tmpstr;
-	char		**list;
+	int 		len      , i;
+	char           *tmpstr;
+	char          **list;
 
 	d = opendir(dir);
 	if (d == NULL) {
@@ -137,8 +136,10 @@ make_sorted_page_arr(char *dir, int *length)
 		//printf("%s\n", si->name);
 		len++;
 	}
-/* 	printf("len:%d malloc-size:%lu\n", len, len*sizeof(char*)); */
-
+	nlog("140 len:%d malloc-size:%lu\n", len, len * sizeof(char *));
+	if (len == 0) {
+		return NULL;
+	}
 	list = malloc(len * sizeof(char *));
 	assert(list != NULL);
 	i = 0;
@@ -159,10 +160,10 @@ make_sorted_page_arr(char *dir, int *length)
 		free(si);
 	}
 	assert(RB_EMPTY(&head) == 1);
-/*
-	for (i=0; i<len; i++)
-		printf("%s\n", list[i]);
-*/
+	/*
+		for (i=0; i<len; i++)
+			printf("%s\n", list[i]);
+	*/
 
 	*length = len;
 	return list;
@@ -171,12 +172,9 @@ make_sorted_page_arr(char *dir, int *length)
 void
 free_sorted_arr(char **list, int l)
 {
-	int	i;
-	for (i=0; i<l; i++) {
+	int 		i;
+	for (i = 0; i < l; i++) {
 		free(list[i]);
 	}
 	free(list);
 }
-
-
-
