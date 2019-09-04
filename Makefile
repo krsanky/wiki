@@ -51,10 +51,6 @@ zztest_sort_mdict: $@.c $(SRCS) $(HDRS)
 zztest_wiki_file_io:  $@.c $(SRCS) $(HDRS) 
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
-#json 
-must: $@.c params.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ must.c params.c
-
 strstrp: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c
 
@@ -125,7 +121,7 @@ clean:
 	rm -f admin
 	rm -f writef nanoclient mdtest params_test test_params
 	rm -f a.out *.BAK *.core
-	rm -f tmpl must fix_perms
+	rm -f tmpl fix_perms
 	rm -f test_tmpl
 	rm -f test_codemirror  
 	rm -f sample long_page test_altstyle
