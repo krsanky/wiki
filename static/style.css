@@ -17,6 +17,10 @@ h1,h2,h3 {
 
 .CodeMirror {
 	border: 1px solid black; 
-	font-size:13px
+	font-size: 13px;
+}
+
+code {
+	font-size: 13px;
 }
 
