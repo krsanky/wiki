@@ -1,3 +1,8 @@
+<div id=edit_controls>
+<a href="#">[cmd-1]</a>
+<a href="#">[cmd-2]</a>
+<a href="#">[cmd-3]</a>
+<div>
 <form   action='/wiki.cgi?editform' 
 	method='post' 
 	id='wikieditform'

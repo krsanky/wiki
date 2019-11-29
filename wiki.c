@@ -299,6 +299,8 @@ wikiedit(char *dir, char *page)
 	myhtml_header_add_css(data, "/static/codemirror-5.46.0/lib/codemirror.css");
 	myhtml_header_add_css(data, "/static/codemirror-5.46.0/addon/dialog/dialog.css");
 	myhtml_header_add_css(data, "/static/codemirror-5.46.0/theme/midnight.css");
+	myhtml_header_add_css(data, "/static/codemirror-5.46.0/theme/colorforth.css");
+
 	myhtml_header_add_js(data, "/static/codemirror-5.46.0/lib/codemirror.js");
 	myhtml_header_add_js(data, "/static/codemirror-5.46.0/addon/dialog/dialog.js");
 	myhtml_header_add_js(data, "/static/codemirror-5.46.0/addon/search/searchcursor.js");
@@ -316,11 +318,6 @@ wikiedit(char *dir, char *page)
 	if (mdfile != NULL)
 		fclose(mdfile);
 	myhtml_textarea_close(dir, page);
-
-	/*
-	 * printf("<div style='font-size: 13px; width: 300px; height:
-	 * 30px;'>Key buffer: <span id='command-display'></span></div>\n");
-	 */
 
 	printf("<script src='/static/edit.js'></script>\n");
 	myhtml_footer();

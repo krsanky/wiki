@@ -17,6 +17,5 @@
 <a href="{{a.value}}">{{a.key}}</a>
 {{endfor}}
 </div>
-<hr/>
 
 <!-- /mtemplate breacrumbs.m -->

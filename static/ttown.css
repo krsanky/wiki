@@ -1,14 +1,12 @@
-/* -----------------
-body {
-	margin:0 auto;
-	*max-width:96%;*
-	padding:0 10px
-
-	line-height:1.6;
-	font-size:18px;
+ol.breadcrumb {
+	list-style-type: none;
+	padding-left: 0;
+	/*margin: 0;*/
 }
--------------- */
-
+ol.breadcrumb li {
+	/*float: left;*/
+	display: inline;
+}
 
 body {
 /*
@@ -16,19 +14,19 @@ body {
 	color: #353535;
 */
         background-color: #10151a;
-        color: #00ff80;
+        color: #00ff80 !important;
 
 /*	margin: 0 auto;*/
-	max-width:920px; 
-/*	padding: 0 10px 0 10px;*/
-	padding: .3em;
-
+	max-width:820px; 
+	padding: 0 10px 0 10px;
+}
+body {
 /* font-family:sans-serif;font-size:1.1em;line-height:1.5em */
-/*font-family: "Lucida Grande",Verdana,Lucida,Helvetica,Arial,sans-serif; */
+	font-family: "Lucida Grande",Verdana,Lucida,Helvetica,Arial,sans-serif; */
 
+/*	font-family: "Lucida Sans Unicode", "Lucida Grande", "Verdana", "FreeSans", sans-serif;*/
 	font-family: monospace;
 	font-size: large;
-
 /*
 	font-size: 1.1em;
 	line-height: 1.5em;
@@ -41,12 +39,10 @@ input[type=button], button, select {
 	font-size: 1em;
 }
 */
-/*
 input[type="text"], textarea {
         background-color: #10151a;
         color: #00ff80;
 }
-*/
 
 input[type=submit] {
 	background-color: #10151a;
@@ -66,15 +62,11 @@ a:active, a:hover {
 
 img{border:0;max-width: 100%;}
 
-/* ----------------
-h1,h2,h3 {
-	line-height:1.2
-} -------- */
 /*header,*/
-/*code,pre,kbd,samp,h1,h2,h3,h4,h5,h6{font-family:monospace;overflow-x:auto;}*/
+code,pre,kbd,samp,h1,h2,h3,h4,h5,h6{font-family:monospace;overflow-x:auto;}
 header 	{
 	margin: 2em 0 2em;
-	border-bottom: 1px dashed green;
+/*	border-bottom: 1px dashed green;*/
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -89,26 +81,9 @@ h4{font-size:1.15em}
 h5{font-size:1em}
 h6{font-size:.75em;text-transform:uppercase}
 
-hr {
-	height: 1px;
-	border: none;
-	color: #080;
-	background-color: #080;
-}
-
 ul {
 	list-style-type: none;
 	padding-left: 0;
-}
-
-ol.breadcrumb {
-	list-style-type: none;
-	padding-left: 0;
-	/*margin: 0;*/
-}
-ol.breadcrumb li {
-	/*float: left;*/
-	display: inline;
 }
 
 p{margin:0 0 1em}
@@ -119,25 +94,8 @@ footer{text-align: center;border-top:solid #e2e5e9 0.1em;margin:2em 0; font-size
 	font-size: .8em;
 }
 
+
 .grid-1 {
 	display: grid;
 	grid-template-columns: 50% 50%;
 }
-
-code, pre {
-	background-color: #242;
-	font-size: 13px;
-}
-
-.CodeMirror {
-	background-color: blue;
-	color: red;
-	border: 1px solid black; 
-	font-size: 13px;
-}
-
-.breadcrumbs {
-	border-bottom: 1px solid #3a3;
-	padding-bottom: .3em;
-}
-
