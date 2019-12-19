@@ -1,4 +1,5 @@
-WWWROOT=	/var/www/htdocs/wiki
+#WWWROOT=	/var/www/htdocs/wiki
+WWWROOT=	/var/www/vhost/wiki.oldcode.org/htdocs
 
 CFLAGS+= -W -Wall -O2 -std=c99 -g -pedantic
 CFLAGS+= -I/usr/local/include
