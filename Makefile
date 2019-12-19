@@ -1,3 +1,5 @@
+WWWROOT=	/var/www/htdocs/wiki
+
 CFLAGS+= -W -Wall -O2 -std=c99 -g -pedantic
 CFLAGS+= -I/usr/local/include
 CFLAGS+= -Imtemplate
@@ -87,33 +89,26 @@ writef: $@.c
 		$@.c \
 		-lmarkdown \
 
-cgi123: $@.c
-	$(CC) -o $@.cgi \
-		-L/usr/local/lib -I/usr/local/include \
-		$@.c \
-		-lmarkdown \
-
 indent:
 	@echo "indenting all code..."
 	./indent-all.sh
 
 deploy: all
-	cp -f wiki ../htdocs/wiki.cgi
-	cp -f options ../htdocs/options.cgi
-	cp -f menu ../htdocs/menu.cgi
-	cp -f admin ../htdocs/admin.cgi
-	cp -f wikieditform.php ../htdocs/
-	cp -f sample ../htdocs/sample.cgi
-	cp -f test_codemirror ../htdocs/test_codemirror.cgi 2>/dev/null || :
-	cp -f test_altstyle ../htdocs/test_altstyle.cgi 2>/dev/null || :
-	cp -f long_page ../htdocs/long_page.cgi 2>/dev/null || :
+	cp -f wiki ${WWWROOT}/wiki.cgi
+	cp -f options ${WWWROOT}/options.cgi
+	cp -f menu ${WWWROOT}/menu.cgi
+	cp -f admin ${WWWROOT}/admin.cgi
+	cp -f sample ${WWWROOT}/sample.cgi
+	cp -f test_codemirror ${WWWROOT}/test_codemirror.cgi 2>/dev/null || :
+	cp -f test_altstyle ${WWWROOT}/test_altstyle.cgi 2>/dev/null || :
+	cp -f long_page ${WWWROOT}/long_page.cgi 2>/dev/null || :
 
-	#cp -rf static ../htdocs/
-	cp -rf static/edit.js ../htdocs/static/
-	cp -rf static/style.css ../htdocs/static/
-	cp -rf static/normalize.css ../htdocs/static/
+	#cp -rf static ${WWWROOT}/
+	cp -rf static/edit.js ${WWWROOT}/static/
+	cp -rf static/style.css ${WWWROOT}/static/
+	cp -rf static/normalize.css ${WWWROOT}/static/
 
-	cp -rf templates ../htdocs/
+	cp -rf templates ${WWWROOT}/
 
 clean:
 	rm -f wiki
