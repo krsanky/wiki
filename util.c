@@ -133,19 +133,23 @@ wikilog(char *msg)
 int
 nlog(const char *fmt,...)
 {
-	char           *p;
-	va_list 	ap;
-	int 		ret;
+	if (0) {
+		char           *p;
+		va_list 	ap;
+		int 		ret;
 
-	if ((p = malloc(256)) == NULL)
+		if ((p = malloc(256)) == NULL)
+			return 0;
+		va_start(ap, fmt);
+		ret = vsnprintf(p, 256, fmt, ap);
+
+		va_end(ap);
+		ret = wikilog(p);
+		free(p);
+		return ret;
+	} else {
 		return 0;
-	va_start(ap, fmt);
-	ret = vsnprintf(p, 256, fmt, ap);
-
-	va_end(ap);
-	ret = wikilog(p);
-	free(p);
-	return ret;
+	}
 }
 
 void
