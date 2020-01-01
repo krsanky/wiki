@@ -1,5 +1,5 @@
-#WWWROOT=	/var/www/htdocs/wiki
-WWWROOT=	/var/www/vhost/wiki.oldcode.org/htdocs
+WWWROOT=	/var/www/htdocs/wiki
+#WWWROOT=	/var/www/vhost/wiki.oldcode.org/htdocs
 
 CFLAGS+= -W -Wall -O2 -std=c99 -g -pedantic
 CFLAGS+= -I/usr/local/include
@@ -29,7 +29,7 @@ sample: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 long_page: $@.c util.c
-	$(CC) $(CFLAGS) -o $@ $@.c tmpl.c myhtml.c util.c $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $@.c tmpl.c myhtml.c util.c breadcrumbs.c $(LDFLAGS)
 
 admin: $@.c util.c myhtml.c breadcrumbs.c
 	$(CC) $(CFLAGS) -o $@ $@.c \
@@ -38,9 +38,6 @@ admin: $@.c util.c myhtml.c breadcrumbs.c
 # TEST 
 test_breadcrumbs: $@.c breadcrumbs.c breadcrumbs.h
 	$(CC) $(CFLAGS) -o $@ $@.c breadcrumbs.c $(LDFLAGS)
-
-test_altstyle: $@.c $(SRCS) $(HDRS)
-	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
 
 test_util: $@.c util.c
 	$(CC) $(CFLAGS) -o $@ $@.c util.c $(LDFLAGS)
@@ -101,7 +98,6 @@ deploy: all
 	cp -f admin ${WWWROOT}/admin.cgi
 	cp -f sample ${WWWROOT}/sample.cgi
 	cp -f test_codemirror ${WWWROOT}/test_codemirror.cgi 2>/dev/null || :
-	cp -f test_altstyle ${WWWROOT}/test_altstyle.cgi 2>/dev/null || :
 	cp -f long_page ${WWWROOT}/long_page.cgi 2>/dev/null || :
 
 	#cp -rf static ${WWWROOT}/
@@ -121,7 +117,7 @@ clean:
 	rm -f tmpl fix_perms
 	rm -f test_tmpl
 	rm -f test_codemirror  
-	rm -f sample long_page test_altstyle
+	rm -f sample long_page 
 	rm -f test_breadcrumbs test_errno test_sort test_strings test_util
 	rm -f zztest_sort_mdict
 	rm -f zztest_wiki_file_io

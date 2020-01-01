@@ -45,7 +45,7 @@ main()
 
 	//showenv();
 
-	myhtml_footer();
+	myhtml_footer(data);
 
 	mobject_free(data);
 	return EXIT_SUCCESS;

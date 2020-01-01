@@ -19,6 +19,7 @@
 #include <string.h>
 #include <mtemplate.h>
 #include <dirent.h>
+#include <assert.h>
 
 #include "util.h"
 #include "tmpl.h"
@@ -26,11 +27,10 @@
 #include "breadcrumbs.h"
 
 #include "myhtml.h"
+#include "settings.h"
 
 #define EXTRA_JS "myhtml_extra_js"
 #define EXTRA_CSS "myhtml_extra_css"
-
-static char    *_altstyle = NULL;
 
 /*
  * free this with mobject_free or mdict_free
@@ -46,45 +46,43 @@ myhtml_data_new()
 		mdict_insert_sa(ns, EXTRA_CSS);
 		/*
 		 * example:struct mobject *tmp = mdict_item_s(ns, EXTRA_JS);
-		 * marray_append_s(tmp, "/bad/js/include.js");
+		 * marray_append_s(tmp, "/some/js/include.js");
 		 */
+		mdict_insert_ss(ns, "url_root", WIKI_URL_ROOT);
 	}
 	return ns;
-}
-
-void
-myhtml_set_altstyle(char *s)
-{
-	free(_altstyle);
-	_altstyle = s;
-}
-
-char           *
-myhtml_get_altstyle()
-{
-	return _altstyle;
-}
-
-void
-myhtml_test_altstyle()
-{
-	printf("<p>_altstyle:%s</p>\n", _altstyle);
 }
 
 void
 myhtml_header_add_js(struct mobject * ns, char *js)
 {
 	struct mobject *tmp;
+	char	*_js;
+	int		_jsl;
+
+	_jsl = strlen(js) + strlen(WIKI_URL_ROOT) + 1;
+	assert((_js = malloc(_jsl)) != NULL);
+	strlcpy(_js, WIKI_URL_ROOT, _jsl);
+	strlcat(_js, js, _jsl);
+
 	tmp = mdict_item_s(ns, EXTRA_JS);
-	marray_append_s(tmp, js);
+	marray_append_s(tmp, _js);
 }
 
 void
 myhtml_header_add_css(struct mobject * ns, char *css)
 {
 	struct mobject *tmp;
+	char	*_css;
+	int		_cssl;
+
+	_cssl = strlen(css) + strlen(WIKI_URL_ROOT) + 1;
+	assert((_css = malloc(_cssl)) != NULL);
+	strlcpy(_css, WIKI_URL_ROOT, _cssl);
+	strlcat(_css, css, _cssl);
+
 	tmp = mdict_item_s(ns, EXTRA_CSS);
-	marray_append_s(tmp, css);
+	marray_append_s(tmp, _css);
 }
 
 void
@@ -102,10 +100,18 @@ myhtml_header(struct mobject * ctx)
 }
 
 void
-myhtml_footer()
+myhtml_footer(struct mobject * ctx)
 {
 	char 		fn       [] = "templates/footer.m";
-	tmpl_render(fn, NULL);
+	struct mobject *data;
+
+	if (ctx == NULL) {
+		data = myhtml_data_new();
+		tmpl_render(fn, data);
+		mobject_free(data);
+		return;
+	}
+	tmpl_render(fn, ctx);
 }
 
 void
@@ -156,6 +162,7 @@ make_anchor(char *pagetype, char *dir, char *page, char *display)
 	char           *a = NULL;
 
 	max_l = strlen("<a href='/wiki.cgi?edit&amp;d=%s&amp;p=%s'>(edit)</a>");
+	max_l += strlen(WIKI_URL_ROOT);
 	if (pagetype != NULL)
 		max_l += strlen(pagetype);
 	if (dir != NULL)
@@ -169,7 +176,9 @@ make_anchor(char *pagetype, char *dir, char *page, char *display)
 	if (a == NULL)
 		return NULL;
 
-	strlcpy(a, "<a href='/wiki.cgi?", max_l);
+	strlcpy(a, "<a href='", max_l);
+	strlcat(a, WIKI_URL_ROOT, max_l);
+	strlcat(a, "/wiki.cgi?", max_l);
 	strlcat(a, pagetype, max_l);
 	strlcat(a, "&amp;", max_l);
 
@@ -203,6 +212,7 @@ make_url(char *pagetype, char *dir, char *page)
 	char           *a;
 
 	max_l = strlen("/wiki.cgi?edit&d=%s&p=%s");
+	max_l += strlen(WIKI_URL_ROOT);
 	if (pagetype != NULL)
 		max_l += strlen(pagetype);
 	if (dir != NULL)
@@ -214,7 +224,8 @@ make_url(char *pagetype, char *dir, char *page)
 	if (a == NULL)
 		return NULL;
 
-	strlcpy(a, "/wiki.cgi?", max_l);
+	strlcpy(a, WIKI_URL_ROOT, max_l);
+	strlcat(a, "/wiki.cgi?", max_l);
 	strlcat(a, pagetype, max_l);
 	strlcat(a, "&", max_l);
 
@@ -233,10 +244,10 @@ make_url(char *pagetype, char *dir, char *page)
 }
 
 void
-myhtml_textarea_open()
+myhtml_textarea_open(struct mobject * ctx)
 {
 	char 		fn       [] = "templates/textarea_open.m";
-	tmpl_render(fn, NULL);
+	tmpl_render(fn, ctx);
 }
 
 void

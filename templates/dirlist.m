@@ -20,9 +20,3 @@
     
 </div>
 
-<script>
-$(function() {
-console.log("dirlist.md");
-});
-</script>
-

@@ -111,7 +111,7 @@ wikilog(char *msg)
 	if ((sock = nn_socket(AF_SP, NN_REQ)) < 0) {
 		nn_fatal("nn_socket");
 	}
-	if ((rv = nn_connect(sock, SERVER_ENDPOINT)) < 0) {
+	if ((rv = nn_connect(sock, WIKI_NN_ENDPOINT)) < 0) {
 		nn_fatal("nn_connect");
 	}
 	msg_l = strlen(msg) + sizeof(LOG_PREFIX);
@@ -133,23 +133,22 @@ wikilog(char *msg)
 int
 nlog(const char *fmt,...)
 {
-	if (0) {
-		char           *p;
-		va_list 	ap;
-		int 		ret;
-
-		if ((p = malloc(256)) == NULL)
-			return 0;
-		va_start(ap, fmt);
-		ret = vsnprintf(p, 256, fmt, ap);
-
-		va_end(ap);
-		ret = wikilog(p);
-		free(p);
-		return ret;
-	} else {
+	if (!WIKI_NLOG_ENABLE) 
 		return 0;
-	}
+
+	char           *p;
+	va_list 	ap;
+	int 		ret;
+
+	if ((p = malloc(256)) == NULL)
+		return 0;
+	va_start(ap, fmt);
+	ret = vsnprintf(p, 256, fmt, ap);
+
+	va_end(ap);
+	ret = wikilog(p);
+	free(p);
+	return ret;
 }
 
 void
@@ -164,13 +163,15 @@ self_redirect(char *main, char *dir, char *page)
 	char           *redir;
 
 	redirl = strlen("/wiki.cgi?") + strlen(main) + 1;
+	redirl += strlen(WIKI_URL_ROOT);
 	if (dir != NULL)
 		redirl += strlen(dir) + strlen("d=&");
 	if (page != NULL)
 		redirl += strlen(page) + strlen("p=&");
 	nlog("self_redirect(): main:%s dir:%s page:%s redirl:%d", main, dir, page, redirl);
 	if ((redir = malloc(redirl)) != NULL) {
-		strlcpy(redir, "/wiki.cgi?", redirl);
+		strlcpy(redir, WIKI_URL_ROOT, redirl);
+		strlcat(redir, "/wiki.cgi?", redirl);
 		strlcat(redir, main, redirl);
 		strlcat(redir, "&", redirl);
 
@@ -186,6 +187,7 @@ self_redirect(char *main, char *dir, char *page)
 		}
 		nlog("redir:%s", redir);
 		redirect(redir);
+		free(redir);
 		return 0;
 	}
 	return 1;
@@ -268,3 +270,11 @@ cat_strings(char **buf, int nargs,...)
 
 	return 0;
 }
+
+char	*
+staticd()
+{
+	return "/static/";
+}
+
+

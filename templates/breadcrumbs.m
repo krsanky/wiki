@@ -1,10 +1,3 @@
-<!-- mtemplate breacrumbs.m -->
-<style>
-	div.breadcrumbs {
-/*		background-color:yellow;*/
-	}
-</style>
-
 <div class="breadcrumbs">
 {{for b in breadcrumbs}}
 / <a href="{{b.value}}">{{b.key}}</a> 
@@ -17,5 +10,3 @@
 <a href="{{a.value}}">{{a.key}}</a>
 {{endfor}}
 </div>
-
-<!-- /mtemplate breacrumbs.m -->

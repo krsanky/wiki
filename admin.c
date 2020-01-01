@@ -17,7 +17,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <dirent.h>
-#include <mtemplate.h>
 
 #include "util.h"
 #include "myhtml.h"
@@ -27,9 +26,10 @@ int
 main()
 {
 	char 		t        [] = "templates/admin.m";
+
 	http_headers();
 	myhtml_header(NULL);
 	tmpl_render(t, NULL);
-	myhtml_footer();
+	myhtml_footer(NULL);
 	return EXIT_SUCCESS;
 }

@@ -104,15 +104,10 @@ char           *
 tmpl_path(char *t)
 {
 	int 		l = 0;
-	char           *alt = myhtml_get_altstyle();
 	char           *tp;
 
 	l += strlen(WIKI_ROOT);
 	l += strlen("/");
-	if (alt != NULL) {
-		l += strlen(alt);
-		l += strlen("/");
-	}
 	l += strlen(t);
 	l += 1;
 
@@ -121,10 +116,6 @@ tmpl_path(char *t)
 
 	strlcpy(tp, WIKI_ROOT, l);
 	strlcat(tp, "/", l);
-	if (alt != NULL) {
-		strlcat(tp, alt, l);
-		strlcat(tp, "/", l);
-	}
 	strlcat(tp, t, l);
 
 	return tp;

@@ -47,6 +47,9 @@ errpage(char *fmt,...)
 	va_list 	ap;
 	char           *errerr = "error in errpage :(";
 	int 		ret;
+	struct mobject *data;
+
+	assert((data = myhtml_data_new()) != NULL);
 
 	if ((error = malloc(256)) == NULL)
 		error = errerr;
@@ -58,8 +61,9 @@ errpage(char *fmt,...)
 	http_headers();
 	myhtml_header(NULL);
 	printf("<p style='color:red;'>%s</p>\n", error);
-	myhtml_footer();
+	myhtml_footer(data);
 
+	mobject_free(data);
 	free(error);
 }
 
@@ -81,7 +85,7 @@ msgpage(char *fmt,...)
 	http_headers();
 	myhtml_header(NULL);
 	printf("<p style='color:green;'>%s</p>\n", msg);
-	myhtml_footer();
+	myhtml_footer(NULL);
 	free(msg);
 }
 
@@ -185,7 +189,7 @@ wikiindex(char *dir)
 
 	fd = fulldir(dir);
 
-	assert((ns = mdict_new()) != NULL);
+	assert((ns = myhtml_data_new()) != NULL);
 	if (dir != NULL)
 		mdict_insert_ss(ns, "dir", dir);
 	else
@@ -213,7 +217,8 @@ wikiindex(char *dir)
 
 	tmpl_render(t, ns);
 
-	myhtml_footer();
+	myhtml_footer(ns);
+
 	mobject_free(ns);
 	free(fd);
 	free_sorted_arr(ps, psl);
@@ -257,7 +262,7 @@ wikiview(char *dir, char *page)
 
 	myhtml_breadcrumbs(dir, page, "view");
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS | MKD_FENCEDCODE);
-	myhtml_footer();
+	myhtml_footer(NULL);
 
 end:
 	if (mdfile != NULL)
@@ -296,31 +301,34 @@ wikiedit(char *dir, char *page)
 
 	struct mobject *data;
 	assert((data = myhtml_data_new()) != NULL);
-	myhtml_header_add_css(data, "/static/codemirror-5.46.0/lib/codemirror.css");
-	myhtml_header_add_css(data, "/static/codemirror-5.46.0/addon/dialog/dialog.css");
-	myhtml_header_add_css(data, "/static/codemirror-5.46.0/theme/midnight.css");
-	myhtml_header_add_css(data, "/static/codemirror-5.46.0/theme/colorforth.css");
+	myhtml_header_add_css(data, "/static/codemirror-5.50.2/lib/codemirror.css");
+	myhtml_header_add_css(data, "/static/codemirror-5.50.2/addon/dialog/dialog.css");
+	myhtml_header_add_css(data, "/static/codemirror-5.50.2/theme/midnight.css");
+	myhtml_header_add_css(data, "/static/codemirror-5.50.2/theme/colorforth.css");
 
-	myhtml_header_add_js(data, "/static/codemirror-5.46.0/lib/codemirror.js");
-	myhtml_header_add_js(data, "/static/codemirror-5.46.0/addon/dialog/dialog.js");
-	myhtml_header_add_js(data, "/static/codemirror-5.46.0/addon/search/searchcursor.js");
-	myhtml_header_add_js(data, "/static/codemirror-5.46.0/addon/edit/matchbrackets.js");
-	myhtml_header_add_js(data, "/static/codemirror-5.46.0/keymap/vim.js");
-	myhtml_header_add_js(data, "/static/codemirror-5.46.0/keymap/emacs.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.50.2/lib/codemirror.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.50.2/addon/dialog/dialog.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.50.2/addon/search/searchcursor.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.50.2/addon/edit/matchbrackets.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.50.2/keymap/vim.js");
+	myhtml_header_add_js(data, "/static/codemirror-5.50.2/keymap/emacs.js");
 	myhtml_header(data);
 
 
 	myhtml_breadcrumbs(dir, page, "edit");
 
-	myhtml_textarea_open();
+	myhtml_textarea_open(data);
 	while ((c = fgetc(mdfile)) != EOF)
 		printf("%c", c);
 	if (mdfile != NULL)
 		fclose(mdfile);
 	myhtml_textarea_close(dir, page);
 
-	printf("<script src='/static/edit.js'></script>\n");
-	myhtml_footer();
+	printf("<script src='");
+	printf(WIKI_URL_ROOT);
+	printf("/static/edit.js'></script>\n");
+	myhtml_footer(data);
+	mobject_free(data);
 }
 
 void
@@ -425,7 +433,7 @@ wikieditform()
 
 	printf("<p>editform() RM[%s] CT[%s] CL[%d]</p>\n", RM, CT, CL);
 
-	myhtml_footer();
+	myhtml_footer(NULL);
 }
 
 void
@@ -455,7 +463,7 @@ wikinew(char *dir)
 	tmpl_render(t, namespace);
 
 
-	myhtml_footer();
+	myhtml_footer(NULL);
 	mobject_free(namespace);
 }
 void
@@ -551,7 +559,7 @@ wikinewdir(char *dir)
 	char 		t        [] = "templates/newdir.m";
 	struct mobject *data = NULL;
 
-	assert((data = mdict_new()) != NULL);
+	assert((data = myhtml_data_new()) != NULL);
 	if (dir == NULL)
 		mdict_insert_ss(data, "dir", "");
 	else
@@ -564,7 +572,7 @@ wikinewdir(char *dir)
 
 	tmpl_render(t, data);
 
-	myhtml_footer();
+	myhtml_footer(data);
 	mobject_free(data);
 }
 void
@@ -667,7 +675,7 @@ wikioptions()
 	struct mobject *data;
 	PARAMS         *ps = NULL;
 
-	assert((data = mdict_new()) != NULL);
+	assert((data = myhtml_data_new()) != NULL);
 
 
 	/*
@@ -698,12 +706,12 @@ wikioptions()
 
 
 	http_headers();
-	myhtml_header(NULL);
+	myhtml_header(data);
 
 	showenv();
 
 	tmpl_render(t, data);
-	myhtml_footer();
+	myhtml_footer(data);
 
 	mobject_free(data);
 	params_free(ps);

@@ -3,7 +3,7 @@
 <a href="#">[cmd-2]</a>
 <a href="#">[cmd-3]</a>
 <div>
-<form   action='/wiki.cgi?editform' 
+<form   action='{{url_root}}/wiki.cgi?editform' 
 	method='post' 
 	id='wikieditform'
 	enctype='application/x-www-form-urlencoded'>

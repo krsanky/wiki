@@ -74,7 +74,7 @@ main()
 		"c1"
 	};
 
-	assert((data = mdict_new()) != NULL);
+	assert((data = myhtml_data_new()) != NULL);
 	assert((cps = params_new(5)) != NULL);
 
 	if ((cookie = getenv("HTTP_COOKIE")) != NULL) {
@@ -124,7 +124,7 @@ main()
 	myhtml_header(NULL);
 	myhtml_bannerA();
 	tmpl_render(t, data);
-	myhtml_footer();
+	myhtml_footer(data);
 
 	mobject_free(data);
 	params_free(ps);

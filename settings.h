@@ -1,7 +1,4 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
-
-#define SERVER_ENDPOINT "tcp://127.0.0.1:23000"
+#define WIKI_NN_ENDPOINT "tcp://127.0.0.1:23000"
 #define WIKI_ROOT "content"
-
-#endif
+#define WIKI_URL_ROOT "/wiki"
+#define WIKI_NLOG_ENABLE 1
