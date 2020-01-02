@@ -11,9 +11,6 @@ struct mys {
 	int	b;
 };
 
-/**
- * This shows that ...
- */
 void
 f1(struct mys *x)
 {

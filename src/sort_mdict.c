@@ -8,7 +8,6 @@
 
 #include "sort_mdict.h"
 
-/* ------------- RB ------------ */
 struct myitem {
 	RB_ENTRY(myitem) entry;
 	char           *key;
@@ -21,10 +20,10 @@ myitem_cmp(struct myitem * i1, struct myitem * i2)
 	return strcmp(i1->key, i2->key);
 }
 
+/* "head" is a global  ... rename to sort_mdict_head ? */
 RB_HEAD(myitem_tree, myitem) head = RB_INITIALIZER(&head);
 RB_PROTOTYPE(myitem_tree, myitem, entry, myitem_cmp)
 RB_GENERATE(myitem_tree, myitem, entry, myitem_cmp)
-/* ------------- -RB ----------- */
 
 struct mobject *
 sort_mdict(struct mobject * dict)

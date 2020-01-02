@@ -39,8 +39,9 @@ sortitem_cmp(struct sortitem * x, struct sortitem * y)
 RB_HEAD(sorttree, sortitem) head = RB_INITIALIZER(&head);
 RB_PROTOTYPE(sorttree, sortitem, entry, sortitem_cmp)
 RB_GENERATE(sorttree, sortitem, entry, sortitem_cmp)
-	char          **
-			make_sorted_dir_arr(char *dir, int *length)
+
+char          **
+make_sorted_dir_arr(char *dir, int *length)
 {
 	DIR            *d;
 	struct dirent  *de;

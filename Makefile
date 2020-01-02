@@ -29,30 +29,28 @@ menu: src/${@}.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/}
 sample: src/${@}.c src/util.c
 	$(CC) $(CFLAGS) -o $@ src/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
-long_page: $@.c src/util.c
+long_page: src/${@}.c src/util.c
 	$(CC) $(CFLAGS) -o $@ src/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
 admin: src/${@}.c src/util.c src/myhtml.c src/breadcrumbs.c
 	$(CC) $(CFLAGS) -o $@ src/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
 # TEST 
-test_breadcrumbs: $@.c breadcrumbs.c breadcrumbs.h
-	$(CC) $(CFLAGS) -o $@ $@.c breadcrumbs.c $(LDFLAGS)
+test_breadcrumbs: test/${@}.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/}
+	$(CC) $(CFLAGS) -o $@ test/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
-test_util: $@.c util.c
-	$(CC) $(CFLAGS) -o $@ $@.c util.c $(LDFLAGS)
+test_util: test/${@}.c src/util.c
+	$(CC) $(CFLAGS) -o ${@} test/${@}.c src/util.c $(LDFLAGS)
 
-test_tmpl: $@.c params.c tmpl.c
-	$(CC) $(CFLAGS) -o $@ $@.c params.c tmpl.c $(LDFLAGS)
+# BROKEN
+test_tmpl: test/${@}.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/}
+	$(CC) $(CFLAGS) -o $@ test/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
-zztest_sort_mdict: $@.c $(SRCS) $(HDRS)
-	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
+zztest_sort_mdict: test/${@}.c src/sort_mdict.c include/sort_mdict.h
+	$(CC) $(CFLAGS) -o $@ test/${@}.c src/sort_mdict.c ${LDFLAGS}
 
-zztest_wiki_file_io:  $@.c $(SRCS) $(HDRS) 
-	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
-
-strstrp: $@.c util.c
-	$(CC) $(CFLAGS) -o $@ $@.c util.c
+zztest_wiki_file_io: test/$@.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/} 
+	$(CC) $(CFLAGS) -o $@ test/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
 test_codemirror: $@.c $(HDRS) $(SRCS)
 	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)

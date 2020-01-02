@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <assert.h>
 
 #include "mtemplate.h"
 
@@ -15,13 +16,11 @@ make_dummy_namespace()
 	struct mobject *namespace = NULL;
 	struct mobject *tmp;
 
-	/* initialize template namespace object */
-	if ((namespace = mdict_new()) == NULL)
-		printf("mdict_new error");
+	assert((namespace = mdict_new()) != NULL);
 
 	/* Add some values to the namespace (ignoring errors) */
-	mdict_insert_ss(namespace, "program_name", "example");	/* String */
-	mdict_insert_si(namespace, "program_version", 2008);	/* Integer */
+	mdict_insert_ss(namespace, "program_name", "example");
+	mdict_insert_si(namespace, "program_version", 2008);
 	mdict_insert_sa(namespace, "features");	/* Empty array */
 	mdict_insert_sd(namespace, "credits");	/* Empty dictionary */
 
@@ -66,12 +65,6 @@ _render(char *tmplfn, struct mobject * namespace)
 		printf("error mtemplate_run_mbuf");
 		goto end;
 	}
-	/*
-	goto l2;
-	printf("pre l2\n");
-	l2:
-	printf("post l2\n");
-	*/
 
 end:
 	free(tbuf);
@@ -84,7 +77,7 @@ int
 main()
 {
 	int 		ret;
-	char 		fn       [] = "templates/t1.m";
+	char 		fn       [] = "test/templates/t1.m";
 	char           *buf;
 
 	printf("test tmpl_readfile(): %s\n", fn);
