@@ -2,6 +2,7 @@ WWWROOT=	/var/www/htdocs/wiki
 #WWWROOT=	/var/www/vhost/wiki.oldcode.org/htdocs
 
 CFLAGS+= -W -Wall -O2 -std=c99 -g -pedantic
+CFLAGS+= -Iinclude
 CFLAGS+= -I/usr/local/include
 CFLAGS+= -Imtemplate
 LDFLAGS+= -L/usr/local/lib
@@ -16,24 +17,23 @@ all: wiki admin menu sample options
 SRCS= wiki.c myhtml.c params.c util.c tmpl.c breadcrumbs.c wiki_file_io.c
 HDRS= wiki.h myhtml.h params.h util.h tmpl.h breadcrumbs.h wiki_file_io.h
 
-wiki: main.c $(SRCS) $@.h $(HDRS)
-	$(CC) $(CFLAGS) -o $@ main.c ${SRCS} $(LDFLAGS)
+wiki: src/main.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/}
+	$(CC) $(CFLAGS) -o $@ src/main.c ${SRCS:C/.*/src\/&/} $(LDFLAGS)
 
-options: $@.c $(SRCS) $(HDRS)
-	$(CC) $(CFLAGS) -o $@ $@.c ${SRCS} $(LDFLAGS)
+options: src/${@}.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/}
+	$(CC) $(CFLAGS) -o $@ src/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
-menu: $@.c $(SRCS) $(HDRS)
-	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
+menu: src/${@}.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/}
+	$(CC) $(CFLAGS) -o $@ src/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
-sample: $@.c util.c
-	$(CC) $(CFLAGS) -o $@ $@.c $(SRCS) $(LDFLAGS)
+sample: src/${@}.c src/util.c
+	$(CC) $(CFLAGS) -o $@ src/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
-long_page: $@.c util.c
-	$(CC) $(CFLAGS) -o $@ $@.c tmpl.c myhtml.c util.c breadcrumbs.c $(LDFLAGS)
+long_page: $@.c src/util.c
+	$(CC) $(CFLAGS) -o $@ src/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
-admin: $@.c util.c myhtml.c breadcrumbs.c
-	$(CC) $(CFLAGS) -o $@ $@.c \
-		tmpl.c util.c myhtml.c breadcrumbs.c $(LDFLAGS)
+admin: src/${@}.c src/util.c src/myhtml.c src/breadcrumbs.c
+	$(CC) $(CFLAGS) -o $@ src/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
 # TEST 
 test_breadcrumbs: $@.c breadcrumbs.c breadcrumbs.h
