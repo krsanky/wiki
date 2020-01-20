@@ -36,3 +36,6 @@ void 		wikinewdirform();
 
 void 		wikidelete(char *, char *);
 void 		wikioptions();
+
+void		wikimove(char *, char *);
+

@@ -53,7 +53,7 @@ make_sorted_dir_arr(char *dir, int *length)
 
 	d = opendir(dir);
 	if (d == NULL) {
-		printf("could not open dir:%s", dir);
+		nlog("could not open dir:%s", dir);
 		return NULL;
 	}
 	while ((de = readdir(d)) != NULL) {
@@ -118,7 +118,7 @@ make_sorted_page_arr(char *dir, int *length)
 
 	d = opendir(dir);
 	if (d == NULL) {
-		printf("could not open dir:%s", dir);
+		nlog("could not open dir:%s", dir);
 		return NULL;
 	}
 	while ((de = readdir(d)) != NULL) {

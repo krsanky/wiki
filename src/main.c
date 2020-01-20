@@ -79,6 +79,10 @@ main(void)
 		wikinewdir(params_get(ps, "d"));
 	} else if (strcmp(pagetype, "newdirform") == 0) {
 		wikinewdirform();
+	} else if (strcmp(pagetype, "move") == 0) {
+		page = params_get(ps, "p");
+		dir = params_get(ps, "d");
+		wikimove(dir, page);
 	} else if (strcmp(pagetype, "options") == 0) {
 		wikioptions();
 	}

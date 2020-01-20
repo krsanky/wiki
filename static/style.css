@@ -1,3 +1,5 @@
+@import url('/wiki/static/form.css');
+
 /* -----------------
 body {
 	margin:0 auto;
@@ -35,24 +37,6 @@ body {
 */
 }
 
-/* in normalize:
-input[type=button], button, select {
-	font-family: inherit;
-	font-size: 1em;
-}
-*/
-/*
-input[type="text"], textarea {
-        background-color: #10151a;
-        color: #00ff80;
-}
-*/
-
-input[type=submit] {
-	background-color: #10151a;
-	color: #00ff80;
-	padding: .3em;
-}
 
 a {
 	color: #008Acf;
@@ -139,5 +123,9 @@ code, pre {
 .breadcrumbs {
 	border-bottom: 1px solid #3a3;
 	padding-bottom: .3em;
+}
+
+div.main_view {
+	padding: .2em;
 }
 

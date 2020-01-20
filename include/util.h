@@ -26,4 +26,3 @@ int 		self_redirect(char *, char *, char *);
 int 		my_read_file(char *, char **);
 void 		printsep ();
 int 		cat_strings(char **, int,...);
-char		*staticd();

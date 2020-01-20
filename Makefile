@@ -12,10 +12,12 @@ LDFLAGS+= -lnanomsg
 LDFLAGS+= -ljson-c
 LDFLAGS+= -lmtemplate
 
-all: wiki admin menu sample options
+CGIS=	wiki admin menu sample options
+
+all: ${CGIS}
 
 SRCS= wiki.c myhtml.c params.c util.c tmpl.c breadcrumbs.c wiki_file_io.c
-HDRS= wiki.h myhtml.h params.h util.h tmpl.h breadcrumbs.h wiki_file_io.h
+HDRS= wiki.h myhtml.h params.h util.h tmpl.h breadcrumbs.h wiki_file_io.h settings.h
 
 wiki: src/main.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/}
 	$(CC) $(CFLAGS) -o $@ src/main.c ${SRCS:C/.*/src\/&/} $(LDFLAGS)
@@ -26,7 +28,7 @@ options: src/${@}.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/}
 menu: src/${@}.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/}
 	$(CC) $(CFLAGS) -o $@ src/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
-sample: src/${@}.c src/util.c
+sample: src/${@}.c ${SRCS:C/.*/src\/&/} ${HDRS:C/.*/include\/&/}
 	$(CC) $(CFLAGS) -o $@ src/${@}.c ${SRCS:C/.*/src\/&/} ${LDFLAGS}
 
 long_page: src/${@}.c src/util.c
@@ -67,11 +69,12 @@ anchortest: test1.c myhtml.c
 		util.c test1.c myhtml.c \
 		$(LDFLAGS)
 
-test: test_codemirror 
+test: 
 	@echo CURDIR:${.CURDIR}
 	@echo TARGET:$@ [should be 'test']
 	@echo CFLAGS: $(CFLAGS)
 	@echo LDFLAGS: ${LDFLAGS}
+	for f in ${CGIS} ; echo $f ; done  
 
 mdtest: $@.c
 	$(CC) -o $@.cgi \
@@ -102,24 +105,16 @@ deploy: all
 	cp -rf static/edit.js ${WWWROOT}/static/
 	cp -rf static/style.css ${WWWROOT}/static/
 	cp -rf static/normalize.css ${WWWROOT}/static/
+	cp -rf static/form.css ${WWWROOT}/static/
+
+	cp resrc/index.html ${WWWROOT}/
+	cp resrc/favicon.ico ${WWWROOT}/
 
 	cp -rf templates ${WWWROOT}/
 
 clean:
-	rm -f wiki
-	rm -f options
-	rm -f menu
-	rm -f admin
-	rm -f writef nanoclient mdtest params_test test_params
+	rm -f ${CGIS}
 	rm -f a.out *.BAK *.core
-	rm -f tmpl fix_perms
-	rm -f test_tmpl
-	rm -f test_codemirror  
-	rm -f sample long_page 
-	rm -f test_breadcrumbs test_errno test_sort test_strings test_util
-	rm -f zztest_sort_mdict
-	rm -f zztest_wiki_file_io
-	rm -f test_time
 
 .PHONY: test clean indent deploy all
 

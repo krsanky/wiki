@@ -1,4 +1,5 @@
-<form action='/wiki.cgi?newdirform' method='post' 
+<div class=main_view>
+<form action='{{url_root}}/wiki.cgi?newdirform' method='post' 
       enctype='application/x-www-form-urlencoded'>
 
 <input type='text' name='newdir' />
@@ -14,4 +15,5 @@
 {{endif}}
 
 </form>
+</div>
 

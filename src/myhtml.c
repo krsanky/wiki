@@ -122,31 +122,19 @@ myhtml_breadcrumbs(char *dir, char *page, char *pagetype)
 	struct mobject *bcs = NULL;
 	struct mobject *actions = NULL;
 
-	if ((ctx = mdict_new()) == NULL) {
-		nlog("mdict_new() error");
-		goto end;
-	}
+	assert ((ctx = mdict_new()) != NULL);
 	if (page != NULL)
 		mdict_insert_ss(ctx, "page", page);
 	else
 		mdict_insert_ss(ctx, "page", "");
 
-	bcs = breadcrumbs_make(dir);
-	if (bcs == NULL) {
-		nlog("breadcrumbs_make() error");
-		goto end;
-	}
+	assert((bcs = breadcrumbs_make(dir)) != NULL);
 	mdict_insert_s(ctx, "breadcrumbs", bcs);
 
-	actions = breadcrumbs_make_actions(dir, page, pagetype);
-	if (actions == NULL) {
-		nlog("breadcrumbs_make_actions() error");
-		goto end;
-	}
+	assert((actions = breadcrumbs_make_actions(dir, page, pagetype)) != NULL);
 	mdict_insert_s(ctx, "actions", actions);
 
 	tmpl_render(t, ctx);
-end:
 	mobject_free(ctx);
 }
 

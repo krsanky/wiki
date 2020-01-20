@@ -1,4 +1,4 @@
-<!-- tmpl new.m -->
+<div class=main_view>
 <form action='/wiki.cgi?newform' method='post' 
       enctype='application/x-www-form-urlencoded'>
 
@@ -7,12 +7,10 @@
 <button type='submit'>submit</button>
 
 {{if dir}}
-<!-- dir exists -->
 <input type='hidden' name='dir' value='{{dir}}'/>
-{{else}}
-<!-- dir NOT exists -->
 {{endif}}
 
+<p>Currently new pages must have .md extension</p>
 </form>
-<!-- end tmpl new.m -->
+</div>
 

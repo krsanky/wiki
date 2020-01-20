@@ -72,11 +72,9 @@ msgpage(char *fmt,...)
 {
 	char           *msg;
 	va_list 	ap;
-	char           *errerr = "error in msgpage :(";
 	int 		ret;
 
-	if ((msg = malloc(256)) == NULL)
-		msg = errerr;
+	assert((msg = malloc(256)) != NULL);
 
 	va_start(ap, fmt);
 	ret = vsnprintf(msg, 256, fmt, ap);
@@ -182,23 +180,23 @@ populate_pages(struct mobject * pages, char *basedir, char **parr, int parrl)
 void
 wikiindex(char *dir)
 {
-	struct mobject *ns = NULL;
+	struct mobject *data = NULL;
 	struct mobject *pages, *dirs;
 	char 		t        [] = "templates/dirlist.m";
 	char           *fd;
 
 	fd = fulldir(dir);
 
-	assert((ns = myhtml_data_new()) != NULL);
+	assert((data = myhtml_data_new()) != NULL);
 	if (dir != NULL)
-		mdict_insert_ss(ns, "dir", dir);
+		mdict_insert_ss(data, "dir", dir);
 	else
-		mdict_insert_ss(ns, "dir", "");
+		mdict_insert_ss(data, "dir", "");
 
-	mdict_insert_sd(ns, "pages");
-	mdict_insert_sd(ns, "dirs");
-	pages = mdict_item_s(ns, "pages");
-	dirs = mdict_item_s(ns, "dirs");
+	mdict_insert_sd(data, "pages");
+	mdict_insert_sd(data, "dirs");
+	pages = mdict_item_s(data, "pages");
+	dirs = mdict_item_s(data, "dirs");
 
 	int 		psl      , dsl;
 	char          **ps, **ds;
@@ -215,11 +213,11 @@ wikiindex(char *dir)
 
 	myhtml_breadcrumbs(dir, NULL, NULL);
 
-	tmpl_render(t, ns);
+	tmpl_render(t, data);
 
-	myhtml_footer(ns);
+	myhtml_footer(data);
 
-	mobject_free(ns);
+	mobject_free(data);
 	free(fd);
 	free_sorted_arr(ps, psl);
 	free_sorted_arr(ds, dsl);
@@ -261,7 +259,9 @@ wikiview(char *dir, char *page)
 	myhtml_header(NULL);
 
 	myhtml_breadcrumbs(dir, page, "view");
+	printf("<div class=main_view>\n");
 	val = markdown(mmiot, stdout, MKD_GITHUBTAGS | MKD_FENCEDCODE);
+	printf("</div>\n");
 	myhtml_footer(NULL);
 
 end:
@@ -440,31 +440,26 @@ void
 wikinew(char *dir)
 {
 	char 		t        [] = "templates/new.m";
+	struct mobject *data = NULL;
+
+	assert((data = myhtml_data_new()) != NULL);
+
 	http_headers();
-	myhtml_header(NULL);
+	myhtml_header(data);
 
 	myhtml_breadcrumbs(dir, NULL, "new");
 
 
-	/* myhtml_new(dir); */
-	struct mobject *namespace = NULL;
-
-	if ((namespace = mdict_new()) == NULL) {
-		nlog("mdict_new error dir:%s", dir);
-		return;
-	} else
-		nlog("mdict_new OK dir:%s", dir);
-
 	if (dir == NULL)
-		mdict_insert_ss(namespace, "dir", "");
+		mdict_insert_ss(data, "dir", "");
 	else
-		mdict_insert_ss(namespace, "dir", dir);
+		mdict_insert_ss(data, "dir", dir);
 
-	tmpl_render(t, namespace);
+	tmpl_render(t, data);
 
 
-	myhtml_footer(NULL);
-	mobject_free(namespace);
+	myhtml_footer(data);
+	mobject_free(data);
 }
 void
 wikinewform()
@@ -566,7 +561,7 @@ wikinewdir(char *dir)
 		mdict_insert_ss(data, "dir", dir);
 
 	http_headers();
-	myhtml_header(NULL);
+	myhtml_header(data);
 
 	myhtml_breadcrumbs(dir, NULL, "newdir");
 
@@ -578,6 +573,7 @@ wikinewdir(char *dir)
 void
 wikinewdirform()
 {
+	nlog("newdirform()592");
 	char           *RM;
 	char           *CL_;
 	char           *CT;
@@ -715,4 +711,61 @@ wikioptions()
 
 	mobject_free(data);
 	params_free(ps);
+}
+
+void
+wikimove(char *dir, char *page)
+{
+	char 		t        [] = "templates/move.m";
+	struct mobject *data = NULL;
+
+	nlog("wikimove() dir:%s page:%s", dir, page);
+	assert((data = myhtml_data_new()) != NULL);
+	if (dir == NULL)
+		mdict_insert_ss(data, "dir", "");
+	else
+		mdict_insert_ss(data, "dir", dir);
+	mdict_insert_ss(data, "page", page);
+
+
+	char           *fd;
+	char          **ds;
+	int 		i, dsl;
+	struct mobject *dirs;
+
+	fd = fulldir(dir);
+	mdict_insert_sa(data, "dirs");
+	dirs = mdict_item_s(data, "dirs");
+
+	ds = make_sorted_dir_arr(fd, &dsl);
+	for (i=0; i<dsl; i++) {
+		nlog("dir[%d]:%s", i, ds[i]);
+		marray_append_s(dirs, ds[i]);
+	}
+
+	//populate_dirs(dirs, dir, ds, dsl);
+/*
+	for (i = 0; i < darrl; i++) {
+		if (basedir != NULL)
+			cat_strings(&tmpd, 3, basedir, "/", darr[i]);
+		else
+			cat_strings(&tmpd, 1, darr[i]);
+
+		anchor = make_anchor("index", tmpd, NULL, darr[i]);
+		s1 = strdup(darr[i]);
+		mdict_insert_ss(dirs, s1, anchor);
+		free(anchor);
+		free(tmpd);
+	}
+*/
+
+	http_headers();
+	myhtml_header(data);
+
+	myhtml_breadcrumbs(dir, page, "move");
+
+	tmpl_render(t, data);
+
+	myhtml_footer(data);
+	mobject_free(data);
 }

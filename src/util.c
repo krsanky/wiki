@@ -271,10 +271,3 @@ cat_strings(char **buf, int nargs,...)
 	return 0;
 }
 
-char	*
-staticd()
-{
-	return "/static/";
-}
-
-

@@ -87,11 +87,20 @@ breadcrumbs_make_actions(char *dir, char *page, char *pagetype)
 		if (strcmp(pagetype, "view") == 0) {
 			a = make_url("edit", dir, page);
 			mdict_insert_ss(actions, "(edit)", a);
+			a = make_url("move", dir, page);
+			mdict_insert_ss(actions, "(move)", a);
+			a = make_url("rename", dir, page);
+			mdict_insert_ss(actions, "(rename)", a);
 		} else if (strcmp(pagetype, "edit") == 0) {
 			a = make_url("view", dir, page);
 			mdict_insert_ss(actions, "(view)", a);
 			a = make_url("delete", dir, page);
 			mdict_insert_ss(actions, "(delete)", a);
+		} else if (strcmp(pagetype, "move") == 0) {
+			a = make_url("view", dir, page);
+			mdict_insert_ss(actions, "(view)", a);
+			a = make_url("rename", dir, page);
+			mdict_insert_ss(actions, "(rename)", a);
 		}
 	} else {
 		mdict_insert_ss(actions, "[new]", make_url("new", dir, NULL));

@@ -1,4 +1,12 @@
 console.log("edit.js ...");
+/*
+cm.setSize(width: number|string, height: number|string)
+    Programmatically set the size of the editor (overriding the
+    applicable CSS rules).  width and height can be either numbers
+    (interpreted as pixels) or CSS units ("100%", for example).
+    You can pass null for either of them to indicate that that
+    dimension should not be changed.
+*/
 
 var cm_elem = undefined;
 var editor = undefined;
@@ -37,5 +45,11 @@ var init_cm = function() {
 
 $(function(){
 	init_cm();
+
+	$("#save-button").click(function() {
+		//alert( "Handler for .click() called." );
+		editor.save();
+	});
+
 });
 
