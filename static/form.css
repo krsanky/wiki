@@ -1,0 +1,38 @@
+/* in normalize:
+input[type=button], button, select {
+ font-family: inherit;
+ font-size: 1em;
+}
+*/
+
+input[type="text"], textarea {
+        background-color: #10151a;
+        color: #00ff80;
+}
+
+input[type=submit], input[type=button] {
+	background-color: #10151a;
+	color: #00ff80;
+	padding: .3em;
+	border: 1px dashed yellow;
+}
+
+button {
+	color: #00ff80;
+	background-color: #10151a;
+	font-size: 16px;
+	text-decoration: none;
+	padding: .1em .3em;
+/*
+	text-align: center;
+	border: none;
+	padding: 15px 32px;
+	display: inline-block;
+*/
+}
+
+
+.newdir {
+	padding: .1em;
+}
+
