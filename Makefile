@@ -100,8 +100,8 @@ deploy: all
 	cp -f test_codemirror ${WWWROOT}/test_codemirror.cgi 2>/dev/null || :
 	cp -f long_page ${WWWROOT}/long_page.cgi 2>/dev/null || :
 
-	#cp -rf static ${WWWROOT}/
-	cp -rf static/codemirror ${WWWROOT}/static/
+	##cp -rf static ${WWWROOT}/
+	#cp -rf static/codemirror ${WWWROOT}/static/
 	cp -rf static/edit.js ${WWWROOT}/static/
 	cp -rf static/style.css ${WWWROOT}/static/
 	cp -rf static/normalize.css ${WWWROOT}/static/
