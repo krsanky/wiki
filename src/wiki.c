@@ -301,17 +301,17 @@ wikiedit(char *dir, char *page)
 
 	struct mobject *data;
 	assert((data = myhtml_data_new()) != NULL);
-	myhtml_header_add_css(data, "/static/codemirror-5.50.2/lib/codemirror.css");
-	myhtml_header_add_css(data, "/static/codemirror-5.50.2/addon/dialog/dialog.css");
-	myhtml_header_add_css(data, "/static/codemirror-5.50.2/theme/midnight.css");
-	myhtml_header_add_css(data, "/static/codemirror-5.50.2/theme/colorforth.css");
+	myhtml_header_add_css(data, "/static/codemirror/lib/codemirror.css");
+	myhtml_header_add_css(data, "/static/codemirror/addon/dialog/dialog.css");
+	myhtml_header_add_css(data, "/static/codemirror/theme/midnight.css");
+	myhtml_header_add_css(data, "/static/codemirror/theme/colorforth.css");
 
-	myhtml_header_add_js(data, "/static/codemirror-5.50.2/lib/codemirror.js");
-	myhtml_header_add_js(data, "/static/codemirror-5.50.2/addon/dialog/dialog.js");
-	myhtml_header_add_js(data, "/static/codemirror-5.50.2/addon/search/searchcursor.js");
-	myhtml_header_add_js(data, "/static/codemirror-5.50.2/addon/edit/matchbrackets.js");
-	myhtml_header_add_js(data, "/static/codemirror-5.50.2/keymap/vim.js");
-	myhtml_header_add_js(data, "/static/codemirror-5.50.2/keymap/emacs.js");
+	myhtml_header_add_js(data, "/static/codemirror/lib/codemirror.js");
+	myhtml_header_add_js(data, "/static/codemirror/addon/dialog/dialog.js");
+	myhtml_header_add_js(data, "/static/codemirror/addon/search/searchcursor.js");
+	myhtml_header_add_js(data, "/static/codemirror/addon/edit/matchbrackets.js");
+	myhtml_header_add_js(data, "/static/codemirror/keymap/vim.js");
+	myhtml_header_add_js(data, "/static/codemirror/keymap/emacs.js");
 	myhtml_header(data);
 
 
@@ -361,9 +361,6 @@ wikieditform()
 		CL = -1;
 
 	nlog("editform() RM[%s] CT[%s] CL[%d]", RM, CT, CL);
-
-
-
 
 	buf = malloc(CL);
 	if (buf != NULL) {

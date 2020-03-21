@@ -1,0 +1,3 @@
+wise@donna:/var/www/vhost/wiki/htdocs$ chgrp -R www content                                                                                                   
+wise@donna:/var/www/vhost/wiki/htdocs$ chmod  -R g+w content
+

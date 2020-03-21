@@ -1,5 +1,4 @@
-WWWROOT=	/var/www/htdocs/wiki
-#WWWROOT=	/var/www/vhost/wiki.oldcode.org/htdocs
+WWWROOT=	/var/www/vhost/wiki/htdocs
 
 CFLAGS+= -W -Wall -O2 -std=c99 -g -pedantic
 CFLAGS+= -Iinclude
@@ -102,6 +101,7 @@ deploy: all
 	cp -f long_page ${WWWROOT}/long_page.cgi 2>/dev/null || :
 
 	#cp -rf static ${WWWROOT}/
+	cp -rf static/codemirror ${WWWROOT}/static/
 	cp -rf static/edit.js ${WWWROOT}/static/
 	cp -rf static/style.css ${WWWROOT}/static/
 	cp -rf static/normalize.css ${WWWROOT}/static/

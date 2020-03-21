@@ -3,5 +3,7 @@
 *.BAK
 content
 
-static/codemirror-5.46.0/
+static/codemirror/
 static/codemirror-5.50.2/
+static/codemirror-5.52.2/
+static/codemirror-5.52.2/
